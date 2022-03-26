@@ -1,0 +1,193 @@
+$primary: rgb(55, 198, 69);
+
+@import "../bootstrap-5.0.2/scss/bootstrap";
+
+.sidebar {
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: calc(100vh - 3.5rem);
+    width: auto;
+    min-width: 15vw;
+    background-color: rgb(52, 188, 66);
+    z-index: 10;
+    margin-top: 3.5rem;
+    list-style-type: none;
+    padding: 0;
+    color: black;
+    overflow: hidden;
+}
+
+#loginbg{
+    background: url('/assets/loginbg.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+.opacity70{
+    background: rgba(255, 255, 255, 0.8);
+}
+
+hr.solid {
+    border-top: 1px solid rgb(47, 168, 58);
+    width: 100%;
+    margin: 0 auto;
+}
+
+.sidebar ul {
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    display: block;
+    margin: 0;
+    padding: 1rem;
+    text-align: center;
+}
+
+.sidebar li:hover {
+    background-color: rgb(50, 180, 63);
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: black;
+}
+
+.sidebar a:hover {
+    font-weight: 500;
+}
+
+#burger {
+    border: none;
+    outline: none;
+    background-color: $primary;
+    cursor: pointer;
+    margin: 0 1rem;
+}
+
+#title {
+    position: absolute;
+    top: 0.5rem;
+    left: 4rem;
+}
+
+body {
+    padding-top: 3.5rem;
+}
+
+.optioncontainer {
+    width: 50%;
+}
+
+.sectionicon {
+    transition: all 0.2s ease-in-out;
+}
+
+.sectionicon:hover {
+    transform: scale(1.05);
+}
+
+.chartbox {
+    max-width: 700px;
+    min-width: 300px;
+}
+
+#imgHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    text-align: center;
+    height: 70vh;
+    background: url("/assets/header.jpg") no-repeat center center;
+    background-size: cover;
+    width:100vw;
+    padding: 0;
+    border: 1px solid black;
+    max-width: 100%;
+}
+
+#welcome {
+    background-color: rgba(127, 127, 127, 0.6);
+    padding: 1rem;
+}
+
+.card img {
+    max-width: 80%;
+}
+
+footer {
+    z-index: 100;
+}
+
+.formicon{
+    width: 2rem; 
+    font-size: 1.6rem
+}
+
+
+td{
+    min-width: 5rem;
+    text-align: left;
+    padding: 0.25rem;
+}
+
+#profileImage{
+    width: 250px;
+}
+
+vitalS
+
+@media (max-width: 600px) {
+    .sectionicon {
+        max-width: 150px;
+    }
+}
+@media (max-width: 683px) {
+    body {
+        min-height: 100vh;
+        font-size: 0.7rem;
+    }
+    .optioncontainer {
+        width: 100%;
+    }
+
+    .btn {
+        font-size: 0.7rem;
+    }
+
+    input::placeholder {
+        font-size: 0.7rem;
+    }
+    .sectionHead {
+        margin-top: 0.5rem;
+        font-size: 1rem;
+    }
+
+    #imgHeader{
+        background: url('/assets/headermobile.jpg') no-repeat center center;
+    }
+    .formicon{
+        width: 1.5rem; 
+        font-size: 1rem
+    }
+
+    input.form-control{
+        height: 1.5rem;
+    }
+
+    #profileImage{
+        width: 150px;
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar {
+        min-width: 40vw;
+    }
+}
+
+
