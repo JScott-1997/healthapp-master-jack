@@ -44,6 +44,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 Arrays.stream(roles).forEach(r ->{
                     authorities.add(new SimpleGrantedAuthority(r));
                 });
+
+                //Credentials are null as they're not needed again after auth has been completed
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 filterChain.doFilter(request, response);

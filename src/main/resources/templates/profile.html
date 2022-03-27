@@ -10,115 +10,122 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://kit.fontawesome.com/218320a513.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
 </head>
 
 <body class="bg-light d-flex flex-column min-vh-100">
-    <nav class="sidebar" id="sideNav">
-        <ul>
-            <a href="dashboard.html">
-                <li>
+<nav class="sidebar" id="sideNav">
+    <ul>
+        <a href="dashboard">
+            <li>
                 <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-house mx-2"
-                        style="font-size: 0.9rem"></i>Home
+                                                                               style="font-size: 0.9rem"></i>Home
                 </div>
-                </li>
-            </a>
-            <hr class="solid">
-            <a href="#">
-                <li>
-                    <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user mx-2"
-                            style="font-size: 0.9rem"></i>My Profile
-                    </div>
-                </li>
-            </a>
-            <hr class="solid">
-            <a href="#">
-                <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user-gear mx-2"
-                    style="font-size: 0.9rem"></i>Account Management
-            </div></li>
-            </a>
-            <hr class="solid">
-            <a href="login.html">
-                <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
-                    style="font-size: 0.9rem"></i>Log Out
-            </div></li>
-            </a>
-            <hr class="solid">
-        </ul>
-    </nav>
-    <nav class="navbar fixed-top navbar-expand-md  bg-primary">
-        <button id="burger" class="text-dark navbar-brand bg-primary" onclick="openSideNav()">☰</button>
-        <a class="navbar-brand text-dark" id="title"></i>Dundas Health</a>
-    </nav>
-    <div class="container mx-auto text-center my-2">
-        <h1>Profile</h1>
-        <div class="d-flex justify-content-center mx-auto my-3">
-            <div class="mx-2">
-            <img src="assets/profileplaceholder.png" id="profileImage">
-            </div>
-            <div class="mx-2" id="profileInfo">
-                <table>
-                    <tbody class="text-left">
-                        <tr>
-                            <td><b>Name</b></td>
-                            <td>Guys Name</td>
-                        </tr>
-                        <tr>
-                            <td><b>Date of Birth</b></td>
-                            <td>11/11/1911</td>
-                        </tr>
-                        <tr>
-                            <td><b>Email Address</b></td>
-                            <td>guy@email.com</td>
-                        </tr>
-                        <tr>
-                            <td><b>Member Since</b></td>
-                            <td>14/03/2022</td>
-                        </tr>
-                        <tr>
-                            <td><b>Height</b></td>
-                            <td>1.72M</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            </li>
+        </a>
+        <hr class="solid">
+        <a href="profile">
+            <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user mx-2"
+                                                                               style="font-size: 0.9rem"></i>My Profile
+                </div>
+            </li>
+        </a>
+        <hr class="solid">
+        <a href="account">
+            <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user-gear mx-2"
+                                                                               style="font-size: 0.9rem"></i>Account
+                    Management
+                </div>
+            </li>
+        </a>
+        <hr class="solid">
+        <a href="../logout">
+            <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
+                                                                               style="font-size: 0.9rem"></i>Log Out
+                </div>
+            </li>
+        </a>
+        <hr class="solid">
+    </ul>
+</nav>
+<nav class="navbar fixed-top navbar-expand-md  bg-primary">
+    <button id="burger" class="text-dark navbar-brand bg-primary" onclick="openSideNav()">☰</button>
+    <a class="navbar-brand text-dark" id="title"></i>Dundas Health</a>
+</nav>
+<div class="container mx-auto text-center my-2">
+    <h1>Profile</h1>
+    <div class="d-flex justify-content-center mx-auto my-3">
+        <div class="mx-2">
+            <img th:src="@{/assets/profileplaceholder.png}" id="profileImage">
         </div>
-        <div class="d-flex flex-wrap col-xl-4 col-9 mx-auto">
-            <div class="vitalstat bg-primary mx-auto my-1 rounded border p-2"><b>Current Weight: </b>65kg</div>
-            <div class="vitalstat bg-primary mx-auto my-1 rounded border p-2"><b>Last Heart Rate: </b>65bpm</div>
-            <div class="vitalstat bg-primary mx-auto my-1 rounded border p-2"><b>Last Respiration Rate: </b>sadawef</div>
-            <div class="vitalstat bg-primary mx-auto my-1 rounded border p-2"><b>Grip Strength: </b>43363</div>
+        <div class="mx-2" id="profileInfo">
+            <table>
+                <tbody class="text-left">
+                <tr>
+                    <td><b>Name</b></td>
+                    <td th:text="${user.name}"></td>
+                </tr>
+                <tr>
+                    <td><b>Date of Birth</b></td>
+                    <td th:text="${#dates.format(user.dateOfBirth, 'dd/MM/yyyy')}"></td>
+                </tr>
+                <tr>
+                    <td><b>Email Address</b></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><b>Member Since</b></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><b>Height</b></td>
+                    <td th:inline="text">[[${user.height}]]cm</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-        <p>You currently have access to:</p>
-        <ul style="list-style: none; font-weight: bold;">
-            <li>
-                Weight Tracking
-            </li>
-            <li>
-                Heart Rate Tracking
-            </li>
-            <li>
-                Respiration Tracking
-            </li>
-            <li>
-                Grip Strength Tracking
-            </li>
-        </ul>
     </div>
-    <footer class="text-center text-white mt-auto" style="background-color: #3B3B3B;">
-        <div class="text-center text-white p-4">
-            © 2022 Copyright:
-            <a class="text-primary" href="https://dundashealth.co.uk">https://dundashealth.co.uk</a>
-        </div>
-    </footer>
-    <script src="script.js"></script>
+    <div class="d-flex flex-wrap col-xl-4 col-9 mx-auto">
+        <div class="vitalstat bg-primary mx-auto my-1 rounded border p-2"><b>Current Weight: </b>65kg</div>
+        <div class="vitalstat bg-primary mx-auto my-1 rounded border p-2"><b>Last Heart Rate: </b>65bpm</div>
+        <div class="vitalstat bg-primary mx-auto my-1 rounded border p-2"><b>Last Respiration Rate: </b>4</div>
+        <div class="vitalstat bg-primary mx-auto my-1 rounded border p-2"><b>Grip Strength: </b>43363</div>
+    </div>
+    <p>
+        You currently have access to:
+    </p>
+    <ul style="list-style: none; font-weight: bold;">
+        <li>
+            Weight Tracking
+        </li>
+        <li>
+            Heart Rate Tracking
+        </li>
+        <li>
+            Respiration Tracking
+        </li>
+        <li>
+            Grip Strength Tracking
+        </li>
+    </ul>
+</div>
+<footer class="text-center text-white mt-auto" style="background-color: #3B3B3B;">
+    <div class="text-center text-white p-4">
+        © 2022 Copyright:
+        <a class="text-primary" href="https://dundashealth.co.uk">https://dundashealth.co.uk</a>
+    </div>
+</footer>
+<script th:src="@{/js/script.js}"></script>
 </body>
 
 </html>

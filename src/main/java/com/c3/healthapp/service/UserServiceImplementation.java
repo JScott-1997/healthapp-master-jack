@@ -106,4 +106,8 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
         log.info("Fetching all users...");
         return userRepository.findAll();
     }
+
+    public boolean isUsernameTaken(String username){
+        return userRepository.existsUserByUsername(username);
+    }
 }

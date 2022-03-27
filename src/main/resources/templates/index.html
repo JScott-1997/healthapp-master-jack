@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <link th:href="@{/css/main.css}" rel="stylesheet"/>
@@ -22,7 +22,9 @@
 </head>
 <body class="bg-dark d-flex flex-column min-vh-100">
 <nav class="sidebar" id="sideNav">
-    <ul>
+
+    <!-- Display different menu depending on whether user is logged in or not-->
+    <ul sec:authorize="!isAuthenticated()">
         <a href="#">
             <li>
                 <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-house mx-2"
@@ -56,6 +58,36 @@
         </a>
         <hr class="solid">
     </ul>
+    <ul sec:authorize="isAuthenticated()">
+        <a href="/user/dashboard">
+            <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-house mx-2"
+                                                                               style="font-size: 0.9rem"></i>Home
+                </div>
+            </li>
+        </a>
+        <hr class="solid">
+        <a href="/user/profile">
+            <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user mx-2"
+                                                                               style="font-size: 0.9rem"></i>My Profile
+                </div>
+            </li>
+        </a>
+        <hr class="solid">
+        <a href="/user/account">
+            <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user-gear mx-2"
+                                                                               style="font-size: 0.9rem"></i>Account Management
+            </div></li>
+        </a>
+        <hr class="solid">
+        <a href="/logout">
+            <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
+                                                                               style="font-size: 0.9rem"></i>Log Out
+            </div></li>
+        </a>
+        <hr class="solid">
+    </ul>
 </nav>
 <nav class="navbar fixed-top navbar-expand-md  bg-primary">
     <button id="burger" class="text-dark navbar-brand bg-primary" onclick="openSideNav()">☰</button>
@@ -64,10 +96,13 @@
 <div id="imgHeader">
     <section id="welcome" class="rounded">
         <h1 class="text-light">Welcome to Dundas Health<br>Online Fitness Portal</h1>
-        <div class="d-flex flex-row justify-content-center">
+        <div sec:authorize="!isAuthenticated()" class="d-flex flex-row justify-content-center">
             <a class="btn btn-primary text-light btn-md m-1" href="login" role="button">Log in</a>
             <a class="btn btn-primary text-light btn-md m-1" href="register" role="button">Register</a>
             <a class="btn btn-primary text-light btn-md m-1" href="#" role="button">Find out More</a>
+        </div>
+        <div sec:authorize="isAuthenticated()" class="d-flex flex-row justify-content-center">
+            <a class="btn btn-primary text-light btn-md m-1" href="dashboard" role="button">Go to Dashboard</a>
         </div>
     </section>
 </div>
@@ -93,7 +128,7 @@
         <a class="text-primary" href="https://dundashealth.co.uk">https://dundashealth.co.uk</a>
     </div>
 </footer>
-<script th:src="@{/js/script.js}" type="text/javascript"></script>
+<script th:src="@{/js/script.js}"></script>
 </body>
 
 </html>

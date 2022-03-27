@@ -3,11 +3,16 @@ package com.c3.healthapp.controllers;
 import com.c3.healthapp.model.User;
 import com.c3.healthapp.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.connector.Response;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/registration")
@@ -18,13 +23,18 @@ public class UserRegistrationController {
 
     @PostMapping
     //As data will be passed as a string in post request, ModelAttribute is used to bind data to user object
-    public String registerUser(@ModelAttribute User user, Model model){
+    public String registerUser(@ModelAttribute User user, Model model) {
         model.addAttribute("username", user.getUsername());
-        userService.saveUser(user);
 
-        //All users start with this role
-        userService.addRoleToUser(user.getUsername(), "ROLE_USER");
-        return "success";
+        //Check if user exists and save, redirect
+        if (!userService.isUsernameTaken(user.getUsername())) {
+            userService.saveUser(user);
+            //All users start with this role
+            userService.addRoleToUser(user.getUsername(), "ROLE_USER");
+            return "success";
+        } else {
+            return "exists";
+        }
     }
 }
 

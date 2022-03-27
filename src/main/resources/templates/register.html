@@ -22,7 +22,7 @@
 <body class="bg-light d-flex flex-column min-vh-100">
 <nav class="sidebar" id="sideNav">
     <ul>
-        <a href="#">
+        <a href="/">
             <li>
                 <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-house mx-2"
                                                                                style="font-size: 0.9rem"></i>Home
@@ -66,17 +66,17 @@
         <h1 class="h1">Register</h1>
         <form th:action="@{/registration}" method="post">
             <div class="form-group d-flex flex-column mx-auto my-2 formelement">
-                <label for="name">First name</label>
+                <label for="name">Full name</label>
                 <input type="text" class="form-control" id="name" name="name"
-                       aria-describedby="fnameHelp" placeholder="Enter name" required>
+                       aria-describedby="nameHelp" placeholder="Enter name" required>
             </div>
             <div class="form-group d-flex flex-column mx-auto my-2 formelement">
-                <label for="username">Surname</label>
+                <label for="username">Username</label>
                 <input type="text" class="form-control" id="username" name="username"
                        aria-describedby="unameHelp" placeholder="Enter username" required>
             </div>
             <div class="form-group d-flex flex-column mx-auto my-2 formelement">
-                <label for="height">Email address</label>
+                <label for="height">Height</label>
                 <input type="number" class="form-control" id="height" name="height"
                        aria-describedby="emailHelp" placeholder="Enter height (cm)" required>
             </div>

@@ -46,4 +46,6 @@ public interface UserService {
      * @return A list of all users in the database
      */
     List<User> getUsers();
+
+    boolean isUsernameTaken(String username);
 }

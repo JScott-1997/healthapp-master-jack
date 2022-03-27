@@ -12,7 +12,12 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -31,15 +36,28 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
-@RestController
-@RequestMapping("/controller")
+@Controller
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    //Probably best to add this in to an admin controller later, unless we want to administrate admin functions here too?
+    //Might be easier to manage permissions in a /admin controller
+//    @GetMapping("/users")
+//    public ResponseEntity<List<User>> getUsers() {
+//        return ResponseEntity.ok().body(userService.getUsers());
+//    }
 
-    @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsers() {
-        return ResponseEntity.ok().body(userService.getUsers());
+    //adds user to model and loads profile page
+    @GetMapping("/profile")
+    public String loggedInUser(Model model) throws IOException {
+        String username = SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal().toString();
+        User user = userService.getUser(username);
+        System.out.println("happened");
+        System.out.println(user);
+        model.addAttribute("user", user);
+        return "profile";
     }
 
     @GetMapping("/user")
@@ -47,14 +65,13 @@ public class UserController {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
         User user = userService.getUser(username);
-        System.out.println(user);
         return ResponseEntity.ok().body(user);
     }
 
     @PostMapping("/user/save")
     public ResponseEntity<User> saveUser(@RequestBody User user) {
-        //returns location resource was created in response object
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
+        //returns the location the resource was created in response sent
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/controller/user/save").toUriString());
         return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
 
@@ -112,8 +129,9 @@ public class UserController {
 
 }
 
+
 @Data
-class RoleToUserForm{
+class RoleToUserForm {
     protected String username;
     protected String roleName;
 }

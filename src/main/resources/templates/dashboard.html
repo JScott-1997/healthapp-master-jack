@@ -21,38 +21,38 @@
 </head>
 
 <body class="bg-light d-flex flex-column min-vh-100">
-    <nav class="sidebar" id="sideNav">
-        <ul>
-            <a href="dashboard.html">
-                <li>
+<nav class="sidebar" id="sideNav">
+    <ul>
+        <a href="dashboard">
+            <li>
                 <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-house mx-2"
-                        style="font-size: 0.9rem"></i>Home
+                                                                               style="font-size: 0.9rem"></i>Home
                 </div>
-                </li>
-            </a>
-            <hr class="solid">
-            <a href="profile.html">
-                <li>
-                    <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user mx-2"
-                            style="font-size: 0.9rem"></i>My Profile
-                    </div>
-                </li>
-            </a>
-            <hr class="solid">
-            <a href="#">
-                <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user-gear mx-2"
-                    style="font-size: 0.9rem"></i>Account Management
+            </li>
+        </a>
+        <hr class="solid">
+        <a href="profile">
+            <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user mx-2"
+                                                                               style="font-size: 0.9rem"></i>My Profile
+                </div>
+            </li>
+        </a>
+        <hr class="solid">
+        <a href="account">
+            <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user-gear mx-2"
+                                                                               style="font-size: 0.9rem"></i>Account Management
             </div></li>
-            </a>
-            <hr class="solid">
-            <a href="login.html">
-                <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
-                    style="font-size: 0.9rem"></i>Log Out
+        </a>
+        <hr class="solid">
+        <a href="../logout">
+            <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
+                                                                               style="font-size: 0.9rem"></i>Log Out
             </div></li>
-            </a>
-            <hr class="solid">
-        </ul>
-    </nav>
+        </a>
+        <hr class="solid">
+    </ul>
+</nav>
     <nav class="navbar fixed-top navbar-expand-md  bg-primary">
         <button id="burger" class="text-dark navbar-brand bg-primary" onclick="openSideNav()">☰</button>
         <a class="navbar-brand text-dark" id="title"></i>Dundas Health</a>
@@ -61,22 +61,22 @@
         <h1 class="my-1">Dashboard</h1>
         <div class="optioncontainer row justify-content-center mx-auto">
             <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow">
-                <a href="weight.html"><img src="@{/assets/scale.svg}" /></a>
+                <a href="weight"><img th:src="@{/assets/scale.svg}" /></a>
             </div>
             <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow">
-                <a href="heartrate.html"><img src="@{/assets/heart.svg}"></a>
+                <a href="heartrate"><img th:src="@{/assets/heart.svg}"></a>
             </div>
             <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow">
-                <a href="#"><img src="@{/assets/respiration.svg}" /></a>
+                <a href="#"><img th:src="@{/assets/respiration.svg}" /></a>
             </div>
             <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow">
-                <a href="#"><img src="@{/assets/grip.svg}" /></a>
+                <a href="#"><img th:src="@{/assets/grip.svg}" /></a>
             </div>
             <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow">
-                <a href="#"><img src="@{/assets/settings.svg}" /></a>
+                <a href="#"><img th:src="@{/assets/settings.svg}" /></a>
             </div>
             <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow">
-                <a href="#"><img src="@{/assets/help.svg}" /></a>
+                <a href="#"><img th:src="@{/assets/help.svg}" /></a>
             </div>
         </div>
     </div>

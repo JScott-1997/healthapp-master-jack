@@ -25,32 +25,32 @@
     <!-- Sidebar navigation. Hidden by default and toggled by burger button -->
     <nav class="sidebar" id="sideNav">
         <ul>
-            <a href="dashboard.html">
+            <a href="dashboard">
                 <li>
-                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-house mx-2"
-                        style="font-size: 0.9rem"></i>Home
-                </div>
-                </li>
-            </a>
-            <hr class="solid">
-            <a href="#">
-                <li>
-                    <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user mx-2"
-                            style="font-size: 0.9rem"></i>My Profile
+                    <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-house mx-2"
+                                                                                   style="font-size: 0.9rem"></i>Home
                     </div>
                 </li>
             </a>
             <hr class="solid">
-            <a href="#">
-                <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user-gear mx-2"
-                    style="font-size: 0.9rem"></i>Account Management
-            </div></li>
+            <a href="profile">
+                <li>
+                    <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user mx-2"
+                                                                                   style="font-size: 0.9rem"></i>My Profile
+                    </div>
+                </li>
             </a>
             <hr class="solid">
-            <a href="login.html">
+            <a href="account">
+                <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user-gear mx-2"
+                                                                                   style="font-size: 0.9rem"></i>Account Management
+                </div></li>
+            </a>
+            <hr class="solid">
+            <a href="../logout">
                 <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
-                    style="font-size: 0.9rem"></i>Log Out
-            </div></li>
+                                                                                   style="font-size: 0.9rem"></i>Log Out
+                </div></li>
             </a>
             <hr class="solid">
         </ul>
@@ -121,8 +121,8 @@
             <a class="text-primary" href="https://dundashealth.co.uk">https://dundashealth.co.uk</a>
         </div>
     </footer>
-    <script src="script.js"></script>
-    <script src="heartrate.js"></script>
+    <script th:src="@{/js/script.js}"></script>
+    <script th:src="@{/js/heartrate.js}"></script>
 </body>
 
 </html>

@@ -66,8 +66,10 @@
     <main class="container mx-auto text-center align-items-center vh-100">
         <section
                 class="col-9 col-md-7 col-xl-4 mt-5 p-4 rounded border border-secondary mx-auto text-center bg-light">
-            <h1 class="h1">Success</h1>
-            <p>User <b><th:block th:text="${username}"></th:block></b> registered successfully</p>
+            <div th:if="${param.username}" class="alert alert-success">
+                <p>User <b><th:block th:text="${username}"></th:block></b> registered successfully</p>
+            </div>
+
             <a class="btn btn-primary text-light btn-md m-1" href="login" role="button">Log in</a>
         </section>
     </main>
