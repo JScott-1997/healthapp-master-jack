@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-//Maps the HTML pages to paths
+//Maps HTML pages to paths
 @Configuration
 public class ViewConfig implements WebMvcConfigurer {
     @Override

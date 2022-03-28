@@ -12,10 +12,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +24,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -54,7 +50,6 @@ public class UserController {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
         User user = userService.getUser(username);
-        System.out.println("happened");
         System.out.println(user);
         model.addAttribute("user", user);
         return "profile";

@@ -12,13 +12,11 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -55,8 +53,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         String refresh_token = JWT.create()
                 .withSubject(user.getUsername())
-                //Refresh token valid for 30 minutes
-                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
+                //Refresh token valid for 3 hours
+                .withExpiresAt(new Date(System.currentTimeMillis() + 3 * 60 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
                 //Add user roles to refresh token
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())).sign(algo);

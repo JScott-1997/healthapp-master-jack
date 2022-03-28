@@ -13,9 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.context.request.RequestContextHolder;
 
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -42,13 +40,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin().loginPage("/login?unauthenticated")
                 .defaultSuccessUrl("/user/dashboard", true)
                 .permitAll().and().httpBasic().and().logout().logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout").deleteCookies("token").deleteCookies("refresh_token").invalidateHttpSession(true);
+                .logoutSuccessUrl("/login?logout").deleteCookies("token").deleteCookies("refreshToken").invalidateHttpSession(true);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers(GET, "/controller/user").hasAnyAuthority("ROLE_USER");
-        http.authorizeRequests().antMatchers(GET, "/controller/users").hasAnyAuthority("ROLE_ADMIN");
         http.authorizeRequests().antMatchers(GET, "/user/**").hasAnyAuthority("ROLE_USER");
-        http.authorizeRequests().antMatchers(POST, "/controller/users/save/**").hasAnyAuthority("ROLE_ADMIN");
-        http.authorizeRequests().antMatchers("/**", "/login/**", "/controller/token/refresh", "/controller/register", "/", "/login.html").permitAll();
+        http.authorizeRequests().antMatchers(POST, "/user/users/save/**").hasAnyAuthority("ROLE_ADMIN");
+        http.authorizeRequests().antMatchers("/**", "/login/**", "/user/token/refresh", "/").permitAll();
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
     }
