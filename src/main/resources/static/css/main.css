@@ -11516,7 +11516,12 @@ fieldset:disabled .btn {
 }
 
 #loginbg {
-  background: url("../assets/loginbg.jpg") no-repeat center center;
+  background: url("/assets/loginbg.jpg") no-repeat center center;
+  background-size: cover;
+}
+
+#registerbg {
+  background: url("/assets/gym.jpg") no-repeat center center;
   background-size: cover;
 }
 
@@ -11635,14 +11640,42 @@ footer {
   font-size: 1.6rem;
 }
 
-td {
+td, th {
   min-width: 5rem;
-  text-align: left;
+  text-align: center;
   padding: 0.25rem;
 }
 
 #profileImage {
   width: 250px;
+}
+
+#countButton {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  justify-content: center;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+}
+
+.buttonFlash {
+    -webkit-animation-name: flash-animation;
+    -webkit-animation-duration: 0.2s;
+
+    animation-name: flash-animation;
+    animation-duration: 0.2s;
+}
+
+@-webkit-keyframes flash-animation {
+    from { background: red; }
+    to   { background: default; }
+}
+
+@keyframes flash-animation {
+    from { background: red; }
+    to   { background: default; }
 }
 
 @media (max-width: 600px) {

@@ -5,7 +5,6 @@ function openSideNav() {
     burger.setAttribute('onclick', 'closeSideNav()')
     sideNav.style.visibility = 'visible';
     burger.textContent = "X";
-
 }
 
 function closeSideNav() {
