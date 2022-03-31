@@ -33,7 +33,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 String authToken = tokenExtractor(request, "token");
                 Algorithm algo = Algorithm.HMAC256("secret".getBytes());
                 JWTVerifier verifier = JWT.require(algo).build();
-                DecodedJWT decodedJWT = null;
+                DecodedJWT decodedJWT;
                 try {
                     decodedJWT = verifier.verify(authToken);
 
@@ -44,11 +44,10 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     String refreshToken = tokenExtractor(request, "refreshToken");
                     decodedJWT = verifier.verify(refreshToken);
 
-                    //Get new auth token
+                    //Get new access token
                     authToken = refreshAccessToken(decodedJWT, request, response);
                     decodedJWT = verifier.verify(authToken);
                 }
-
                 //Set authorities based on roles from JWT
                 String username = decodedJWT.getSubject();
                 String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
@@ -77,7 +76,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     //Called when current access token is invalid, takes refresh token as input
     private String refreshAccessToken(DecodedJWT jwt, HttpServletRequest request, HttpServletResponse response) {
-
         Algorithm algo = Algorithm.HMAC256("secret".getBytes());
         String accessToken = JWT.create()
                 .withSubject(jwt.getSubject())

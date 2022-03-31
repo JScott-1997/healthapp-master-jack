@@ -19,7 +19,8 @@
             crossorigin="anonymous"></script>
 </head>
 
-<body class="bg-light d-flex flex-column min-vh-100">
+<body class="bg-light d-flex flex-column min-vh-100" id="registerbg">
+<div class="opacity70">
 <nav class="sidebar" id="sideNav">
     <ul>
         <a href="/">
@@ -61,7 +62,7 @@
     <button id="burger" class="text-dark navbar-brand bg-primary" onclick="openSideNav()">☰</button>
     <a class="navbar-brand text-dark" id="title"></i>Dundas Health</a>
 </nav>
-<main class="container mx-auto text-center bg-light align-items-center vh-100" id="mainContainer">
+<main class="container mx-auto text-center align-items-center vh-100" id="mainContainer">
     <section class="col-9 col-md-7 col-xl-4 bg-white mt-5 p-4 rounded border border-secondary mx-auto text-center">
         <h1 class="h1">Register</h1>
         <form th:action="@{/registration}" method="post">
@@ -74,11 +75,6 @@
                 <label for="username">Username</label>
                 <input type="text" class="form-control" id="username" name="username"
                        aria-describedby="unameHelp" placeholder="Enter username" required>
-            </div>
-            <div class="form-group d-flex flex-column mx-auto my-2 formelement">
-                <label for="height">Height</label>
-                <input type="number" class="form-control" id="height" name="height"
-                       aria-describedby="emailHelp" placeholder="Enter height (cm)" required>
             </div>
             <div class="form-group d-flex flex-column mx-auto my-2 formelement">
                 <label for="dateOfBirth">Date of Birth</label>
@@ -99,6 +95,7 @@
         <a class="text-primary" href="https://dundashealth.co.uk">https://dundashealth.co.uk</a>
     </div>
 </footer>
-<script th:src="@{/js/script.js}" type="text/javascript"></script>
+<script th:src="@{/js/sidenav.js}"></script>
+</div>
 </body>
 </html>

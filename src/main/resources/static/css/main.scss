@@ -24,6 +24,11 @@ $primary: rgb(55, 198, 69);
     background-size: cover;
 }
 
+#registerbg {
+  background: url("/assets/gym.jpg") no-repeat center center;
+  background-size: cover;
+}
+
 .opacity70{
     background: rgba(255, 255, 255, 0.8);
 }
@@ -129,9 +134,9 @@ footer {
 }
 
 
-td{
+td, th{
     min-width: 5rem;
-    text-align: left;
+    text-align: center;
     padding: 0.25rem;
 }
 
@@ -139,7 +144,33 @@ td{
     width: 250px;
 }
 
-vitalS
+#countButton {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  justify-content: center;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+}
+
+.buttonFlash {
+    -webkit-animation-name: flash-animation;
+    -webkit-animation-duration: 0.2s;
+
+    animation-name: flash-animation;
+    animation-duration: 0.2s;
+}
+
+@-webkit-keyframes flash-animation {
+    from { background: red; }
+    to   { background: default; }
+}
+
+@keyframes flash-animation {
+    from { background: red; }
+    to   { background: default; }
+}
 
 @media (max-width: 600px) {
     .sectionicon {
