@@ -1,9 +1,13 @@
 package com.c3.healthapp.service;
 
+import com.c3.healthapp.model.HeartRateEntry;
 import com.c3.healthapp.model.Role;
 import com.c3.healthapp.model.User;
+import com.c3.healthapp.model.WeightEntry;
+import com.c3.healthapp.repository.HeartRateRepository;
 import com.c3.healthapp.repository.RoleRepository;
 import com.c3.healthapp.repository.UserRepository;
+import com.c3.healthapp.repository.WeightEntryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,6 +29,8 @@ import java.util.List;
 public class UserServiceImplementation implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final HeartRateRepository heartRateRepository;
+    private final WeightEntryRepository weightEntryRepository;
     private final BCryptPasswordEncoder pwEncoder;
 
     @Override
@@ -107,7 +113,23 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
         return userRepository.findAll();
     }
 
-    public boolean isUsernameTaken(String username){
+    @Override
+    public HeartRateEntry saveHeartRateEntry(String username, HeartRateEntry heartRateEntry) {
+        log.info("Saving new heart rate entry to the database for user: {}...", username);
+        User user = userRepository.findByUsername(username);
+        user.getHeartRateEntries().add(heartRateEntry);
+        return heartRateRepository.save(heartRateEntry);
+    }
+
+    @Override
+    public WeightEntry saveWeightEntry(String username, WeightEntry weightEntry) {
+        log.info("Saving new weight entry to the database for user: {}...", username);
+        User user = userRepository.findByUsername(username);
+        user.getWeightEntries().add(weightEntry);
+        return weightEntryRepository.save(weightEntry);
+    }
+
+    public boolean isUsernameTaken(String username) {
         return userRepository.existsUserByUsername(username);
     }
 }

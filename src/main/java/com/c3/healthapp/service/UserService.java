@@ -1,8 +1,11 @@
 package com.c3.healthapp.service;
 
+import com.c3.healthapp.model.HeartRateEntry;
 import com.c3.healthapp.model.Role;
 import com.c3.healthapp.model.User;
+import com.c3.healthapp.model.WeightEntry;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface UserService {
@@ -48,4 +51,8 @@ public interface UserService {
     List<User> getUsers();
 
     boolean isUsernameTaken(String username);
+
+    HeartRateEntry saveHeartRateEntry(String username, HeartRateEntry heartRateEntry);
+
+    WeightEntry saveWeightEntry(String username, WeightEntry weightEntry);
 }

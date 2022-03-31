@@ -24,8 +24,14 @@ public class User {
     private Date dateOfBirth;
     @Nullable
     private int height;
+    private UserSex userSex;
+    private  UserUnitsPreference userUnitsPreference;
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<HeartRateEntry> heartRateEntries = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<WeightEntry> weightEntries = new ArrayList<>();
 
     /**
      * Constructs and returns a String representing the state of the object
@@ -33,7 +39,7 @@ public class User {
     @Override
     public String toString() {
 
-        return "Customer Id: " + id + " First Name: " + name + " Date Of Birth : " + dateOfBirth +
+        return "User Id: " + id + " First Name: " + name + " Date Of Birth : " + dateOfBirth +
                 " Email Address: " + username + " Password: " + password;
 
     }
