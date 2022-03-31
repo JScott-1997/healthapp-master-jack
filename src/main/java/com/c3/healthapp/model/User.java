@@ -1,6 +1,8 @@
 package com.c3.healthapp.model;
 
 import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -24,11 +26,14 @@ public class User {
     private int height;
     private UserSex userSex;
     private  UserUnitsPreference userUnitsPreference;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Role> roles = new ArrayList<>();
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<HeartRateEntry> heartRateEntries = new ArrayList<>();
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<WeightEntry> weightEntries = new ArrayList<>();
 
     /**
