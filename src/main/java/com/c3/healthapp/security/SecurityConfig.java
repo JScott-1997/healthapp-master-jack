@@ -21,7 +21,6 @@ import static org.springframework.http.HttpMethod.POST;
 @Configuration @EnableWebSecurity @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    //Injected by spring on the fly
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -43,8 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login?logout").deleteCookies("token").deleteCookies("refreshToken").invalidateHttpSession(true);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers(GET, "/user/**").hasAnyAuthority("ROLE_USER");
-        http.authorizeRequests().antMatchers(POST, "/user/users/save/**").hasAnyAuthority("ROLE_ADMIN");
-        http.authorizeRequests().antMatchers("/**", "/login/**", "/user/token/refresh", "/").permitAll();
+        http.authorizeRequests().antMatchers(POST, "/user/save/**").hasAnyAuthority("ROLE_ADMIN");
+        http.authorizeRequests().antMatchers("/**", "/login/**", "/").permitAll();
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
     }

@@ -1,6 +1,7 @@
 package com.c3.healthapp.model;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -21,6 +22,7 @@ public class User {
     private String username;
     private String password;
     private Date dateOfBirth;
+    @Nullable
     private int height;
     private UserSex userSex;
     private  UserUnitsPreference userUnitsPreference;
