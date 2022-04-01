@@ -10,23 +10,19 @@ let table;
 let current_page = 1;
 let records_per_page;
 
-function addKeyValueToTable(key, value) {
-    if(data.hasOwnProperty(key)){
-        return false;
+function addEntryToTable(lastEntryDate, date, value) {
+    date.setHours(0, 0, 0, 0);
+    if(!(lastEntryDate==date.toLocaleDateString('en-GB'))){
+        const entry = {
+            date: date,
+            value: value
+            }
+        data.push(entry);
+        //Refreshes table entries
+        changePage(1);
+        return true;
     }
-    data[key] = value;
-    //Refreshes table entries
-    changePage(1);
-    return true;
-}
-
-function getKeyValuePair(arr1, arr2) {
-    let newArray = {};
-
-    arr1.forEach((element, index) => {
-        newArray[element] = arr2[index];
-    });
-    return newArray;
+        return false;
 }
 
 function setupTable(dataIn, nextBtn, prevBtn, pageNoEl, tableEl, recordsPerPage) {
@@ -36,15 +32,6 @@ function setupTable(dataIn, nextBtn, prevBtn, pageNoEl, tableEl, recordsPerPage)
     pageNoSpan = pageNoEl;
     table = tableEl;
     records_per_page = recordsPerPage;
-}
-
-function getKeyValuePair(array1, array2) {
-    let newArray = {};
-
-    array1.forEach((element, index) => {
-        newArray[element] = array2[index];
-    });
-    return newArray;
 }
 
 
@@ -66,24 +53,19 @@ function changePage(page) {
 
     if (page < 1) page = 1;
     if (page > numPages()) page = numPages();
-
     table.innerHTML = "";
 
     let j = 0;
     for (var i = (page - 1) * records_per_page; i < (page * records_per_page); i++) {
 
+        if(i < data.length){
         //Error occurs on last page if number of results is less than page size. Until solution is found, this try catch prevents issues
-        try {
-            let [key, value] = Object.entries(data)[i];
             let row = table.insertRow(j);
             let cell1 = row.insertCell(0);
             let cell2 = row.insertCell(1);
-            cell1.innerHTML = key;
-            cell2.innerHTML = value;
+            cell1.innerHTML = getDateAsString(data[i].date);
+            cell2.innerHTML = data[i].value;
             j++;
-        }
-        catch (error) {
-
         }
     }
     let numberOfPages = numPages();
