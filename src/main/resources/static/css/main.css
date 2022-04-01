@@ -11525,6 +11525,10 @@ fieldset:disabled .btn {
   background-size: cover;
 }
 
+#carotidPulseDiagram{
+    width: 300px;
+}
+
 .opacity70 {
   background: rgba(255, 255, 255, 0.8);
 }
@@ -11678,13 +11682,15 @@ td, th {
     to   { background: default; }
 }
 
-@media (max-width: 600px) {
-  .sectionicon {
-    max-width: 150px;
-  }
-}
-
 @media (max-width: 683px) {
+   .sectionicon {
+    max-width: 150px;
+   }
+
+   #carotidPulseDiagram{
+    width: 200px;
+  }
+
   body {
     min-height: 100vh;
     font-size: 0.7rem;
@@ -11712,8 +11718,11 @@ td, th {
     font-size: 1rem;
   }
   #imgHeader {
-    background: url("/assets/headermobile.jpg") no-repeat center center;
+    background: url("/assets/headermobile.jpg") no-repeat;
+    background-size: cover;
+    background-position: 15% center;
   }
+
   .formicon {
     width: 1.5rem;
     font-size: 1rem;
