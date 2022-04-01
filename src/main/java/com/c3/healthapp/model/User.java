@@ -1,17 +1,12 @@
 package com.c3.healthapp.model;
 
 import lombok.*;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-@Entity
+@MappedSuperclass
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,29 +17,5 @@ public class User {
     private String name;
     private String username;
     private String password;
-    private Date dateOfBirth;
-    private int height;
-    private UserSex userSex;
-    private  UserUnitsPreference userUnitsPreference;
-    @ManyToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private Collection<Role> roles = new ArrayList<>();
-    @ManyToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private Collection<HeartRateEntry> heartRateEntries = new ArrayList<>();
-    @ManyToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private Collection<WeightEntry> weightEntries = new ArrayList<>();
-
-    /**
-     * Constructs and returns a String representing the state of the object
-     */
-    @Override
-    public String toString() {
-
-        return "User Id: " + id + " First Name: " + name + " Date Of Birth : " + dateOfBirth +
-                " Email Address: " + username + " Password: " + password;
-
-    }
 
 }

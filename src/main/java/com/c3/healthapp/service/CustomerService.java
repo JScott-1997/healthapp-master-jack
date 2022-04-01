@@ -1,21 +1,17 @@
 package com.c3.healthapp.service;
 
-import com.c3.healthapp.model.HeartRateEntry;
-import com.c3.healthapp.model.Role;
-import com.c3.healthapp.model.User;
-import com.c3.healthapp.model.WeightEntry;
+import com.c3.healthapp.model.*;
 
-import java.util.Collection;
 import java.util.List;
 
-public interface UserService {
+public interface CustomerService {
     /**
      * Stores a new user in the database.
      *
-     * @param user
+     * @param customer
      * @return The saved user
      */
-    User saveUser(User user);
+    Customer saveCustomer(Customer customer);
 
     /**
      * Stores a new role in the database.
@@ -31,7 +27,7 @@ public interface UserService {
      * @param username
      * @param roleName
      */
-    void addRoleToUser(String username, String roleName);
+    void addRoleToCustomer(String username, String roleName);
 
     /**
      * Queries the database, retrieves the details of one specified user
@@ -40,7 +36,7 @@ public interface UserService {
      * @param username
      * @return The specified user
      */
-    User getUser(String username);
+    Customer getCustomer(String username);
 
     /**
      * Queries the database, retrieves all users stored within and returns
@@ -48,7 +44,7 @@ public interface UserService {
      *
      * @return A list of all users in the database
      */
-    List<User> getUsers();
+    List<Customer> getCustomers();
 
     boolean isUsernameTaken(String username);
 

@@ -1,12 +1,9 @@
 package com.c3.healthapp.service;
 
-import com.c3.healthapp.model.HeartRateEntry;
-import com.c3.healthapp.model.Role;
-import com.c3.healthapp.model.User;
-import com.c3.healthapp.model.WeightEntry;
+import com.c3.healthapp.model.*;
 import com.c3.healthapp.repository.HeartRateRepository;
 import com.c3.healthapp.repository.RoleRepository;
-import com.c3.healthapp.repository.UserRepository;
+import com.c3.healthapp.repository.CustomerRepository;
 import com.c3.healthapp.repository.WeightEntryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class UserServiceImplementation implements UserService, UserDetailsService {
-    private final UserRepository userRepository;
+public class CustomerServiceImplementation implements CustomerService, UserDetailsService {
+    private final CustomerRepository customerRepository;
     private final RoleRepository roleRepository;
     private final HeartRateRepository heartRateRepository;
     private final WeightEntryRepository weightEntryRepository;
@@ -35,31 +32,31 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
+        Customer customer = customerRepository.findByUsername(username);
+        if (customer == null) {
             log.error("User {} not found in the database", username);
             throw new UsernameNotFoundException("User not found in the database");
         } else {
             log.info("User {} found in the database", username);
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        user.getRoles().forEach(role -> {
+        customer.getRoles().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         });
-        return new org.springframework.security.core.userdetails.User(username, user.getPassword(), authorities);
+        return new org.springframework.security.core.userdetails.User(username, customer.getPassword(), authorities);
     }
 
     /**
      * Stores a new user in the database.
      *
-     * @param user
+     * @param customer
      * @return The saved user
      */
     @Override
-    public User saveUser(User user) {
-        user.setPassword(pwEncoder.encode(user.getPassword()));
-        log.info("Saving new user: {} to the database...", user.getUsername());
-        return userRepository.save(user);
+    public Customer saveCustomer(Customer customer) {
+        customer.setPassword(pwEncoder.encode(customer.getPassword()));
+        log.info("Saving new user: {} to the database...", customer.getUsername());
+        return customerRepository.save(customer);
     }
 
     /**
@@ -81,11 +78,11 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
      * @param roleName
      */
     @Override
-    public void addRoleToUser(String username, String roleName) {
+    public void addRoleToCustomer(String username, String roleName) {
         log.info("Adding role: {} to user {}...", roleName, username);
-        User user = userRepository.findByUsername(username);
+        Customer customer = customerRepository.findByUsername(username);
         Role role = roleRepository.findByName(roleName);
-        user.getRoles().add(role);
+        customer.getRoles().add(role);
     }
 
     /**
@@ -96,9 +93,9 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
      * @return The specified user
      */
     @Override
-    public User getUser(String username) {
+    public Customer getCustomer(String username) {
         log.info("Fetching user {}...", username);
-        return userRepository.findByUsername(username);
+        return customerRepository.findByUsername(username);
     }
 
     /**
@@ -108,28 +105,28 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
      * @return A list of all users in the database
      */
     @Override
-    public List<User> getUsers() {
+    public List<Customer> getCustomers() {
         log.info("Fetching all users...");
-        return userRepository.findAll();
+        return customerRepository.findAll();
     }
 
     @Override
     public HeartRateEntry saveHeartRateEntry(String username, HeartRateEntry heartRateEntry) {
         log.info("Saving new heart rate entry to the database for user: {}...", username);
-        User user = userRepository.findByUsername(username);
-        user.getHeartRateEntries().add(heartRateEntry);
+        Customer customer = customerRepository.findByUsername(username);
+        customer.getHeartRateEntries().add(heartRateEntry);
         return heartRateRepository.save(heartRateEntry);
     }
 
     @Override
     public WeightEntry saveWeightEntry(String username, WeightEntry weightEntry) {
         log.info("Saving new weight entry to the database for user: {}...", username);
-        User user = userRepository.findByUsername(username);
-        user.getWeightEntries().add(weightEntry);
+        Customer customer = customerRepository.findByUsername(username);
+        customer.getWeightEntries().add(weightEntry);
         return weightEntryRepository.save(weightEntry);
     }
 
     public boolean isUsernameTaken(String username) {
-        return userRepository.existsUserByUsername(username);
+        return customerRepository.existsCustomerByUsername(username);
     }
 }
