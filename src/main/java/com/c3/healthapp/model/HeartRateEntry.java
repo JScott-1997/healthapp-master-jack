@@ -1,5 +1,6 @@
 package com.c3.healthapp.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,8 +20,8 @@ public class HeartRateEntry {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long entryId;
-    private int entryHeartRate;
     private Date dateOfEntry;
+    private int entryHeartRate;
 
     @Override
     public String toString() {

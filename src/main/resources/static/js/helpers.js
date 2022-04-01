@@ -54,3 +54,20 @@ function checkDateEquality(date1, date2){
         return false;
 }
 
+function yearsBeforeToday(date) {
+  let difference =(today.getTime() - date.getTime()) / 1000;
+   difference /= (60 * 60 * 24);
+  return Math.abs(Math.round(difference/365.25));
+ }
+
+//sorting function for dates
+ function compare(a, b) {
+   if ( a.dateOfEntry < b.dateOfEntry ){
+     return -1;
+   }
+   if ( a.dateOfEntry > b.dateOfEntry ){
+     return 1;
+   }
+   return 0;
+ }
+

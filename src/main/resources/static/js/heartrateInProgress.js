@@ -1,22 +1,71 @@
-//Dummy data for user and chart
-const userAge = 40;
+let customer = JSON.parse(sessionStorage.getItem('customer'));
+const userAge = yearsBeforeToday(new Date(customer.dateOfBirth));
 const maxHeartRate = 220 - userAge;
-let heartRates = [55, 65, null, 58, 59, 62, 55, 65, 57, 58, 59, 55, 65, 57, 58, 59, 62, 55, 65, 57, 58, 59, 55, 65, 57, 58];
-const dates = ["03/01/2022", "03/02/2022", "03/03/2022", "03/04/2022", "03/05/2022", "03/06/2022", "03/07/2022", "03/08/2022", "03/09/2022", "03/10/2022", "03/11/2022",
-               "03/12/2022", "03/13/2022", "03/14/2022", "03/15/2022", "03/16/2022", "03/17/2022", "03/18/2022", "03/19/2022", "03/20/2022", "03/21/2022", "03/22/2022",
-               "03/23/2022", "03/24/2022", "03/25/2022", "03/26/2022"];
-for(let i = 0; i<dates.length; i++){
-    dates[i] = new Date(dates[i]);
-}
 
-const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+let heartRates = getHeartRates(customer.heartRateEntries);
+let dates = getEntryDates(customer.heartRateEntries);
 
-let dateStringsFormatted = getDateStrings(dates);
+//Formatted Strings are used to label chart, derived from date objects
+let chartLabels = getChartDates(dates);
 
-//Default amount of data points on chart
+//Objects with date and value for each entry
+const entryObjects = getEntryObjectsFromCustomer(customer);
+
+let heartModalData = changeDatesInEntriesToString(entryObjects);
+//Default amount of dates shown on chart
 let noOfPoints = 7;
 let chartHRates = heartRates.slice(-noOfPoints);
-let chartDates = dateStringsFormatted.slice(-noOfPoints);
+let chartDates = chartLabels.slice(-noOfPoints);
+
+function getEntryObjectsFromCustomer(customer){
+    const heartRateEntries = customer.heartRateEntries;
+    const entriesArr = new Array();
+    heartRateEntries.forEach(entry =>{
+        entry.date = new Date(entry.dateOfEntry);
+        entriesArr.push(entry);
+    })
+    //Sort objects
+    entriesArr.sort(compare);
+
+    return entriesArr;
+}
+
+function changeDatesInEntriesToString(entries){
+    const newData = new Array();
+    entries.forEach(entry => {
+        const newEntry = {
+            dateOfEntry: new Date(entry.dateOfEntry).toLocaleDateString('en-GB'),
+            entryHeartRate: entry.entryHeartRate
+        }
+        newData.push(newEntry);
+    })
+    return newData;
+}
+
+function getHeartRates(entries){
+    const rates = new Array();
+    entries.forEach(entry =>{
+        rates.push(entry.entryHeartRate);
+    })
+    return rates;
+}
+
+function getEntryDates(entries){
+    const dates = new Array();
+    entries.forEach(entry =>{
+        dates.push(new Date(entry.dateOfEntry));
+    })
+    return dates;
+}
+
+function getChartDates(dates){
+    const labels = new Array();
+    dates.forEach(date =>{
+        const dateString = date.toLocaleDateString('en-GB');
+        labels.push(dateString);
+    });
+    return labels;
+}
 
 //Get page elements and data and send to setUpTable in paginateTable.js
 const hrModalTable = document.getElementById('hrModalData');
@@ -24,12 +73,8 @@ let nextIn = document.getElementById('btn_next');
 let prevIn = document.getElementById('btn_prev');
 let pageNoSpanIn = document.getElementById('page');
 
-//parseEntriesObject method is in paginateTable.js, returns object of pairs from 2 arrays
-let heartModalData = parseEntriesObjectArray(dates, heartRates);
-
 //Set up modal data table with elements and to display 10 results each page
-setupTable(heartModalData, nextIn, prevIn, pageNoSpanIn, hrModalTable, 10);
-
+setupTable(entryObjects, nextIn, prevIn, pageNoSpanIn, hrModalTable, 10);
 //Setting messages for heart rate section
 const maxRateMessage = document.getElementById('maxheartrate');
 maxRateMessage.innerHTML = `${maxHeartRate}BPM`;
@@ -93,71 +138,76 @@ function updateChart(chart, data, labels) {
 }
 
 //Sets the period of displayed data (a week, 30 days etc). Creates objects with date and null values if no data exists for that date
-function setChartPoints(points){
-    noOfPoints = points;
-
-    const datesTodayAndBefore = getDatesBeforeIncToday(points);
-    const allDatesAndValues = new Array();
-    let dataDivisor = 0;
-
-    switch(points){
-
-     case 7:
-         dataDivisor = 7;
-         break;
-     case 30:
-         dataDivisor = 5;
-         break;
-     case 90:
-         dataDivisor = 10;
-         break;
-     case 180:
-         dataDivisor = 15;
-         break;
-    }
-
-    for(let i = 0; i < datesTodayAndBefore.length; i++){
-         allDatesAndValues[i] = {
-             date: datesTodayAndBefore[i]
-         }
-         for(let j = 0; j < data.length; j++){
-             if(data[j].date.getTime() == allDatesAndValues[i].date.getTime()){
-                 allDatesAndValues[i].value = data[j].value;
-             }
-         }
-    }
-   heartRates = [];
-   dateStringsFormatted = [];
-
-
- let rateCounter = 0;
- let numberOfValuesCounted = 0;
-
-   for(let i = 0; i<allDatesAndValues.length; i++){
-     if(allDatesAndValues[i].value!=null){
-         rateCounter += allDatesAndValues[i].value;
-         numberOfValuesCounted++;
-     }
-     if(i%(dataDivisor)==0){
-         if(rateCounter==0){
-             heartRates.push(null);
-         }
-         else{
-             heartRates.push(rateCounter/numberOfValuesCounted);
-         }
-         numberOfValuesCounted = 0;
-         rateCounter = 0;
-         dateStringsFormatted.push(allDatesAndValues[i].date.toLocaleDateString('en-GB'));
-     }
-   }
-   heartRates.shift();
-   dateStringsFormatted.shift();
-   //Add today to data
-   heartRates.push(allDatesAndValues[allDatesAndValues.length-1]);
-   dateStringsFormatted.push(allDatesAndValues[allDatesAndValues.length-1].date.toLocaleDateString('en-GB'));
-
-   updateChart(heartChart, heartRates, dateStringsFormatted);
- }
+//function setChartPoints(points){
+//    noOfPoints = points;
+//
+//    const datesTodayAndBefore = getDatesBeforeIncToday(points);
+//    const allDatesAndValues = new Array();
+//    let dataDivisor = 0;
+//
+//    switch(points){
+//
+//     case 7:
+//         dataDivisor = 7;
+//         break;
+//     case 30:
+//         dataDivisor = 5;
+//         break;
+//     case 90:
+//         dataDivisor = 10;
+//         break;
+//     case 180:
+//         dataDivisor = 15;
+//         break;
+//    }
+//
+//    for(let i = 0; i < datesTodayAndBefore.length; i++){
+//         allDatesAndValues[i] = {
+//             date: datesTodayAndBefore[i]
+//         }
+//
+//         for(let j = 0; j < data.length; j++){
+//         console.log(data[j])
+//             if(new Date(data[j].dateOfEntry).getTime() == allDatesAndValues[i].date.getTime()){
+//                 allDatesAndValues[i].value = data[j].value;
+//             }
+//         }
+//    }
+//   heartRates = [];
+//   chartLabels = [];
+//
+//
+// let rateCounter = 0;
+// let numberOfValuesCounted = 0;
+//
+//   for(let i = 0; i<allDatesAndValues.length; i++){
+//     if(allDatesAndValues[i].value!=null){
+//         rateCounter += allDatesAndValues[i].value;
+//         numberOfValuesCounted++;
+//     }
+//     if(i%(dataDivisor)==0){
+//         if(rateCounter==0){
+//             heartRates.push(null);
+//         }
+//         else{
+//             heartRates.push(rateCounter/numberOfValuesCounted);
+//         }
+//         numberOfValuesCounted = 0;
+//         rateCounter = 0;
+//         chartLabels.push(allDatesAndValues[i].date.toLocaleDateString('en-GB'));
+//     }
+//   }
+//   heartRates.shift();
+//   chartLabels.shift();
+//   //Add today to data
+//   if(allDatesAndValues[allDatesAndValues.length-1].value){
+//       heartRates.push(allDatesAndValues[allDatesAndValues.length-1]);
+//       chartLabels.push(allDatesAndValues[allDatesAndValues.length-1].date.toLocaleDateString('en-GB'));
+//   }
+//   console.log(heartRates);
+//   console.log(chartLabels);
+//   updateChart(heartChart, heartRates, chartLabels);
+// }
 
 
 //Adds new heart rate to array and updates page, modal content
@@ -174,12 +224,24 @@ function addHeartRate(event) {
     const newDateString = today.toLocaleDateString('en-GB');
 
     //Update chart and table in view data modal
-    let hasBeenAdded = addEntryToTable(dateStringsFormatted[dateStringsFormatted.length-1], today, newHeartRate);
+    let hasBeenAdded = addEntryToTable(chartLabels[chartLabels.length-1], today, newHeartRate);
 
    if(hasBeenAdded){
-       dateStringsFormatted.push(newDateString);
+
+        let nullEntry = Object.create(null);
+        nullEntry.dateOfEntry = today;
+        nullEntry.entryHeartRate = newHeartRate;
+
+        //Save to db
+        saveHeartRate(nullEntry);
+
+       //Update customer object
+       getCustData();
+       customer = JSON.parse(sessionStorage.getItem('customer'));
+
+       chartLabels.push(newDateString);
        heartRates.push(newHeartRate);
-       updateChart(heartChart, heartRates, dateStringsFormatted);
+       updateChart(heartChart, heartRates, chartLabels);
        currentRate = newHeartRate;
        heartRateMessage.innerHTML = getMessage(currentRate);
    }

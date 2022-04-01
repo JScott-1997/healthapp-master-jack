@@ -10,12 +10,12 @@ let table;
 let current_page = 1;
 let records_per_page;
 
-function addEntryToTable(lastEntryDate, date, value) {
-    date.setHours(0, 0, 0, 0);
-    if(!(lastEntryDate==date.toLocaleDateString('en-GB'))){
+function addEntryToTable(lastEntryDate, value) {
+    today.setHours(0, 0, 0, 0);
+    if(!(lastEntryDate==today.toLocaleDateString('en-GB'))){
         const entry = {
-            date: date,
-            value: value
+            dateOfEntry: today.toLocaleDateString('en-GB'),
+            entryHeartRate: value
             }
         data.push(entry);
         //Refreshes table entries
@@ -57,14 +57,13 @@ function changePage(page) {
 
     let j = 0;
     for (var i = (page - 1) * records_per_page; i < (page * records_per_page); i++) {
-
         if(i < data.length){
         //Error occurs on last page if number of results is less than page size. Until solution is found, this try catch prevents issues
             let row = table.insertRow(j);
             let cell1 = row.insertCell(0);
             let cell2 = row.insertCell(1);
-            cell1.innerHTML = getDateAsString(data[i].date);
-            cell2.innerHTML = data[i].value;
+            cell1.innerHTML = new Date(data[i].dateOfEntry).toLocaleDateString('en-GB');
+            cell2.innerHTML = data[i].entryHeartRate;
             j++;
         }
     }

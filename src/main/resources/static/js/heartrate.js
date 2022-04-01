@@ -1,8 +1,45 @@
-//Dummy data for user and chart
-const userAge = 40;
+let customer = JSON.parse(sessionStorage.getItem('customer'));
+const userAge = yearsBeforeToday(new Date(customer.dateOfBirth));
 const maxHeartRate = 220 - userAge;
-const heartRates = [55, 65, 57, 58, 59, 62, 55, 65, 57, 58, 59];
-const dates = ["01/03", "02/03", "03/03", "04/03", "05/03", "06/03", "07/03", "08/03", "09/03", "10/03", "11/03"];
+
+let heartRates = getHeartRates(customer.heartRateEntries);
+let dates = getEntryDates(customer.heartRateEntries);
+let chartLabels = getChartDates(dates);
+
+const entryObjects = getEntryObjectsFromCustomer(customer);
+
+function getEntryObjectsFromCustomer(customer){
+    const heartRateEntries = customer.heartRateEntries;
+    const entriesArr = new Array();
+    heartRateEntries.forEach(entry =>{
+        entriesArr.push(entry);
+    })
+    //Sort objects
+    entriesArr.sort(compare);
+    return entriesArr;
+}
+
+function getHeartRates(entries){
+    const rates = new Array();
+    entries.forEach(entry =>{
+        rates.push(entry.entryHeartRate);
+    })
+    return rates;
+}
+
+function getEntryDates(entries){
+    const dates = new Array();
+    entries.forEach(entry =>{
+        dates.push(new Date(entry.dateOfEntry));
+    })
+    return dates;
+}
+
+function getChartDates(dates){
+    dates.forEach(date =>{
+
+    })
+}
 
 //Default amount of data points on chart
 let noOfPoints = 7;
@@ -15,8 +52,8 @@ let nextIn = document.getElementById('btn_next');
 let prevIn = document.getElementById('btn_prev');
 let pageNoSpanIn = document.getElementById('page');
 
-//getKeyValuePair method is in paginateTable.js, returns object of KV pairs from 2 arrays
-let heartModalData = getKeyValuePair(dates, heartRates);
+//returns array of entries objects
+let heartModalData = parseEntriesObjectArray(dates, heartRates);
 
 //Set up modal data table with elements and to display 10 results each page
 setupTable(heartModalData, nextIn, prevIn, pageNoSpanIn, hrModalTable, 10);
