@@ -10,13 +10,8 @@ let table;
 let current_page = 1;
 let records_per_page;
 
-function addEntryToTable(lastEntryDate, value) {
-    today.setHours(0, 0, 0, 0);
-    if(!(lastEntryDate==today.toLocaleDateString('en-GB'))){
-        const entry = {
-            dateOfEntry: today.toLocaleDateString('en-GB'),
-            entryHeartRate: value
-            }
+function addEntryToTable(entry) {
+    if(!(data[data.length-1]==today.toLocaleDateString('en-GB'))){
         data.push(entry);
         //Refreshes table entries
         changePage(1);
@@ -62,8 +57,8 @@ function changePage(page) {
             let row = table.insertRow(j);
             let cell1 = row.insertCell(0);
             let cell2 = row.insertCell(1);
-            cell1.innerHTML = new Date(data[i].dateOfEntry).toLocaleDateString('en-GB');
-            cell2.innerHTML = data[i].entryHeartRate;
+            cell1.innerHTML = new Date(data[i].x).toLocaleDateString('en-GB');
+            cell2.innerHTML = data[i].y;
             j++;
         }
     }

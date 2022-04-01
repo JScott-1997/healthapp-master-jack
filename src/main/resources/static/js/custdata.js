@@ -12,11 +12,14 @@ function getCustData(){
 
 
   function saveHeartRate(rate){
-  console.log(rate);
+        let postedData = {};
+      postedData.dateOfEntry = rate.x;
+      postedData.entryHeartRate = rate.y;
+      rate
       fetch("/customer/heartrates/save", {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(rate)
+        body: JSON.stringify(postedData)
       }).then(res => {
       });
   }

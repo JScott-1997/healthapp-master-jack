@@ -2,81 +2,42 @@ let customer = JSON.parse(sessionStorage.getItem('customer'));
 const userAge = yearsBeforeToday(new Date(customer.dateOfBirth));
 const maxHeartRate = 220 - userAge;
 
-let heartRates = getHeartRates(customer.heartRateEntries);
-let dates = getEntryDates(customer.heartRateEntries);
-let chartLabels = getChartDates(dates);
+//Min and max values user has submitted, used to render chart to display a practical scale
+let currentMinValue = 100;
+let currentMaxValue = 0;
 
-const entryObjects = getEntryObjectsFromCustomer(customer);
+const chartData = getChartDataFromCustomer(customer);
 
-function getEntryObjectsFromCustomer(customer){
-    const heartRateEntries = customer.heartRateEntries;
-    const entriesArr = new Array();
-    heartRateEntries.forEach(entry =>{
-        entriesArr.push(entry);
-    })
-    //Sort objects
-    entriesArr.sort(compare);
-    return entriesArr;
-}
+let daysDisplayedOnChart = 7;
 
-function getHeartRates(entries){
-    const rates = new Array();
-    entries.forEach(entry =>{
-        rates.push(entry.entryHeartRate);
-    })
-    return rates;
-}
-
-function getEntryDates(entries){
-    const dates = new Array();
-    entries.forEach(entry =>{
-        dates.push(new Date(entry.dateOfEntry));
-    })
-    return dates;
-}
-
-function getChartDates(dates){
-    dates.forEach(date =>{
-
-    })
-}
-
-//Default amount of data points on chart
-let noOfPoints = 7;
-let chartHRates = heartRates.slice(-noOfPoints);
-let chartDates = dates.slice(-noOfPoints);
+const maxRateMessage = document.getElementById('maxheartrate');
+maxRateMessage.innerHTML = `${maxHeartRate}BPM`;
+const heartRateMessage = document.getElementById('heartratemessage');
+heartRateMessage.innerHTML = getMessage(chartData[chartData.length-1].y);
 
 //Get page elements and data and send to setUpTable in paginateTable.js
 const hrModalTable = document.getElementById('hrModalData');
-let nextIn = document.getElementById('btn_next');
-let prevIn = document.getElementById('btn_prev');
-let pageNoSpanIn = document.getElementById('page');
-
-//returns array of entries objects
-let heartModalData = parseEntriesObjectArray(dates, heartRates);
+const nextIn = document.getElementById('btn_next');
+const prevIn = document.getElementById('btn_prev');
+const pageNoSpanIn = document.getElementById('page');
 
 //Set up modal data table with elements and to display 10 results each page
-setupTable(heartModalData, nextIn, prevIn, pageNoSpanIn, hrModalTable, 10);
+setupTable(chartData, nextIn, prevIn, pageNoSpanIn, hrModalTable, 10);
 
 
-//Gets current date minus time as String
-function getCurrentDate() {
-    const date = new Date(Date.now()).toLocaleString();
-    const dateSplit = date.split(",");
-    const dateOnly = dateSplit[0].split("/");
-
-    //Returns only day and month without year
-    return dateOnly[0] + "/" + dateOnly[1];
+function getChartDataFromCustomer(customer){
+    const newArr = new Array();
+    const entries = customer.heartRateEntries;
+    entries.forEach(entry => {
+        let newEntry = {};
+        newEntry.x = new Date(entry.dateOfEntry).toISOString();
+        newEntry.y = entry.entryHeartRate;
+        if(newEntry.y < currentMinValue) currentMinValue = newEntry.y;
+        if(newEntry.y > currentMaxValue) currentMaxValue = newEntry.y;
+        newArr.push(newEntry)
+    })
+    return newArr;
 }
-
-const dateOnly = getCurrentDate();
-
-//Setting messages for heart rate section
-const maxRateMessage = document.getElementById('maxheartrate');
-maxRateMessage.innerHTML = `${maxHeartRate}BPM`;
-
-const heartRateMessage = document.getElementById('heartratemessage');
-let currentRate = heartRates[heartRates.length - 1];
 
 function getMessage(currentRate) {
     if (currentRate >= 60 && currentRate <= 100)
@@ -86,61 +47,91 @@ function getMessage(currentRate) {
     }
 }
 
-heartRateMessage.innerHTML = getMessage(currentRate);
-
-//Chart.js chart settings
 let heartChart = new Chart(
     document.getElementById('heartchart'),
     {
         type: 'line',
         data: {
-            labels: chartDates,
             datasets: [{
                 fill: false,
                 backgroundColor: 'rgb(47, 168, 58)',
                 borderColor: 'rgb(47, 168, 58)',
-                data: chartHRates,
+                data: chartData,
+                spanGaps: true
             }]
         },
         options: {
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                displayFormats: {
+                                    week: 'MMM d',
+                                    month: 'MMM'
+                                }
+                            },
+                            min: new Date(today - 7 * 24 * 60 * 60 * 1000).toISOString(),
+                            max: today.toISOString(),
+                            ticks: {
+                                source: 'auto',
+                            }
+                        },
+                        y: {
+                            min: currentMinValue-5,
+                            max: currentMaxValue+5
+                            },
+                        },
             responsive: true,
             maintainAspectRatio: true,
             elements: {
                 line: {
                     borderJoinStyle: 'round',
                     tension: 0.3,
-                },
-                point: {
-                    radius: 0
                 }
             },
             plugins: {
                 legend: {
                     display: false,
-                },
-            },
+                }
+            }
+            }
         }
-    }
 );
 
-//Update chart when new data is submitted without reloading page
-function updateChart(chart, data, labels) {
+function setDaysDisplayedOnChart(numberOfDays){
+    heartChart.options.scales.x.min = new Date(today - numberOfDays * 24 * 60 * 60 * 1000).toISOString();
+    switch(numberOfDays){
+        case 180:
+            heartChart.options.scales.x.time.unit = 'month';
+            heartChart.options.scales.x.time.stepSize = 1;
+            break;
+        case 90:
+            heartChart.options.scales.x.time.unit = 'week';
+            heartChart.options.scales.x.time.stepSize = 2;
+            break;
+        case 30:
+            heartChart.options.scales.x.time.unit = 'day';
+            heartChart.options.scales.x.time.stepSize = 5;
+            break;
+        case 7:
+            heartChart.options.scales.x.time.unit = 'day';
+            heartChart.options.scales.x.time.stepSize = 1;
+        break;
 
-    //Refresh data
-    chart.data.datasets[0].data = data.slice(-noOfPoints);
-    chart.data.labels = labels.slice(-noOfPoints);
+    }
+    updateChart(heartChart);
+}
+
+function updateChart(chart, data) {
     chart.update();
 }
 
-//Sets the number of data points to be displayed
-function setChartPoints(points){
-   noOfPoints = points;
-   updateChart(heartChart, heartRates, dates);
+function updateChart(chart) {
+    chart.update();
 }
 
-//Adds new heart rate to array and updates page, modal content
 function addHeartRate(event) {
-
     event.preventDefault();
 
     //Get input by class
@@ -149,16 +140,30 @@ function addHeartRate(event) {
 
     //Reset value
     input.value = '';
+    const newDateString = today.toLocaleDateString('en-GB');
 
-    heartRates.push(newHeartRate);
-    dates.push(dateOnly);
+    //Object has to be fully null to send to back end and be parsed by spring boot
+    let newEntry = Object.create(null);
+    newEntry.x = today.toISOString();
+    newEntry.y = newHeartRate;
 
     //Update chart and table in view data modal
-    let hasBeenAdded = addKeyValueToTable(dateOnly, newHeartRate); //this function is inside paginateTable.js
+    let hasBeenAdded = addEntryToTable(newEntry);
+
    if(hasBeenAdded){
-        updateChart(heartChart, heartRates, dates);
-        currentRate = newHeartRate;
-        heartRateMessage.innerHTML = getMessage(currentRate);
+        //Save to db
+        saveHeartRate(newEntry);
+
+        //Update min/max if required
+        if(newEntry.y < currentMinValue) currentMinValue = newEntry.y;
+        if(newEntry.y > currentMaxValue) currentMaxValue = newEntry.y;
+
+       //Update customer object
+       getCustData();
+       customer = JSON.parse(sessionStorage.getItem('customer'));
+       chartData.push(newEntry)
+       updateChart(heartChart);
+       heartRateMessage.innerHTML = getMessage(newHeartRate);
    }
    showSubmittedContent(newHeartRate, hasBeenAdded);
 }
