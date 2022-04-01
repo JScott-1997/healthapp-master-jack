@@ -1,8 +1,9 @@
 package com.c3.healthapp.controllers;
 
+import com.c3.healthapp.model.Customer;
 import com.c3.healthapp.model.Role;
 import com.c3.healthapp.model.User;
-import com.c3.healthapp.service.UserService;
+import com.c3.healthapp.service.CustomerService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +20,11 @@ import java.util.Date;
 
 @Slf4j
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/customer")
 @RequiredArgsConstructor
 //Majority of methods return JSON data to the client. If js processing isn't required it's added to model for thymeleaf rendering
-public class UserController {
-    private final UserService userService;
+public class CustomerController {
+    private final CustomerService customerService;
     //Probably best to add this in to an admin controller later, unless we want to administrate admin functions here too?
     //Might be easier to manage permissions in a /admin controller
 //    @GetMapping("/users")
@@ -33,34 +34,34 @@ public class UserController {
 
     //adds user to model and sends user to profile page
     @GetMapping("/profile")
-    public String loggedInUser(Model model) throws IOException {
+    public String loggedInCustomer(Model model) throws IOException {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
-        User user = userService.getUser(username);
+        User user = customerService.getCustomer(username);
         model.addAttribute("user", user);
         return "profile";
     }
 
     //gets username from UsernamePasswordAuthenticationToken and passes to repo to find user details, sends json data to client
-    @GetMapping("/user")
-    public ResponseEntity<User> getUser() {
+    @GetMapping("/customer")
+    public ResponseEntity<Customer> getUser() {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
-        User user = userService.getUser(username);
-        return ResponseEntity.ok().body(user);
+        Customer customer = customerService.getCustomer(username);
+        return ResponseEntity.ok().body(customer);
     }
 
     @PostMapping("/save")
-    public ResponseEntity<User> saveUser(@RequestBody User user) {
+    public ResponseEntity<User> saveCustomer(@RequestBody Customer customer) {
         //returns the location the resource was created in response sent
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/save").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveUser(user));
+        return ResponseEntity.created(uri).body(customerService.saveCustomer(customer));
     }
 
     @PostMapping("/role/save")
     public ResponseEntity<Role> saveRole(@RequestBody Role role) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/role/save").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveRole(role));
+        return ResponseEntity.created(uri).body(customerService.saveRole(role));
     }
 
     //Should be added to admin functions later
@@ -73,7 +74,7 @@ public class UserController {
 }
 
 @Data
-class RoleToUserForm {
+class RoleToCustomerForm {
     protected String username;
     protected String roleName;
 }

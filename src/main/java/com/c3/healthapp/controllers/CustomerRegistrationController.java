@@ -1,7 +1,8 @@
 package com.c3.healthapp.controllers;
 
+import com.c3.healthapp.model.Customer;
 import com.c3.healthapp.model.User;
-import com.c3.healthapp.service.UserService;
+import com.c3.healthapp.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,20 +13,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/registration")
 @RequiredArgsConstructor
-public class UserRegistrationController {
+public class CustomerRegistrationController {
 
-    private final UserService userService;
+    private final CustomerService customerService;
 
     @PostMapping
     //As data will be passed as a string in post request, ModelAttribute is used to bind data to user object
-    public String registerUser(@ModelAttribute User user, Model model) {
-        model.addAttribute("username", user.getUsername());
+    public String registerCustomer(@ModelAttribute Customer customer, Model model) {
+        model.addAttribute("username", customer.getUsername());
 
         //Check if user exists and save, redirect
-        if (!userService.isUsernameTaken(user.getUsername())) {
-            userService.saveUser(user);
+        if (!customerService.isUsernameTaken(customer.getUsername())) {
+            customerService.saveCustomer(customer);
             //All users start with this role
-            userService.addRoleToUser(user.getUsername(), "ROLE_USER");
+            customerService.addRoleToCustomer(customer.getUsername(), "ROLE_USER");
             return "success";
         } else {
             return "exists";

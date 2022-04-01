@@ -1,6 +1,6 @@
 package com.c3.healthapp.model;
 
-public enum UserUnitsPreference {
+public enum CustomerUnitsPreference {
     METRIC,
     IMPERIAL;
 }
