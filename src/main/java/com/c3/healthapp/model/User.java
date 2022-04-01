@@ -1,7 +1,8 @@
 package com.c3.healthapp.model;
 
 import lombok.*;
-import org.springframework.lang.Nullable;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -22,10 +23,18 @@ public class User {
     private String username;
     private String password;
     private Date dateOfBirth;
-    @Nullable
     private int height;
-    @ManyToMany(fetch = FetchType.EAGER)
+    private UserSex userSex;
+    private  UserUnitsPreference userUnitsPreference;
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Role> roles = new ArrayList<>();
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Collection<HeartRateEntry> heartRateEntries = new ArrayList<>();
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Collection<WeightEntry> weightEntries = new ArrayList<>();
 
     /**
      * Constructs and returns a String representing the state of the object
@@ -33,7 +42,7 @@ public class User {
     @Override
     public String toString() {
 
-        return "Customer Id: " + id + " First Name: " + name + " Date Of Birth : " + dateOfBirth +
+        return "User Id: " + id + " First Name: " + name + " Date Of Birth : " + dateOfBirth +
                 " Email Address: " + username + " Password: " + password;
 
     }
