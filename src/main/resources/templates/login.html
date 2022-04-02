@@ -88,14 +88,14 @@
                 <button type="submit" class="btn btn-primary m-2">Log in</button>
             </form>
             <small>Don't have an account? <a href="register">register</a></small>
-            <div th:if="${param.error}" class="alert alert-danger">
-                <p>Invalid username or password.</p>
+            <div th:if="${param.error}" class="alert alert-danger mt-1 p-1">
+                <p class="p-0 m-0">Invalid username or password.</p>
             </div>
-            <div th:if="${param.unauthenticated}" class="alert alert-danger">
-                <p>Please login to continue.</p>
+            <div th:if="${param.unauthenticated}" class="alert alert-danger mt-1 p-1">
+                <p class="p-0 m-0">Please login to continue.</p>
             </div>
-            <div th:if="${param.logout}" class="alert alert-success">
-                <p>Logged out successfully.</p>
+            <div th:if="${param.logout}" class="alert alert-success mt-1 p-1">
+                <p class="p-0 m-0">Logged out successfully.</p>
             </div>
         </section>
     </main>

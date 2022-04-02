@@ -47,7 +47,7 @@
             </div></li>
         </a>
         <hr class="solid">
-        <a href="../logout">
+        <a href="#" onclick="logOut()">
             <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
                                                                                style="font-size: 0.9rem"></i>Log Out
             </div></li>
@@ -88,6 +88,7 @@
             <a class="text-primary" href="https://dundashealth.co.uk">https://dundashealth.co.uk</a>
         </div>
     </footer>
+    <script th:src="@{/js/logout.js}"></script>
     <script th:src="@{/js/custdata.js}"></script>
     <script>getCustData();</script>
     <script th:src="@{/js/sidenav.js}"></script>

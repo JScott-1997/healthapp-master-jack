@@ -11,7 +11,7 @@ let current_page = 1;
 let records_per_page;
 
 function addEntryToTable(entry) {
-    if(!(data[data.length-1]==today.toLocaleDateString('en-GB'))){
+    if(!(new Date(data[data.length-1].x).toLocaleDateString('en-GB')==today.toLocaleDateString('en-GB'))){
         data.push(entry);
         //Refreshes table entries
         changePage(1);
@@ -53,7 +53,6 @@ function changePage(page) {
     let j = 0;
     for (var i = (page - 1) * records_per_page; i < (page * records_per_page); i++) {
         if(i < data.length){
-        //Error occurs on last page if number of results is less than page size. Until solution is found, this try catch prevents issues
             let row = table.insertRow(j);
             let cell1 = row.insertCell(0);
             let cell2 = row.insertCell(1);

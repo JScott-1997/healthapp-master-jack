@@ -1,5 +1,3 @@
-
-
 function getCustData(){
   fetch('/customer/customer')
       .then(jsonData => jsonData.json())
@@ -8,18 +6,17 @@ function getCustData(){
   let saveToSession = (data) => {
       sessionStorage.setItem('customer', JSON.stringify(data));
   }
-  }
+}
 
 
-  function saveHeartRate(rate){
-        let postedData = {};
-      postedData.dateOfEntry = rate.x;
-      postedData.entryHeartRate = rate.y;
-      rate
-      fetch("/customer/heartrates/save", {
+function saveEntry(entry, path, type){
+    let postedData = {};
+    postedData.dateOfEntry = entry.x;
+    postedData['entry' + type] = entry.y;
+    fetch(path, {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(postedData)
-      }).then(res => {
-      });
-  }
+    }).then(res => {
+    });
+}

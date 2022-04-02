@@ -24,21 +24,6 @@ const pageNoSpanIn = document.getElementById('page');
 //Set up modal data table with elements and to display 10 results each page
 setupTable(chartData, nextIn, prevIn, pageNoSpanIn, hrModalTable, 10);
 
-
-function getChartDataFromCustomer(customer){
-    const newArr = new Array();
-    const entries = customer.heartRateEntries;
-    entries.forEach(entry => {
-        let newEntry = {};
-        newEntry.x = new Date(entry.dateOfEntry).toISOString();
-        newEntry.y = entry.entryHeartRate;
-        if(newEntry.y < currentMinValue) currentMinValue = newEntry.y;
-        if(newEntry.y > currentMaxValue) currentMaxValue = newEntry.y;
-        newArr.push(newEntry)
-    })
-    return newArr;
-}
-
 function getMessage(currentRate) {
     if (currentRate >= 60 && currentRate <= 100)
         return `Your heart rate of <b>${currentRate}BPM</b> is within a normal range`
@@ -72,7 +57,7 @@ let heartChart = new Chart(
                                 }
                             },
                             min: new Date(today - 7 * 24 * 60 * 60 * 1000).toISOString(),
-                            max: today.toISOString(),
+                            suggestedMax: new Date(today - 1 * 24 * 60 * 60 * 1000).toISOString(),
                             ticks: {
                                 source: 'auto',
                             }
@@ -99,38 +84,6 @@ let heartChart = new Chart(
         }
 );
 
-function setDaysDisplayedOnChart(numberOfDays){
-    heartChart.options.scales.x.min = new Date(today - numberOfDays * 24 * 60 * 60 * 1000).toISOString();
-    switch(numberOfDays){
-        case 180:
-            heartChart.options.scales.x.time.unit = 'month';
-            heartChart.options.scales.x.time.stepSize = 1;
-            break;
-        case 90:
-            heartChart.options.scales.x.time.unit = 'week';
-            heartChart.options.scales.x.time.stepSize = 2;
-            break;
-        case 30:
-            heartChart.options.scales.x.time.unit = 'day';
-            heartChart.options.scales.x.time.stepSize = 5;
-            break;
-        case 7:
-            heartChart.options.scales.x.time.unit = 'day';
-            heartChart.options.scales.x.time.stepSize = 1;
-        break;
-
-    }
-    updateChart(heartChart);
-}
-
-function updateChart(chart, data) {
-    chart.update();
-}
-
-function updateChart(chart) {
-    chart.update();
-}
-
 function addHeartRate(event) {
     event.preventDefault();
 
@@ -147,12 +100,13 @@ function addHeartRate(event) {
     newEntry.x = today.toISOString();
     newEntry.y = newHeartRate;
 
-    //Update chart and table in view data modal
+    //Save to db
     let hasBeenAdded = addEntryToTable(newEntry);
 
    if(hasBeenAdded){
-        //Save to db
-        saveHeartRate(newEntry);
+        console.log(newEntry);
+        //Save to DB
+        saveEntry(newEntry, "/customer/heartrates/save", "HeartRate");
 
         //Update min/max if required
         if(newEntry.y < currentMinValue) currentMinValue = newEntry.y;
@@ -161,7 +115,6 @@ function addHeartRate(event) {
        //Update customer object
        getCustData();
        customer = JSON.parse(sessionStorage.getItem('customer'));
-       chartData.push(newEntry)
        updateChart(heartChart);
        heartRateMessage.innerHTML = getMessage(newHeartRate);
    }
