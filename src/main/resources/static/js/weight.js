@@ -1,60 +1,40 @@
+//update and get customer object
+getCustData();
+let customer = JSON.parse(sessionStorage.getItem('customer'));
 
-//Label for chart (prototype use only, to be replaced by record submission dates)
-const dates = ["01/03/2022", "02/03/2022", "03/03/2022", "04/03/2022", "05/03/2022", "06/03/2022"
-];
-
-//Gets current date minus time as String
-function getCurrentDate() {
-    const date = new Date(Date.now()).toLocaleString();
-    const dateSplit = date.split(",");
-    const dateOnly = dateSplit[0];
-    return dateOnly;
-}
-
-const dateOnly = getCurrentDate();
-
-//To track current row of data in modal table
-let modalRowCounter = 1;
-
-//User data for charts
-const userHeight = 1.76;
-const userAge = 40;
-const userBMI = [];
-const weightData = [75, 75, 73, 74, 71, 69];
-const calorieData = [1500, 2300, 2000, 2150, 1700, 2500];
-const calorieTarget = 2000;
 let targetWeight = 65;
-let currentWeight = weightData[weightData.length - 1];
 
-//Fills modal with submission data
-const weightModaltable = document.getElementById('weightModalData');
+//Min and max values user has submitted, used to render chart to display a practical scale
+let currentMinValue = 50;
+let currentMaxValue = 0;
 
-weightData.forEach(function () {
-    const modalRow1 = weightModaltable.insertRow(modalRowCounter);
-    const cell1 = modalRow1.insertCell(0);
-    cell1.innerHTML = dates[modalRowCounter - 1];
-    const cell2 = modalRow1.insertCell(1);
-    cell2.innerHTML = weightData[modalRowCounter - 1];
-    modalRowCounter++;
-})
+const chartData = getChartDataFromCustomer(customer, "weight");
+console.log(chartData);
+let daysDisplayedOnChart = 7;
 
-//Calculates BMI and fills array with data to 2 decimal places
-function getBMI(item, index, arr) {
-    userBMI.push((arr[index] / (userHeight * userHeight)).toFixed(2));
-}
-weightData.forEach(getBMI);
-
-//Then get current BMI
-const currentBMI = userBMI[userBMI.length - 1];
+let currentWeight = 0;
 
 //Setting messages for weight section
 let target = document.getElementById('targetWeight');
 target.innerHTML = `${targetWeight}KG`;
 let current = document.getElementById('currentWeight');
-current.innerHTML = `${currentWeight}KG`;
 let weightMessage = document.getElementById('weightMessage');
 
-weightMessage.innerHTML = getWeightMessage(targetWeight, currentWeight);
+if(currentWeight==0){
+       current.innerHTML = `No data.`;
+       weightMessage.innerHTML = `No data.`;
+}
+else{
+    current.innerHTML = `${currentWeight}KG`;
+    weightMessage.innerHTML = getWeightMessage(targetWeight, currentWeight);
+}
+
+const weightModalTable = document.getElementById('weightModalData');
+const nextIn = document.getElementById('btn_next');
+const prevIn = document.getElementById('btn_prev');
+const pageNoSpanIn = document.getElementById('page');
+
+setupTable(chartData, nextIn, prevIn, pageNoSpanIn, weightModalTable, 10);
 
 function getWeightMessage(targetWeight, currentWeight) {
     const weightDifference = Math.abs(targetWeight - currentWeight);
@@ -70,82 +50,103 @@ function getWeightMessage(targetWeight, currentWeight) {
 }
 
 //Chart.js charts settings and config
-const weightChart = new Chart(
+let weightChart = new Chart(
     document.getElementById('weightchart'),
     {
         type: 'line',
         data: {
-            labels: dates,
             datasets: [{
-                label: 'Weight (KG)',
+                fill: false,
                 backgroundColor: 'rgb(47, 168, 58)',
                 borderColor: 'rgb(47, 168, 58)',
-                data: weightData,
+                data: chartData,
+                spanGaps: true
             }]
         },
         options: {
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                displayFormats: {
+                                    week: 'MMM d',
+                                    month: 'MMM'
+                                }
+                            },
+
+                            //Default min 1 week before
+                            min: new Date(today - 7 * 24 * 60 * 60 * 1000).toISOString(),
+
+                            //Max will be yesterday unless data exists for today
+                            suggestedMax: new Date(today - 1 * 24 * 60 * 60 * 1000).toISOString(),
+                            ticks: {
+                                source: 'auto',
+                            }
+                        },
+                        y: {
+                            min: currentMinValue-5,
+                            max: currentMaxValue+5
+                            },
+                        },
             responsive: true,
             maintainAspectRatio: true,
             elements: {
                 line: {
                     borderJoinStyle: 'round',
                     tension: 0.3,
-                },
-                // point: {
-                //     radius: 1
-                // }
+                }
             },
             plugins: {
                 legend: {
                     display: false,
-                },
-            },
+                }
+            }
+            }
         }
-    }
 );
 
-//Add event listener to form to allow dummy data to be submitted
-const form = document.getElementById('weightForm');
-
-form.addEventListener('submit', (event) => {
+function addWeight(event) {
     event.preventDefault();
-    const buttonPressed = document.activeElement.id;
 
-    //Check if user is recording new weight or setting new target
-    if (buttonPressed === 'record') {
-        const input = document.getElementById('weight');
-        const newWeight = input.value;
-        currentWeight = newWeight;
-        input.value = '';
-        dates.push(dateOnly);
-        weightData.push(newWeight);
-        current.innerHTML = `${newWeight}KG`;
-        weightMessage.innerHTML = getWeightMessage(targetWeight, currentWeight);
+    //Get input by class
+    const input = event.target.querySelector('#weight');
+    const newWeight = parseInt(input.value);
+    //Reset value
+    input.value = '';
+    const newDateString = today.toLocaleDateString('en-GB');
 
-        updateChart(weightChart, dateOnly, currentWeight);
-        addModalData(weightModaltable, dateOnly, currentWeight);
-    }
-    else if (buttonPressed === 'set') {
-        const input = document.getElementById('target');
-        targetWeight = input.value;
-        input.value = '';
-        weightMessage.innerHTML = getWeightMessage(targetWeight, currentWeight);
-        target.innerHTML = `${targetWeight}KG`;
-    }
-});
+    //Object has to be fully null to send to back end and be parsed by spring boot
+    let newEntry = Object.create(null);
+    newEntry.x = today.toISOString();
+    newEntry.y = newWeight;
+    console.log(newEntry);
+    //Save to db
+    let hasBeenAdded = addEntryToTable(newEntry);
 
-//Update chart when new data is submitted without reloading page
-function updateChart(chart) {
-    chart.update();
+   if(hasBeenAdded){
+        console.log(newEntry);
+        //Save to DB
+        saveEntry(newEntry, "/customer/weight/save", "Weight");
+
+        //Update min/max if required
+        if(newEntry.y < currentMinValue) currentMinValue = newEntry.y;
+        if(newEntry.y > currentMaxValue) currentMaxValue = newEntry.y;
+
+        currentWeight = newEntry.y;
+       //Update customer object
+       getCustData();
+
+       customer = JSON.parse(sessionStorage.getItem('customer'));
+       updateChart(weightChart);
+       weightMessage.innerHTML = getMessage(newWeight);
+   }
+//   showSubmittedContent(newWeight, hasBeenAdded);
 }
 
-//Add submitted data to modal table
-function addModalData(table, label, data) {
-    const modalRow = table.insertRow(modalRowCounter);
-    const cell = modalRow.insertCell(0);
-    cell.innerHTML = label;
-    const cell2 = modalRow.insertCell(1);
-    cell2.innerHTML = data;
-    modalRowCounter++;
-}
+const form = document.getElementById('weightForm');
+form.addEventListener('submit', addWeight);
+
+
+
 

@@ -11,13 +11,21 @@ let current_page = 1;
 let records_per_page;
 
 function addEntryToTable(entry) {
-    if(!(new Date(data[data.length-1].x).toLocaleDateString('en-GB')==today.toLocaleDateString('en-GB'))){
+    if(!data.length==0){
+        if(!(new Date(data[data.length-1].x).toLocaleDateString('en-GB')==today.toLocaleDateString('en-GB'))){
+            data.push(entry);
+            //Refreshes table entries
+            changePage(1);
+            return true;
+        }
+            return false;
+    }
+    else{
         data.push(entry);
         //Refreshes table entries
         changePage(1);
         return true;
     }
-        return false;
 }
 
 function setupTable(dataIn, nextBtn, prevBtn, pageNoEl, tableEl, recordsPerPage) {
@@ -51,8 +59,8 @@ function changePage(page) {
     table.innerHTML = "";
 
     let j = 0;
-    for (var i = (page - 1) * records_per_page; i < (page * records_per_page); i++) {
-        if(i < data.length){
+    for (let i = (page - 1) * records_per_page; i < (page * records_per_page); i++) {
+        if(i < data.length && !data.length==0){
             let row = table.insertRow(j);
             let cell1 = row.insertCell(0);
             let cell2 = row.insertCell(1);
@@ -78,7 +86,7 @@ function changePage(page) {
 }
 
 function numPages() {
-    return Math.ceil((Object.keys(data).length / records_per_page));
+    return Math.ceil((data.length / records_per_page));
 }
 
 window.onload = function () {

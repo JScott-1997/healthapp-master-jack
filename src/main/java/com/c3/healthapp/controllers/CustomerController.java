@@ -1,9 +1,6 @@
 package com.c3.healthapp.controllers;
 
-import com.c3.healthapp.model.Customer;
-import com.c3.healthapp.model.HeartRateEntry;
-import com.c3.healthapp.model.Role;
-import com.c3.healthapp.model.User;
+import com.c3.healthapp.model.*;
 import com.c3.healthapp.service.CustomerService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -84,15 +81,15 @@ public class CustomerController {
         return ResponseEntity.created(uri).body(heartRateEntry);
     }
 
-    @PostMapping("/heartrates/saveAll")
-    public ResponseEntity<Collection<HeartRateEntry>> saveAllHR(@RequestBody Collection<HeartRateEntry> heartRateEntries){
+    @PostMapping("/weight/save")
+    public ResponseEntity<WeightEntry> saveHREntry(@RequestBody WeightEntry weightEntry){
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
-        Customer customer = customerService.getCustomer(username);
-        customer.setHeartRateEntries(heartRateEntries);
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/heartrates/saveAll").toUriString());
-        return ResponseEntity.created(uri).body(heartRateEntries);
+        customerService.saveWeightEntry(username, weightEntry);
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/weight/save").toUriString());
+        return ResponseEntity.created(uri).body(weightEntry);
     }
+
 }
 
 @Data

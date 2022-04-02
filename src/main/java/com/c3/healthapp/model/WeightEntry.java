@@ -19,8 +19,9 @@ public class WeightEntry {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long entryId;
-    private int entryWeight;
     private Date dateOfEntry;
+    private int entryWeight;
+
 
     @Override
     public String toString() {

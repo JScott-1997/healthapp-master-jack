@@ -32,9 +32,9 @@ function setDaysDisplayedOnChart(numberOfDays, chart){
     updateChart(chart);
 }
 
-function getChartDataFromCustomer(customer){
+function getChartDataFromCustomer(customer, entryType){
     const newArr = new Array();
-    const entries = customer.heartRateEntries;
+    const entries = customer[entryType+"Entries"];
     entries.forEach(entry => {
         let newEntry = {};
 

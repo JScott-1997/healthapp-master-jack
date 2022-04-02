@@ -1,4 +1,7 @@
+//update and get customer object
+getCustData();
 let customer = JSON.parse(sessionStorage.getItem('customer'));
+
 const userAge = yearsBeforeToday(new Date(customer.dateOfBirth));
 const maxHeartRate = 220 - userAge;
 
@@ -6,14 +9,24 @@ const maxHeartRate = 220 - userAge;
 let currentMinValue = 100;
 let currentMaxValue = 0;
 
-const chartData = getChartDataFromCustomer(customer);
+const chartData = getChartDataFromCustomer(customer, "heartRate");
 
 let daysDisplayedOnChart = 7;
 
 const maxRateMessage = document.getElementById('maxheartrate');
-maxRateMessage.innerHTML = `${maxHeartRate}BPM`;
 const heartRateMessage = document.getElementById('heartratemessage');
-heartRateMessage.innerHTML = getMessage(chartData[chartData.length-1].y);
+
+if(chartData.length==0){
+    maxRateMessage.innerHTML = `No data available`;
+    heartRateMessage.innerHTML = `No data available`;
+}
+else{
+    maxRateMessage.innerHTML = `${maxHeartRate}BPM`;
+    heartRateMessage.innerHTML = getMessage(chartData[chartData.length-1].y);
+}
+
+
+
 
 //Get page elements and data and send to setUpTable in paginateTable.js
 const hrModalTable = document.getElementById('hrModalData');
@@ -56,7 +69,11 @@ let heartChart = new Chart(
                                     month: 'MMM'
                                 }
                             },
+
+                            //Default min 1 week before
                             min: new Date(today - 7 * 24 * 60 * 60 * 1000).toISOString(),
+
+                            //Max will be yesterday unless data exists for today
                             suggestedMax: new Date(today - 1 * 24 * 60 * 60 * 1000).toISOString(),
                             ticks: {
                                 source: 'auto',
