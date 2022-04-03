@@ -69,43 +69,29 @@
         <div class="row justify-content-center">
 
             <section id="leftColumn" class="col-lg bg-white m-1 p-1 chartbox">
-                <!-- <img src="assets/scale.svg" height="100px" style="margin-top:2rem;"> -->
-                <h3 class="h3 sectionHead">Weight (KG)</h3>
+                <h3 class="h3 sectionHead">Weight (<span class="unit"></span>)</h3>
                 <div class="canvasContainer">
                     <canvas id="weightchart" class="m-3"></canvas>
+                    <small><b>Note: </b>The blue line on the chart indicates your target weight.</small>
+                    <div class="d-flex flex-row-reverse px-4 my-3">|
+                        <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(180, weightChart)">180D</a> |
+                        <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(90, weightChart)">90D</a> |
+                        <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(30, weightChart)">30D</a> |
+                        <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(7, weightChart)">1W</a>
+                    </div>
                 </div>
                 Target Weight: <b><span id="targetWeight"></span></b><br>
                 Current Weight: <b><span id="currentWeight"></span></b><br>
                 <span id="weightMessage"></span>
-
-                <form class="m-2" id="weightForm">
-                    <table class="mx-auto">
-                        <tr>
-                            <td><label for="weight">Current Weight: </label></td>
-                            <td><input type="text" id="weight" maxlength="3" size="3" class="m-1"
-                                    pattern="(3[5-9]|[4-9]\d|1[0-4]\d|150)"
-                                    oninvalid="this.setCustomValidity('Enter a value between 35 and 150')"
-                                    oninput="this.setCustomValidity('')"></td>
-                            <td><button class="btn btn-primary btn-sm m-1" id="record">Record</button></td>
-                        </tr>
-<!--                        <tr>-->
-<!--                            <td>-->
-<!--                                <label for="target">Set New Target: </label>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <input type="text" id="target" maxlength="3" size="3" class="m-1"-->
-<!--                                    pattern="(3[5-9]|[4-9]\d|1[0-4]\d|150)"-->
-<!--                                    oninvalid="this.setCustomValidity('Enter a value between 35 and 150')"-->
-<!--                                    oninput="this.setCustomValidity('')">-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <button class="btn btn-primary btn-sm" id="set">Set Target</button>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-                    </table>
-                </form>
-                <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#weightdata">View
-                    Data</button>
+                <div id="weightbuttons" class="m-3">
+                    <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#weightentry">Record Weight
+                    </button>
+                    <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#weightdata">View
+                        Data
+                    </button>
+                    <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#weighttarget">Set Target
+                    </button>
+                </div>
                 <div class="modal fade pt-5" id="weightdata" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -113,7 +99,7 @@
                                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">X</span>
                                 </button>
-                                <h5 class="modal-title mx-auto">All Weight Submissions</h5>
+                                <h6 class="modal-title mx-auto">All Weight Submissions</h6>
                             </div>
                             <div class="modal-body">
                                 <table class="table table-striped" width="80%">
@@ -123,7 +109,7 @@
                                             Date
                                         </th>
                                         <th class="text-left">
-                                            Weight
+                                            Weight (<span class="unit"></span>)
                                         </th>
                                     </tr>
                                     </thead>
@@ -137,6 +123,92 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="weightentry" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content p-3">
+                            <div class="modal-header">
+                                <button type="button" class="close btn" data-dismiss="modal" aria-label="Close"
+                                        onclick="revertDefault()">
+                                    <span aria-hidden="true">X</span>
+                                </button>
+                                <h6 class="modal-title mx-auto">Record Your Weight</h6>
+                            </div>
+                            <div class="modal-body" id="weightModalBody">
+                                <div id="defaultContent">
+                                    <form class="m-2" id="weightForm">
+                                        <table class="mx-auto">
+                                            <tr>
+                                                <td><label for="weight">Current Weight (<span class="unit"></span>): </label></td>
+                                                <td><input type="text" id="weight" maxlength="3" size="3"
+                                                           pattern="(4[0-9]|[5-9][0-9]|1[0-9]{2}|2[0-3][0-9]|240)"
+                                                           class="m-1 data"
+                                                           oninvalid="this.setCustomValidity('Enter a value between 40 and 240')"
+                                                           oninput="this.setCustomValidity('')" required></td>
+                                                <td>
+                                                    <button class="btn btn-primary btn-sm m-1" type="submit">Record</button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </form>
+                                </div>
+                                <div id="confirmedMessage">
+
+                                </div>
+                                <div id="submittedContent" style="display: none">
+                                    <h6 id="submittedMessage"></h6>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                        onclick="revertDefault()">Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="weighttarget" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content p-3">
+                            <div class="modal-header">
+                                <button type="button" class="close btn" data-dismiss="modal" aria-label="Close"
+                                        onclick="revertDefault()">
+                                    <span aria-hidden="true">X</span>
+                                </button>
+                                <h6 class="modal-title mx-auto">Set Target Weight</h6>
+                            </div>
+                            <div class="modal-body" id="targetModalBody">
+                                <div id="defaultTargetContent">
+                                    <form class="m-2" id="targetWeightForm">
+                                        <table class="mx-auto">
+                                            <tr>
+                                                <td><label for="weight">Target Weight (<span class="unit"></span>): </label></td>
+                                                <td><input type="text" id="targetWeightData" maxlength="3" size="3"
+                                                           pattern="(4[0-9]|[5-9][0-9]|1[0-9]{2}|2[0-3][0-9]|240)"
+                                                           class="m-1 data"
+                                                           oninvalid="this.setCustomValidity('Enter a value between 40 and 240')"
+                                                           oninput="this.setCustomValidity('')" required></td>
+                                                <td>
+                                                    <button class="btn btn-primary btn-sm m-1" type="submit">Record</button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </form>
+                                </div>
+                                <div id="confirmedTargetMessage">
+
+                                </div>
+                                <div id="submittedTargetContent" style="display: none">
+                                    <h6 id="submittedTargetMessage"></h6>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                        onclick="revertTargetDefault()">Close
+                                </button>
                             </div>
                         </div>
                     </div>

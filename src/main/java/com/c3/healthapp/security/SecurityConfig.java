@@ -37,12 +37,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         //set login page (with unauthenticated parameter), invalidate cookies and session on /logout
         http.formLogin().loginPage("/login?unauthenticated")
-                .defaultSuccessUrl("/user/dashboard", true)
+                .defaultSuccessUrl("/customer/dashboard", true)
                 .permitAll().and().httpBasic().and().logout().logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout").deleteCookies("token").deleteCookies("refreshToken").invalidateHttpSession(true);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers(GET, "/user/**").hasAuthority("ROLE_USER");
-        http.authorizeRequests().antMatchers(POST, "/user/save/**").hasAuthority("ROLE_ADMIN");
+        http.authorizeRequests().antMatchers(GET, "/customer/**").hasAuthority("ROLE_USER");
+        http.authorizeRequests().antMatchers(POST, "/customer/save/**").hasAuthority("ROLE_ADMIN");
         http.authorizeRequests().antMatchers(GET, "/admin/**").hasAuthority("ROLE_ADMIN");
         http.authorizeRequests().antMatchers("/**", "/login/**", "/").permitAll();
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

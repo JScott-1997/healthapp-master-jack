@@ -5,11 +5,18 @@ let customer = JSON.parse(sessionStorage.getItem('customer'));
 const userAge = yearsBeforeToday(new Date(customer.dateOfBirth));
 const maxHeartRate = 220 - userAge;
 
-//Min and max values user has submitted, used to render chart to display a practical scale
-let currentMinValue = 100;
+//Min and max values from data, used to render chart to display a practical scale
+let lowestValueFromData = 1000;
+let highestValueFromData = 0;
+
+let currentMinValue = 0;
 let currentMaxValue = 0;
 
 const chartData = getChartDataFromCustomer(customer, "heartRate");
+
+//getChartDataFromCustomer assigns values to lowest and highest value from data variables
+currentMinValue = lowestValueFromData;
+currentMaxValue = highestValueFromData;
 
 let daysDisplayedOnChart = 7;
 
@@ -70,11 +77,11 @@ let heartChart = new Chart(
                                 }
                             },
 
-                            //Default min 1 week before
-                            min: new Date(today - 7 * 24 * 60 * 60 * 1000).toISOString(),
+                            //Default min 1 week
+                            min: new Date(today - 6 * 24 * 60 * 60 * 1000).toISOString(),
 
                             //Max will be yesterday unless data exists for today
-                            suggestedMax: new Date(today - 1 * 24 * 60 * 60 * 1000).toISOString(),
+                            max: new Date(today).toISOString(),
                             ticks: {
                                 source: 'auto',
                             }
@@ -125,13 +132,17 @@ function addHeartRate(event) {
         //Save to DB
         saveEntry(newEntry, "/customer/heartrates/save", "HeartRate");
 
-        //Update min/max if required
-        if(newEntry.y < currentMinValue) currentMinValue = newEntry.y;
-        if(newEntry.y > currentMaxValue) currentMaxValue = newEntry.y;
+        //Update customer object
+        getCustData()
 
-       //Update customer object
-       getCustData();
-       customer = JSON.parse(sessionStorage.getItem('customer'));
+        //Add to chart with x, y values
+        chartData.push(newEntry);
+
+        //Get lowest and highest data points again in case of change
+        getLowestAndHighestValues(chartData);
+        currentMinValue = lowestValueFromData;
+        currentMaxValue = highestValueFromData;
+
        updateChart(heartChart);
        heartRateMessage.innerHTML = getMessage(newHeartRate);
    }

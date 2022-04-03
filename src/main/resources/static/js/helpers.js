@@ -71,3 +71,11 @@ function yearsBeforeToday(date) {
    return 0;
  }
 
+ function convertKGToLbs(value){
+    return Math.round(value * 2.2046);
+ }
+
+  function convertLbsToKG(value){
+     return Math.round(value / 2.2046);
+  }
+

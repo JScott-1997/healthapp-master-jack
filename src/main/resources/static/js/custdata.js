@@ -20,3 +20,24 @@ function saveEntry(entry, path, type){
     }).then(res => {
     });
 }
+
+function saveTarget(target, path){
+        fetch(path, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(target)
+        }).then(res => {
+        });
+}
+
+function saveUnits(unitsPref){
+        const units = {
+            customerUnitsPreference: unitsPref
+        }
+        fetch('/customer/units/save', {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(unitsPref)
+        }).then(res => {
+        });
+}

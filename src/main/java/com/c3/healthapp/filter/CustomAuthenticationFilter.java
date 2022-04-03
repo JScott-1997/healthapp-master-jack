@@ -75,7 +75,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         response.addCookie(refreshTokenCookie);
 
         //Redirect to dashboard on authentication success
-        String redirectUrl = "/user/dashboard";
+        String redirectUrl = "/customer/dashboard";
         new DefaultRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
 

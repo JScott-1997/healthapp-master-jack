@@ -72,9 +72,9 @@
 <!-- Container for the Health Vitals sections containing the charts -->
 <main class="container-fluid mx-auto text-center bg-light" id="mainContainer">
     <div class="row justify-content-center">
-        <section id="heartRateChart" class="col-sm bg-white m-3 p-3 chartbox">
+        <section id="heartRateChart" class="col-sm bg-white my-2 py-2 chartbox">
             <h3 class="h3 text-secondary sectionHead">Heart Rate (BPM)</h3>
-            <div class="canvasContainer">
+            <div class="canvasContainer m-0 p-0">
                 <canvas id="heartchart" class="m-3"></canvas>
                 <div class="d-flex flex-row-reverse px-4 my-3">|
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(180, heartChart)">180D</a> |
@@ -95,7 +95,7 @@
                     Data
                 </button>
             </div>
-            <div class="modal fade pt-5" id="heartratedata" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal fade pt-2" id="heartratedata" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -132,7 +132,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade pt-1" id="heartrateentry" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal fade" id="heartrateentry" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content p-3">
                         <div class="modal-header">
@@ -195,8 +195,8 @@
                             </div>
                             <div id="preRecordInstructions" style="display: none">
                                 <h5>Record Carotid Pulse</h5>
-                                <img src="https://thumbs.dreamstime.com/b/finger-pressing-spacebar-button-black-keyboard-close-up-shot-male-finger-pressing-spacebar-button-black-136854257.jpg"
-                                     width="200px"/>
+<!--                                <img src="https://thumbs.dreamstime.com/b/finger-pressing-spacebar-button-black-keyboard-close-up-shot-male-finger-pressing-spacebar-button-black-136854257.jpg"-->
+<!--                                     width="200px"/>-->
                                 <img th:src="@{/assets/tappingphone.jpg}" width="200px"/>
                                 <p><b>Instructions: </b>
                                 <p>Make sure that you have two fingers on your Carotid Pulse and can feel your heart
@@ -206,7 +206,7 @@
                                 <p>During the countdown, with your other hand, press the SPACEBAR on your keyboard, or
                                     tap on the button displayed in time with your heart beating, until the
                                     counter reaches zero.</p>
-                                <a class="btn btn-primary btn-md m-1" id="startButton" onclick="beginRecording()">Start
+                                <a class="btn btn-primary btn-lg m-1" id="startButton" onclick="beginRecording()">Start
                                 </a>
                             </div>
                             <div id="recordingContent" style="display: none">

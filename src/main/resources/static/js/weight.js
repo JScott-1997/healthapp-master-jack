@@ -2,31 +2,54 @@
 getCustData();
 let customer = JSON.parse(sessionStorage.getItem('customer'));
 
-let targetWeight = 65;
+let usesImperialUnits = customer.customerUnitsPreference=='IMPERIAL';
+let unitsString = usesImperialUnits ? 'lbs' : 'KG';
+const unitSpans = document.getElementsByClassName('unit');
+
+//Set the units to display in areas of page
+Array.from(unitSpans).forEach(unit => unit.innerHTML = unitsString);
+
+let targetWeight = 50;
 
 //Min and max values user has submitted, used to render chart to display a practical scale
-let currentMinValue = 50;
+let lowestValueFromData = 1000;
+let highestValueFromData = 0;
+let currentMinValue = 0;
 let currentMaxValue = 0;
 
-const chartData = getChartDataFromCustomer(customer, "weight");
-console.log(chartData);
+let chartData = getChartDataFromCustomer(customer, "weight");
+
+//Convert data and chart min/max to pounds if user has imperial units preference
+if(usesImperialUnits){
+    chartData.forEach(entry => {
+        entry.y = convertKGToLbs(entry.y);
+    })
+    lowestValueFromData = Math.round((lowestValueFromData * 2.2046))
+    highestValueFromData = Math.round((highestValueFromData * 2.2046))
+    targetWeight = Math.round((targetWeight * 2.2046))
+}
+
+//Change min max based on target set
+getMinMaxValues();
+
 let daysDisplayedOnChart = 7;
 
 let currentWeight = 0;
 
 //Setting messages for weight section
 let target = document.getElementById('targetWeight');
-target.innerHTML = `${targetWeight}KG`;
+target.innerHTML = `${targetWeight}${unitsString}`;
 let current = document.getElementById('currentWeight');
 let weightMessage = document.getElementById('weightMessage');
 
-if(currentWeight==0){
-       current.innerHTML = `No data.`;
-       weightMessage.innerHTML = `No data.`;
+if(!chartData.length==0){
+    currentWeight = chartData[chartData.length-1].y
+    current.innerHTML = `${currentWeight}${unitsString}`;
+    weightMessage.innerHTML = getWeightMessage(targetWeight, currentWeight);
 }
 else{
-    current.innerHTML = `${currentWeight}KG`;
-    weightMessage.innerHTML = getWeightMessage(targetWeight, currentWeight);
+    current.innerHTML = `No data.`;
+    weightMessage.innerHTML = `No data.`;
 }
 
 const weightModalTable = document.getElementById('weightModalData');
@@ -37,12 +60,12 @@ const pageNoSpanIn = document.getElementById('page');
 setupTable(chartData, nextIn, prevIn, pageNoSpanIn, weightModalTable, 10);
 
 function getWeightMessage(targetWeight, currentWeight) {
-    const weightDifference = Math.abs(targetWeight - currentWeight);
+    const weightDifference = Math.abs(Math.round(targetWeight - currentWeight));
     if (targetWeight > currentWeight) {
-        return `You are <b>${weightDifference}KG</b> below your target`
+        return `You are <b>${weightDifference}${unitsString}</b> below your target of <b>${targetWeight}${unitsString}</b>`
     }
     else if (targetWeight < currentWeight) {
-        return `You are <b>${weightDifference}KG</b> above your target`
+        return `You are <b>${weightDifference}${unitsString}</b> above your target of <b>${targetWeight}${unitsString}</b>`
     }
     else {
         return `Well done, you're on target!`
@@ -54,6 +77,23 @@ let weightChart = new Chart(
     document.getElementById('weightchart'),
     {
         type: 'line',
+        //Plugin to draw weight target line on chart
+        plugins: [{
+            afterDraw: chart => {
+              const ctx = chart.ctx;
+              ctx.save();
+              const xAxis = chart.scales['x'];
+              const yAxis = chart.scales['y'];
+              let y = yAxis.getPixelForValue(targetWeight);
+              ctx.beginPath();
+              ctx.moveTo(xAxis.left, y);
+              ctx.lineTo(xAxis.right, y);
+              ctx.lineWidth = 2;
+              ctx.strokeStyle = 'blue';
+              ctx.stroke();
+              ctx.restore();
+            }
+          }],
         data: {
             datasets: [{
                 fill: false,
@@ -75,11 +115,11 @@ let weightChart = new Chart(
                                 }
                             },
 
-                            //Default min 1 week before
-                            min: new Date(today - 7 * 24 * 60 * 60 * 1000).toISOString(),
+                            //Default min 1 week
+                            min: new Date(today - 6 * 24 * 60 * 60 * 1000).toISOString(),
 
                             //Max will be yesterday unless data exists for today
-                            suggestedMax: new Date(today - 1 * 24 * 60 * 60 * 1000).toISOString(),
+                            suggestedMax: new Date(today).toISOString(),
                             ticks: {
                                 source: 'auto',
                             }
@@ -100,7 +140,7 @@ let weightChart = new Chart(
             plugins: {
                 legend: {
                     display: false,
-                }
+                },
             }
             }
         }
@@ -111,42 +151,131 @@ function addWeight(event) {
 
     //Get input by class
     const input = event.target.querySelector('#weight');
-    const newWeight = parseInt(input.value);
-    //Reset value
+
+    //Convert to kg if user uses imperial units. data is stored in kg in db. Weight read in is used to update chart data etc as its in users choice of units
+    const weightReadIn = parseInt(input.value);
+    const newWeight = usesImperialUnits ? convertLbsToKG(weightReadIn) : weightReadIn;
+
+    //Reset value of input
     input.value = '';
     const newDateString = today.toLocaleDateString('en-GB');
 
     //Object has to be fully null to send to back end and be parsed by spring boot
     let newEntry = Object.create(null);
     newEntry.x = today.toISOString();
-    newEntry.y = newWeight;
-    console.log(newEntry);
-    //Save to db
+    newEntry.y = weightReadIn;
+    //Add to modal table
     let hasBeenAdded = addEntryToTable(newEntry);
 
    if(hasBeenAdded){
-        console.log(newEntry);
-        //Save to DB
-        saveEntry(newEntry, "/customer/weight/save", "Weight");
-
-        //Update min/max if required
-        if(newEntry.y < currentMinValue) currentMinValue = newEntry.y;
-        if(newEntry.y > currentMaxValue) currentMaxValue = newEntry.y;
-
         currentWeight = newEntry.y;
+        //Change weight to KG in object and save to DB. rounded as stored as int
+        const formattedForDBEntry = {
+            x: today.toISOString(),
+            y: Math.round(newWeight)
+        }
+        saveEntry(formattedForDBEntry, "/customer/weight/save", "Weight");
+
        //Update customer object
        getCustData();
 
-       customer = JSON.parse(sessionStorage.getItem('customer'));
+        //Add to chart with x, y values
+       chartData.push(newEntry);
+
+       //Get lowest and highest data points again in case of change
+       getLowestAndHighestValues(chartData);
+
+       //Get chart min and max values (depends on target as well as lowest and highest values)
+       getMinMaxValues();
+
        updateChart(weightChart);
-       weightMessage.innerHTML = getMessage(newWeight);
+       weightMessage.innerHTML = getWeightMessage(targetWeight, weightReadIn);
+       current.innerHTML = `${weightReadIn}${unitsString}`
    }
-//   showSubmittedContent(newWeight, hasBeenAdded);
+   showSubmittedContent(newWeight, hasBeenAdded);
+}
+
+function setWeightTarget(event){
+    event.preventDefault();
+    //Get input by class
+    const input = event.target.querySelector('#targetWeightData');
+    //Convert to kg if user uses imperial units. data is stored in kg in db. Weight read in is used to update chart data etc as its in users choice of units
+    const weightTargetReadIn = parseInt(input.value);
+    const newWeightTarget = usesImperialUnits ? convertLbsToKG(weightTargetReadIn) : weightTargetReadIn;
+    //Reset value of input
+    input.value = '';
+    const weightTargetObj = {
+        weightTarget: newWeightTarget
+    }
+    targetWeight = weightTargetReadIn;
+    target.innerHTML = `${targetWeight}${unitsString}`;
+
+    //change min and max values for chart and update chart
+    getMinMaxValues();
+
+    //Update messages on page
+    target.innerHTML = `${targetWeight}${unitsString}`;
+    weightMessage.innerHTML = getWeightMessage(targetWeight, currentWeight);
+//    saveTarget(newWeightTarget);
+    showSubmittedTargetContent(weightTargetReadIn);
+    updateChart(weightChart);
 }
 
 const form = document.getElementById('weightForm');
 form.addEventListener('submit', addWeight);
+const targetForm = document.getElementById('targetWeightForm');
+targetForm.addEventListener('submit', setWeightTarget);
 
+const defaultContent = document.getElementById('defaultContent');
+const submittedContent = document.getElementById('submittedContent');
+
+const defaultTargetContent = document.getElementById('defaultTargetContent');
+const submittedTargetContent = document.getElementById('submittedTargetContent');
+
+function showSubmittedContent(weight, hasBeenAdded){
+    defaultContent.style.display = 'none';
+    let message = submittedContent.querySelector('#submittedMessage');
+    message.textContent = hasBeenAdded ? `Weight of ${weight}${unitsString} submitted successfully!` : `You have already submitted a reading today, please try again tomorrow!`;
+    submittedContent.style.display = 'block';
+
+}
+
+function revertDefault() {
+    setTimeout(function () {
+        submittedContent.style.display = 'none';
+        defaultContent.style.display = 'block';
+    }, 500);
+}
+
+function showSubmittedTargetContent(weightTarget){
+    defaultTargetContent.style.display = 'none';
+    let message = submittedTargetContent.querySelector('#submittedTargetMessage');
+    message.textContent = `Weight target of ${weightTarget}${unitsString} submitted successfully!`;
+    submittedTargetContent.style.display = 'block';
+
+}
+
+function revertTargetDefault() {
+    setTimeout(function () {
+        submittedTargetContent.style.display = 'none';
+        defaultTargetContent.style.display = 'block';
+    }, 500);
+}
+
+function getMinMaxValues(){
+    if(targetWeight <= lowestValueFromData){
+        currentMinValue = targetWeight;
+    }
+    else{
+        currentMinValue = lowestValueFromData;
+    }
+    if(targetWeight >= highestValueFromData){
+        currentMaxValue = targetWeight;
+    }
+    else{
+        currentMaxValue = highestValueFromData;
+    }
+}
 
 
 

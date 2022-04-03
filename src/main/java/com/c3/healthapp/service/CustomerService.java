@@ -51,4 +51,5 @@ public interface CustomerService {
     HeartRateEntry saveHeartRateEntry(String username, HeartRateEntry heartRateEntry);
 
     WeightEntry saveWeightEntry(String username, WeightEntry weightEntry);
+
 }

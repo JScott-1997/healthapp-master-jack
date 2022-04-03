@@ -5,11 +5,14 @@ function updateChart(chart, data) {
 }
 
 function updateChart(chart) {
+    chart.options.scales.x.suggestedMax = new Date(today).toISOString();
+    chart.options.scales.y.min = currentMinValue-5;
+    chart.options.scales.y.max = currentMaxValue+5;
     chart.update();
 }
 
 function setDaysDisplayedOnChart(numberOfDays, chart){
-    chart.options.scales.x.min = new Date(today - numberOfDays * 24 * 60 * 60 * 1000).toISOString();
+    chart.options.scales.x.min = new Date(today - (numberOfDays-1) * 24 * 60 * 60 * 1000).toISOString();
     switch(numberOfDays){
         case 180:
             chart.options.scales.x.time.unit = 'month';
@@ -41,9 +44,19 @@ function getChartDataFromCustomer(customer, entryType){
         //Object properties 1 and 2 are used as 0 will be the entry id
         newEntry.x = entry[Object.keys(entry)[1]];
         newEntry.y = entry[Object.keys(entry)[2]];
-        if(newEntry.y < currentMinValue) currentMinValue = newEntry.y;
-        if(newEntry.y > currentMaxValue) currentMaxValue = newEntry.y;
         newArr.push(newEntry)
     })
+    getLowestAndHighestValues(newArr);
     return newArr;
+}
+
+function getLowestAndHighestValues(chartData){
+    chartData.forEach(dataEntry => {
+            if(dataEntry.y <= lowestValueFromData){
+                lowestValueFromData = dataEntry.y;
+            }
+            if(dataEntry.y >= highestValueFromData){
+                highestValueFromData = dataEntry.y;
+            }
+    })
 }

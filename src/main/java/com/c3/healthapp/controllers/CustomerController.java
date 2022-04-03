@@ -90,6 +90,17 @@ public class CustomerController {
         return ResponseEntity.created(uri).body(weightEntry);
     }
 
+    @PostMapping("/units/save")
+    public ResponseEntity<CustomerUnitsPreference> saveHREntry(@RequestBody CustomerUnitsPreference customerUnitsPreference){
+        String username = SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal().toString();
+        Customer customer = customerService.getCustomer(username);
+        customer.setCustomerUnitsPreference(customerUnitsPreference);
+        customerService.saveCustomer(customer);
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/units/save").toUriString());
+        return ResponseEntity.created(uri).body(customerUnitsPreference);
+    }
+
 }
 
 @Data
