@@ -192,7 +192,7 @@ function addWeight(event) {
        weightMessage.innerHTML = getWeightMessage(targetWeight, weightReadIn);
        current.innerHTML = `${weightReadIn}${unitsString}`
    }
-   showSubmittedContent(newWeight, hasBeenAdded);
+   showSubmittedContent(weightReadIn, hasBeenAdded);
 }
 
 function setWeightTarget(event){
