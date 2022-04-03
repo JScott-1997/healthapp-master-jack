@@ -179,9 +179,6 @@ function addWeight(event) {
        //Update customer object
        getCustData();
 
-        //Add to chart with x, y values
-       chartData.push(newEntry);
-
        //Get lowest and highest data points again in case of change
        getLowestAndHighestValues(chartData);
 

@@ -128,15 +128,11 @@ function addHeartRate(event) {
     let hasBeenAdded = addEntryToTable(newEntry);
 
    if(hasBeenAdded){
-        console.log(newEntry);
         //Save to DB
         saveEntry(newEntry, "/customer/heartrates/save", "HeartRate");
 
         //Update customer object
         getCustData()
-
-        //Add to chart with x, y values
-        chartData.push(newEntry);
 
         //Get lowest and highest data points again in case of change
         getLowestAndHighestValues(chartData);
