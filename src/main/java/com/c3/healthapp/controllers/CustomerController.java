@@ -26,10 +26,7 @@ public class CustomerController {
     private final CustomerService customerService;
     //Probably best to add this in to an admin controller later, unless we want to administrate admin functions here too?
     //Might be easier to manage permissions in a /admin controller
-//    @GetMapping("/users")
-//    public ResponseEntity<List<User>> getUsers() {
-//        return ResponseEntity.ok().body(userService.getUsers());
-//    }
+
 
     //adds user to model and sends user to profile page
     @GetMapping("/profile")
@@ -65,30 +62,7 @@ public class CustomerController {
         return ResponseEntity.created(uri).body(customerService.saveRole(role));
     }
 
-    //Should be added to admin functions later
-//    @PostMapping("/role/add_to_user")
-//    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserForm form) {
-//        userService.addRoleToUser(form.username, form.roleName);
-//        return ResponseEntity.ok().build();
-//    }
 
-    @PostMapping("/heartrates/save")
-    public ResponseEntity<HeartRateEntry> saveHREntry(@RequestBody HeartRateEntry heartRateEntry){
-        String username = SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal().toString();
-        customerService.saveHeartRateEntry(username, heartRateEntry);
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/heartrates/save").toUriString());
-        return ResponseEntity.created(uri).body(heartRateEntry);
-    }
-
-    @PostMapping("/weight/save")
-    public ResponseEntity<WeightEntry> saveHREntry(@RequestBody WeightEntry weightEntry){
-        String username = SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal().toString();
-        customerService.saveWeightEntry(username, weightEntry);
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/weight/save").toUriString());
-        return ResponseEntity.created(uri).body(weightEntry);
-    }
 
     @PostMapping("/units/save")
     public ResponseEntity<CustomerUnitsPreference> saveHREntry(@RequestBody CustomerUnitsPreference customerUnitsPreference){
@@ -101,10 +75,4 @@ public class CustomerController {
         return ResponseEntity.created(uri).body(customerUnitsPreference);
     }
 
-}
-
-@Data
-class RoleToCustomerForm {
-    protected String username;
-    protected String roleName;
 }

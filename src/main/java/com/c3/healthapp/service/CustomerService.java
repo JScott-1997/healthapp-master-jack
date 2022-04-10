@@ -52,4 +52,7 @@ public interface CustomerService {
 
     WeightEntry saveWeightEntry(String username, WeightEntry weightEntry);
 
+    GripStrengthEntry saveGripStrengthEntry(String username, GripStrengthEntry gripStrengthEntry);
+
+    RespirationRateEntry saveRespirationRateEntry(String username, RespirationRateEntry respirationRateEntry);
 }
