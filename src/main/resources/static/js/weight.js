@@ -6,7 +6,7 @@ let usesImperialUnits = customer.customerUnitsPreference=='IMPERIAL';
 let unitsString = usesImperialUnits ? 'lbs' : 'KG';
 const unitSpans = document.getElementsByClassName('unit');
 
-//Set the units to display in areas of page
+//Set the units to display in areas of page where required
 Array.from(unitSpans).forEach(unit => unit.innerHTML = unitsString);
 
 let targetWeight = 50;
@@ -169,6 +169,7 @@ function addWeight(event) {
 
    if(hasBeenAdded){
         currentWeight = newEntry.y;
+
         //Change weight to KG in object and save to DB. rounded as stored as int
         const formattedForDBEntry = {
             x: today.toISOString(),
@@ -194,11 +195,14 @@ function addWeight(event) {
 
 function setWeightTarget(event){
     event.preventDefault();
+
     //Get input by class
     const input = event.target.querySelector('#targetWeightData');
+
     //Convert to kg if user uses imperial units. data is stored in kg in db. Weight read in is used to update chart data etc as its in users choice of units
     const weightTargetReadIn = parseInt(input.value);
     const newWeightTarget = usesImperialUnits ? convertLbsToKG(weightTargetReadIn) : weightTargetReadIn;
+
     //Reset value of input
     input.value = '';
     const weightTargetObj = {
@@ -213,16 +217,18 @@ function setWeightTarget(event){
     //Update messages on page
     target.innerHTML = `${targetWeight}${unitsString}`;
     weightMessage.innerHTML = getWeightMessage(targetWeight, currentWeight);
-//    saveTarget(newWeightTarget);
     showSubmittedTargetContent(weightTargetReadIn);
+
     updateChart(weightChart);
 }
 
+//Modal elements and data listeners for data submission modal and target submission modal
 const form = document.getElementById('weightForm');
 form.addEventListener('submit', addWeight);
 const targetForm = document.getElementById('targetWeightForm');
 targetForm.addEventListener('submit', setWeightTarget);
 
+//Modal elements for data submission modal and target submission modal
 const defaultContent = document.getElementById('defaultContent');
 const submittedContent = document.getElementById('submittedContent');
 

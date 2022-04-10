@@ -16,19 +16,6 @@ function getDateStrings(dates){
     return formattedDateStrings;
 }
 
-//Takes Date array and values array, returns array of entry objects each with date and value
-function parseEntriesObjectArray(arr1, arr2) {
-    let newArr = new Array();
-
-    for(let i = 0; i < arr1.length; i++){
-        let newObj = {};
-        newObj.date = arr1[i];
-        newObj.value = arr2[i];
-        newArr.push(newObj);
-    }
-    return newArr;
-}
-
 //Takes number of days before today and returns array with those Date objs plus todays
 function getDatesBeforeIncToday(number){
     const datesBefore = new Array();
@@ -61,11 +48,11 @@ function yearsBeforeToday(date) {
  }
 
 //sorting function for dates
- function compare(a, b) {
-   if ( a.dateOfEntry < b.dateOfEntry ){
+ function compare(date1, date2) {
+   if ( date1.dateOfEntry < date2.dateOfEntry ){
      return -1;
    }
-   if ( a.dateOfEntry > b.dateOfEntry ){
+   if ( date1.dateOfEntry > date2.dateOfEntry ){
      return 1;
    }
    return 0;

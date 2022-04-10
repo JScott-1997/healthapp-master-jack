@@ -33,7 +33,7 @@ public class CustomerController {
 
     //adds user to model and sends user to profile page
     @GetMapping("/profile")
-    public String loggedInCustomer(Model model) throws IOException {
+    public String loggedInCustomer(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
         User user = customerService.getCustomer(username);
@@ -91,7 +91,7 @@ public class CustomerController {
     }
 
     @PostMapping("/units/save")
-    public ResponseEntity<CustomerUnitsPreference> saveHREntry(@RequestBody CustomerUnitsPreference customerUnitsPreference){
+    public ResponseEntity<CustomerUnitsPreference> saveUnitPref(@RequestBody CustomerUnitsPreference customerUnitsPreference){
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
         Customer customer = customerService.getCustomer(username);
