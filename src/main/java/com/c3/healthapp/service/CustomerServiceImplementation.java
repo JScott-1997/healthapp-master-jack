@@ -1,10 +1,7 @@
 package com.c3.healthapp.service;
 
 import com.c3.healthapp.model.*;
-import com.c3.healthapp.repository.HeartRateRepository;
-import com.c3.healthapp.repository.RoleRepository;
-import com.c3.healthapp.repository.CustomerRepository;
-import com.c3.healthapp.repository.WeightEntryRepository;
+import com.c3.healthapp.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,6 +25,8 @@ public class CustomerServiceImplementation implements CustomerService, UserDetai
     private final RoleRepository roleRepository;
     private final HeartRateRepository heartRateRepository;
     private final WeightEntryRepository weightEntryRepository;
+    private final GripStrengthEntryRepository gripStrengthEntryRepository;
+    private final RespirationRateEntryRepository respirationRateEntryRepository;
     private final BCryptPasswordEncoder pwEncoder;
 
     @Override
@@ -124,6 +123,22 @@ public class CustomerServiceImplementation implements CustomerService, UserDetai
         Customer customer = customerRepository.findByUsername(username);
         customer.getWeightEntries().add(weightEntry);
         return weightEntryRepository.save(weightEntry);
+    }
+
+    @Override
+    public GripStrengthEntry saveGripStrengthEntry(String username, GripStrengthEntry gripStrengthEntry) {
+        log.info("Saving new grip strength entry to the database for user: {}...", username);
+        Customer customer = customerRepository.findByUsername(username);
+        customer.getGripStrengthEntries().add(gripStrengthEntry);
+        return gripStrengthEntryRepository.save(gripStrengthEntry);
+    }
+
+    @Override
+    public RespirationRateEntry saveRespirationRateEntry(String username, RespirationRateEntry respirationRateEntry) {
+        log.info("Saving new respiration rate entry to the database for user: {}...", username);
+        Customer customer = customerRepository.findByUsername(username);
+        customer.getRespirationRateEntries().add(respirationRateEntry);
+        return respirationRateEntryRepository.save(respirationRateEntry);
     }
 
     public boolean isUsernameTaken(String username) {

@@ -15,17 +15,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HeartRateEntry {
+public class RespirationRateEntry {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long entryId;
     private Date dateOfEntry;
-    private int entryHeartRate;
-
-    @Override
-    public String toString() {
-
-        return "Entry Id: " + entryId + " Entry Heart Rate: " + entryHeartRate + " Date Of Entry : " + dateOfEntry;
-
-    }
+    private int entryRespirationRate;
 }

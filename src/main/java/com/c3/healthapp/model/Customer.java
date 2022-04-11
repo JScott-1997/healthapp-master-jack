@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
+@DynamicUpdate
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
@@ -34,5 +36,11 @@ public class Customer extends User {
     @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<WeightEntry> weightEntries = new ArrayList<>();
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Collection<GripStrengthEntry> gripStrengthEntries = new ArrayList<>();
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Collection<RespirationRateEntry> respirationRateEntries = new ArrayList<>();
 
 }
