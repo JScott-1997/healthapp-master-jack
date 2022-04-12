@@ -22,7 +22,7 @@ import java.net.URI;
 public class RespirationRateEntryController {
     private final CustomerService customerService;
 
-    @PostMapping("/customer/respiration_rate/save")
+    @PostMapping("/save")
     public ResponseEntity<RespirationRateEntry> saveHREntry(@RequestBody RespirationRateEntry respirationRateEntry) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();

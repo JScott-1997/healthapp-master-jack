@@ -21,7 +21,7 @@ import java.net.URI;
 public class WeightEntryController {
     private final CustomerService customerService;
 
-    @PostMapping("/customer/weight/save")
+    @PostMapping("/save")
     public ResponseEntity<WeightEntry> saveHREntry(@RequestBody WeightEntry weightEntry) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();

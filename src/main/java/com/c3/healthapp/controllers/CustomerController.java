@@ -70,7 +70,7 @@ public class CustomerController {
                 .getPrincipal().toString();
         Customer customer = customerService.getCustomer(username);
         customer.setCustomerUnitsPreference(customerUnitsPreference);
-        customerService.saveCustomer(customer);
+        customerService.updateCustomer(customer);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/units/save").toUriString());
         return ResponseEntity.created(uri).body(customerUnitsPreference);
     }

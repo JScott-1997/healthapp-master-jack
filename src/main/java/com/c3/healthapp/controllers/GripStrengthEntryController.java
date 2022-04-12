@@ -22,7 +22,7 @@ import java.net.URI;
 public class GripStrengthEntryController {
     private final CustomerService customerService;
 
-    @PostMapping("/customer/grip_strength/save")
+    @PostMapping("/save")
     public ResponseEntity<GripStrengthEntry> saveGSEntry(@RequestBody GripStrengthEntry gripStrengthEntry) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();

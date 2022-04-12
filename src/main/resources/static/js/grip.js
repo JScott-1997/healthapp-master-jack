@@ -9,7 +9,7 @@ const unitSpans = document.getElementsByClassName('unit');
 //Set the units to display in areas of page where required
 Array.from(unitSpans).forEach(unit => unit.innerHTML = unitsString);
 
-let targetWeight;
+let targetGrip;
 
 //Min and max values user has submitted, used to render chart to display a practical scale
 let lowestValueFromData = 1000;
@@ -17,7 +17,7 @@ let highestValueFromData = 0;
 let currentMinValue = 0;
 let currentMaxValue = 0;
 
-let chartData = getChartDataFromCustomer(customer, "weight");
+let chartData = getChartDataFromCustomer(customer, "gripStrength");
 
 //Convert data and chart min/max to pounds if user has imperial units preference
 if (usesImperialUnits) {
@@ -26,7 +26,7 @@ if (usesImperialUnits) {
     })
     lowestValueFromData = Math.round((lowestValueFromData * 2.2046))
     highestValueFromData = Math.round((highestValueFromData * 2.2046))
-    targetWeight = Math.round((targetWeight * 2.2046))
+    targetGrip = Math.round((targetGrip * 2.2046))
 }
 
 //Change min max based on target set
@@ -34,43 +34,43 @@ getMinMaxValues();
 
 let daysDisplayedOnChart = 7;
 
-let currentWeight = 0;
+let currentGrip = 0;
 
-//Setting messages for weight section
-let target = document.getElementById('targetWeight');
-let current = document.getElementById('currentWeight');
-let weightMessage = document.getElementById('weightMessage');
+//Setting messages for grip section
+let target = document.getElementById('targetGrip');
+let current = document.getElementById('currentGrip');
+let gripMessage = document.getElementById('gripMessage');
 
 if (!chartData.length == 0) {
-    currentWeight = chartData[chartData.length - 1].y
-    current.innerHTML = `${currentWeight}${unitsString}`;
-    weightMessage.innerHTML = getWeightMessage(targetWeight, currentWeight);
+    currentGrip = chartData[chartData.length - 1].y
+    current.innerHTML = `${currentGrip}${unitsString}`;
+    gripMessage.innerHTML = getGripMessage(targetGrip, currentGrip);
 }
 else {
     current.innerHTML = `No data.`;
-    weightMessage.innerHTML = `-`;
+    gripMessage.innerHTML = `-`;
 }
-if(targetWeight == null){
+if(targetGrip == null){
         target.innerHTML = `No target set.`;
 }
 else{
-    target.innerHTML = `${targetWeight}${unitsString}`;
+    target.innerHTML = `${targetGrip}${unitsString}`;
 }
 
-const weightModalTable = document.getElementById('weightModalData');
+const gripModalTable = document.getElementById('gripModalData');
 const nextIn = document.getElementById('btn_next');
 const prevIn = document.getElementById('btn_prev');
 const pageNoSpanIn = document.getElementById('page');
 
-setupTable(chartData, nextIn, prevIn, pageNoSpanIn, weightModalTable, 10);
+setupTable(chartData, nextIn, prevIn, pageNoSpanIn, gripModalTable, 10);
 
-function getWeightMessage(targetWeight, currentWeight) {
-    const weightDifference = Math.abs(Math.round(targetWeight - currentWeight));
-    if (targetWeight > currentWeight) {
-        return `You are <b>${weightDifference}${unitsString}</b> below your target of <b>${targetWeight}${unitsString}</b>`
+function getGripMessage(targetGrip, currentGrip) {
+    const gripDifference = Math.abs(Math.round(targetGrip - currentGrip));
+    if (targetGrip > currentGrip) {
+        return `You are <b>${gripDifference}${unitsString}</b> below your target of <b>${targetGrip}${unitsString}</b>`
     }
-    else if (targetWeight < currentWeight) {
-        return `You are <b>${weightDifference}${unitsString}</b> above your target of <b>${targetWeight}${unitsString}</b>`
+    else if (targetGrip < currentGrip) {
+        return `You are <b>${gripDifference}${unitsString}</b> above your target of <b>${targetGrip}${unitsString}</b>`
     }
     else {
         return `Well done, you're on target!`
@@ -78,18 +78,18 @@ function getWeightMessage(targetWeight, currentWeight) {
 }
 
 //Chart.js charts settings and config
-let weightChart = new Chart(
-    document.getElementById('weightchart'),
+let gripChart = new Chart(
+    document.getElementById('gripchart'),
     {
         type: 'line',
-        //Plugin to draw weight target line on chart
+        //Plugin to draw grip target line on chart
         plugins: [{
             afterDraw: chart => {
                 const ctx = chart.ctx;
                 ctx.save();
                 const xAxis = chart.scales['x'];
                 const yAxis = chart.scales['y'];
-                let y = yAxis.getPixelForValue(targetWeight);
+                let y = yAxis.getPixelForValue(targetGrip);
                 ctx.beginPath();
                 ctx.moveTo(xAxis.left, y);
                 ctx.lineTo(xAxis.right, y);
@@ -151,15 +151,15 @@ let weightChart = new Chart(
     }
 );
 
-function addWeight(event) {
+function addGrip(event) {
     event.preventDefault();
 
     //Get input by class
-    const input = event.target.querySelector('#weight');
+    const input = event.target.querySelector('#grip');
 
-    //Convert to kg if user uses imperial units. data is stored in kg in db. Weight read in is used to update chart data etc as its in users choice of units
-    const weightReadIn = parseInt(input.value);
-    const newWeight = usesImperialUnits ? convertLbsToKG(weightReadIn) : weightReadIn;
+    //Convert to kg if user uses imperial units. data is stored in kg in db. Grip read in is used to update chart data etc as its in users choice of units
+    const gripReadIn = parseInt(input.value);
+    const newGrip = usesImperialUnits ? convertLbsToKG(gripReadIn) : gripReadIn;
 
     //Reset value of input
     input.value = '';
@@ -168,19 +168,19 @@ function addWeight(event) {
     //Object has to be fully null to send to back end and be parsed by spring boot
     let newEntry = Object.create(null);
     newEntry.x = today.toISOString();
-    newEntry.y = weightReadIn;
+    newEntry.y = gripReadIn;
     //Add to modal table
     let hasBeenAdded = addEntryToTable(newEntry);
 
     if (hasBeenAdded) {
-        currentWeight = newEntry.y;
+        currentGrip = newEntry.y;
 
-        //Change weight to KG in object and save to DB. rounded as stored as int
+        //Change grip to KG in object and save to DB. rounded as stored as int
         const formattedForDBEntry = {
             x: today.toISOString(),
-            y: Math.round(newWeight)
+            y: Math.round(newGrip)
         }
-        saveEntry(formattedForDBEntry, "/customer/weight/save", "Weight");
+        saveEntry(formattedForDBEntry, "/customer/grip_strength/save", "GripStrength");
 
         //Update customer object
         getCustData();
@@ -191,47 +191,47 @@ function addWeight(event) {
         //Get chart min and max values (depends on target as well as lowest and highest values)
         getMinMaxValues();
 
-        updateChart(weightChart);
-        weightMessage.innerHTML = getWeightMessage(targetWeight, weightReadIn);
-        current.innerHTML = `${weightReadIn}${unitsString}`
+        updateChart(gripChart);
+        gripMessage.innerHTML = getGripMessage(targetGrip, gripReadIn);
+        current.innerHTML = `${gripReadIn}${unitsString}`
     }
-    showSubmittedContent(weightReadIn, hasBeenAdded);
+    showSubmittedContent(gripReadIn, hasBeenAdded);
 }
 
-function setWeightTarget(event) {
+function setGripTarget(event) {
     event.preventDefault();
 
     //Get input by class
-    const input = event.target.querySelector('#targetWeightData');
+    const input = event.target.querySelector('#targetGripData');
 
-    //Convert to kg if user uses imperial units. data is stored in kg in db. Weight read in is used to update chart data etc as its in users choice of units
-    const weightTargetReadIn = parseInt(input.value);
-    const newWeightTarget = usesImperialUnits ? convertLbsToKG(weightTargetReadIn) : weightTargetReadIn;
+    //Convert to kg if user uses imperial units. data is stored in kg in db. Grip read in is used to update chart data etc as its in users choice of units
+    const gripTargetReadIn = parseInt(input.value);
+    const newGripTarget = usesImperialUnits ? convertLbsToKG(gripTargetReadIn) : gripTargetReadIn;
 
     //Reset value of input
     input.value = '';
-    const weightTargetObj = {
-        weightTarget: newWeightTarget
+    const gripTargetObj = {
+        gripTarget: newGripTarget
     }
-    targetWeight = weightTargetReadIn;
-    target.innerHTML = `${targetWeight}${unitsString}`;
+    targetGrip = gripTargetReadIn;
+    target.innerHTML = `${targetGrip}${unitsString}`;
 
     //change min and max values for chart and update chart
     getMinMaxValues();
 
     //Update messages on page
-    target.innerHTML = `${targetWeight}${unitsString}`;
-    weightMessage.innerHTML = getWeightMessage(targetWeight, currentWeight);
-    showSubmittedTargetContent(weightTargetReadIn);
+    target.innerHTML = `${targetGrip}${unitsString}`;
+    gripMessage.innerHTML = getGripMessage(targetGrip, currentGrip);
+    showSubmittedTargetContent(gripTargetReadIn);
 
-    updateChart(weightChart);
+    updateChart(gripChart);
 }
 
 //Modal elements and data listeners for data submission modal and target submission modal
-const form = document.getElementById('weightForm');
-form.addEventListener('submit', addWeight);
-const targetForm = document.getElementById('targetWeightForm');
-targetForm.addEventListener('submit', setWeightTarget);
+const form = document.getElementById('gripForm');
+form.addEventListener('submit', addGrip);
+const targetForm = document.getElementById('targetGripForm');
+targetForm.addEventListener('submit', setGripTarget);
 
 //Modal elements for data submission modal and target submission modal
 const defaultContent = document.getElementById('defaultContent');
@@ -240,10 +240,10 @@ const submittedContent = document.getElementById('submittedContent');
 const defaultTargetContent = document.getElementById('defaultTargetContent');
 const submittedTargetContent = document.getElementById('submittedTargetContent');
 
-function showSubmittedContent(weight, hasBeenAdded) {
+function showSubmittedContent(grip, hasBeenAdded) {
     defaultContent.style.display = 'none';
     let message = submittedContent.querySelector('#submittedMessage');
-    message.textContent = hasBeenAdded ? `Weight of ${weight}${unitsString} submitted successfully!` : `You have already submitted a reading today, please try again tomorrow!`;
+    message.textContent = hasBeenAdded ? `Grip of ${grip}${unitsString} submitted successfully!` : `You have already submitted a reading today, please try again tomorrow!`;
     submittedContent.style.display = 'block';
 
 }
@@ -255,10 +255,10 @@ function revertDefault() {
     }, 500);
 }
 
-function showSubmittedTargetContent(weightTarget) {
+function showSubmittedTargetContent(gripTarget) {
     defaultTargetContent.style.display = 'none';
     let message = submittedTargetContent.querySelector('#submittedTargetMessage');
-    message.textContent = `Weight target of ${weightTarget}${unitsString} submitted successfully!`;
+    message.textContent = `Grip target of ${gripTarget}${unitsString} submitted successfully!`;
     submittedTargetContent.style.display = 'block';
 
 }
@@ -271,14 +271,14 @@ function revertTargetDefault() {
 }
 
 function getMinMaxValues() {
-    if (targetWeight <= lowestValueFromData) {
-        currentMinValue = targetWeight;
+    if (targetGrip <= lowestValueFromData) {
+        currentMinValue = targetGrip;
     }
     else {
         currentMinValue = lowestValueFromData;
     }
-    if (targetWeight >= highestValueFromData) {
-        currentMaxValue = targetWeight;
+    if (targetGrip >= highestValueFromData) {
+        currentMaxValue = targetGrip;
     }
     else {
         currentMaxValue = highestValueFromData;

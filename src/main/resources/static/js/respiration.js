@@ -3,7 +3,6 @@ getCustData();
 let customer = JSON.parse(sessionStorage.getItem('customer'));
 
 const userAge = yearsBeforeToday(new Date(customer.dateOfBirth));
-const maxHeartRate = 220 - userAge;
 
 //Min and max values from data, used to render chart to display a practical scale
 let lowestValueFromData = 1000;
@@ -12,7 +11,7 @@ let highestValueFromData = 0;
 let currentMinValue = 0;
 let currentMaxValue = 0;
 
-const chartData = getChartDataFromCustomer(customer, "heartRate");
+const chartData = getChartDataFromCustomer(customer, "respirationRate");
 
 //getChartDataFromCustomer assigns values to lowest and highest value from data variables
 currentMinValue = lowestValueFromData;
@@ -20,40 +19,34 @@ currentMaxValue = highestValueFromData;
 
 let daysDisplayedOnChart = 7;
 
-const maxRateMessage = document.getElementById('maxheartrate');
-const heartRateMessage = document.getElementById('heartratemessage');
+const respirationRateMessage = document.getElementById('respirationmessage');
 
 if (chartData.length == 0) {
-    maxRateMessage.innerHTML = `No data available`;
-    heartRateMessage.innerHTML = `No data available`;
+    respirationRateMessage.innerHTML = `No data available`;
 }
 else {
-    maxRateMessage.innerHTML = `${maxHeartRate}BPM`;
-    heartRateMessage.innerHTML = getMessage(chartData[chartData.length - 1].y);
+    respirationRateMessage.innerHTML = getMessage(chartData[chartData.length - 1].y);
 }
 
-
-
-
 //Get page elements and data and send to setUpTable in paginateTable.js
-const hrModalTable = document.getElementById('hrModalData');
+const respirationModalTable = document.getElementById('respirationModalData');
 const nextIn = document.getElementById('btn_next');
 const prevIn = document.getElementById('btn_prev');
 const pageNoSpanIn = document.getElementById('page');
 
 //Set up modal data table with elements and to display 10 results each page
-setupTable(chartData, nextIn, prevIn, pageNoSpanIn, hrModalTable, 10);
+setupTable(chartData, nextIn, prevIn, pageNoSpanIn, respirationModalTable, 10);
 
 function getMessage(currentRate) {
-    if (currentRate >= 60 && currentRate <= 100)
-        return `Your heart rate of <b>${currentRate}BPM</b> is within a normal range`
+    if (currentRate >= 12 && currentRate <= 25)
+        return `Your respiration rate of <b>${currentRate} Breaths Per Minute</b> is within a normal range`
     else {
-        return `Your heart rate of <b>${currentRate}BPM</b> is outside of the normal range`
+        return `Your respiration rate of <b>${currentRate} Breaths Per Minute</b> is outside of the normal range`
     }
 }
 
-let heartChart = new Chart(
-    document.getElementById('heartchart'),
+let respirationChart = new Chart(
+    document.getElementById('respirationchart'),
     {
         type: 'line',
         data: {
@@ -108,12 +101,12 @@ let heartChart = new Chart(
     }
 );
 
-function addHeartRate(event) {
+function addRespirationRate(event) {
     event.preventDefault();
 
     //Get input by class
     const input = event.target.querySelector('.data');
-    const newHeartRate = parseInt(input.value);
+    const newRespirationRate = parseInt(input.value);
 
     //Reset value
     input.value = '';
@@ -122,14 +115,14 @@ function addHeartRate(event) {
     //Object has to be fully null to send to back end and be parsed by spring boot
     let newEntry = Object.create(null);
     newEntry.x = today.toISOString();
-    newEntry.y = newHeartRate;
+    newEntry.y = newRespirationRate;
 
     //Save to db
     let hasBeenAdded = addEntryToTable(newEntry);
 
     if (hasBeenAdded) {
         //Save to DB
-        saveEntry(newEntry, "/customer/heart_rate/save", "HeartRate");
+        saveEntry(newEntry, "/customer/respiration_rate/save", "RespirationRate");
 
         //Update customer object
         getCustData()
@@ -138,28 +131,28 @@ function addHeartRate(event) {
         currentMinValue = lowestValueFromData;
         currentMaxValue = highestValueFromData;
 
-        updateChart(heartChart);
-        heartRateMessage.innerHTML = getMessage(newHeartRate);
+        updateChart(respirationChart);
+        respirationRateMessage.innerHTML = getMessage(newRespirationRate);
     }
-    showSubmittedContent(newHeartRate, hasBeenAdded);
+    showSubmittedContent(newRespirationRate, hasBeenAdded);
 }
 
 let defaultContent = document.getElementById('defaultContent');
 let preRecordContent = document.getElementById('preRecordInstructions');
-let manualPulseContent = document.getElementById('manualPulseForm');
+let manualRespirationContent = document.getElementById('manualRespirationForm');
 let recordingContent = document.getElementById('recordingContent');
 let recordedContent = document.getElementById('recordedContent');
 let submittedContent = document.getElementById('submittedContent');
 
 //Display functions to change visible content of recording new entry modal
-function showManualPulseForm() {
+function showManualRespirationForm() {
 
     defaultContent.style.display = "none";
-    manualPulseContent.style.display = "block";
+    manualRespirationContent.style.display = "block";
 
     //Add event listener to form to allow data to be submitted
-    const form = document.getElementById('heartRateForm');
-    form.addEventListener('submit', addHeartRate);
+    const form = document.getElementById('respirationForm');
+    form.addEventListener('submit', addRespirationRate);
 }
 
 function showPreRecordInstructions() {
@@ -176,41 +169,41 @@ function showRecordingContent() {
     recordingContent.style.display = "block";
 }
 
-function showRecordedContent(heartRate) {
+function showRecordedContent(respirationRate) {
     recordingContent.style.display = "none";
     recordedContent.style.display = "block";
 
     //Reset countButton text incase user selects retry
     countButton.firstChild.textContent = "Record";
     //Display messages relating to results
-    recordedContent.querySelector('#rcHeader').textContent = `Your Heart Rate is ${heartRate} Beats Per Minute`;
+    recordedContent.querySelector('#rcHeader').textContent = `Your respiration Rate is ${respirationRate} Beats Per Minute`;
     //Contains HTML tags, so innerHTML is used over textContent
-    recordedContent.querySelector('#rcMessage').innerHTML = getMessage(heartRate);
-    //Set hidden input value with heart rate so it can be found by addHeartRate on submit
-    recordedContent.querySelector('#heartRateValue').value = heartRate;
-
-    const form = recordedContent.querySelector('#heartRateRecordedForm')
-    form.addEventListener('submit', addHeartRate);
+    recordedContent.querySelector('#rcMessage').innerHTML = getMessage(respirationRate);
+    //Set hidden input value with respiration rate so it can be found by addrespirationRate on submit
+    recordedContent.querySelector('#respirationValue').value = respirationRate;
+    console.log(respirationRate);
+    const form = recordedContent.querySelector('#respirationRecordedForm')
+    form.addEventListener('submit', addRespirationRate);
 }
 
-function showSubmittedContent(heartRate, hasBeenAdded) {
+function showSubmittedContent(respirationRate, hasBeenAdded) {
 
     //Either could be displayed, so both set to display none
     recordedContent.style.display = "none";
-    manualPulseContent.style.display = "none";
+    manualRespirationContent.style.display = "none";
 
     let message = submittedContent.querySelector('#submittedMessage');
-    message.textContent = hasBeenAdded ? `Heart rate of ${heartRate}BPM submitted successfully!` : `You have already submitted a reading today, please try again tomorrow!`;
+    message.textContent = hasBeenAdded ? `Respiration rate of ${respirationRate} Breaths Per Minute submitted successfully!` : `You have already submitted a reading today, please try again tomorrow!`;
     submittedContent.style.display = "block";
 }
 
 let countDown = null;
 
-//Handles displaying countdown and recording of pulse
+//Handles displaying countdown and recording of respiration
 function beginRecording() {
     let seconds = 30;
     let count = 0;
-    let heartRate = 0;
+    let respirationRate = 0;
 
     showRecordingContent();
 
@@ -256,20 +249,20 @@ function beginRecording() {
             seconds--;
             secondsCounter.innerHTML = seconds;
 
-            //When counter expires, display heart rate and options to submit or retry
+            //When counter expires, display respiration rate and options to submit or retry
             if (seconds <= 0) {
                 clearInterval(countDown);
                 //Minus
-                heartRate = count * 2;
-                message = getMessage(heartRate);
+                respirationRate = count * 2;
+                message = getMessage(respirationRate);
 
-                showRecordedContent(heartRate);
+                showRecordedContent(respirationRate);
             }
         }, 1000); //1 second delay
     }
 }
 
-//Resets heart rate record modal to default content, waits 500ms so user doesn't see update while modal is closing
+//Resets respiration rate record modal to default content, waits 500ms so user doesn't see update while modal is closing
 function revertDefault() {
     setTimeout(function () {
 
@@ -277,7 +270,7 @@ function revertDefault() {
         preRecordContent.style.display = "none";
         recordingContent.style.display = "none";
         recordedContent.style.display = "none";
-        manualPulseContent.style.display = "none";
+        manualRespirationContent.style.display = "none";
         submittedContent.style.display = "none";
         defaultContent.style.display = "block";
 

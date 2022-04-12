@@ -67,20 +67,19 @@
 <div class="container mx-auto text-center my-2">
     <h1>Account Settings</h1>
     <div class="d-flex flex-column justify-content-center mx-auto my-3 col col-md-4 col-sm-2">
-            <form class="mx-2 form-horizontal px-5">
-                <div class="form-group">
-                    <label for="unitsPref"><h5>Units Preference: </h5></label>
-                    <select class="form-select form-select-md" id="UnitsPref" aria-label=".form-select-md example">
-                        <option selected value="kg">KG</option>
-                        <option value="lbs">Lbs</option>
-                    </select>
-                </div>
-            </form>
+        <form class="mx-2 form-horizontal px-5">
+            <div class="form-group" id="unitsPrefForm">
+                <label for="unitsPref"><h5>Units Preference: </h5></label>
+                <select class="form-select form-select-md" id="UnitsPref" aria-label=".form-select-md example">
+                    <option selected hidden value="">Choose units preference</option>
+                    <option value="METRIC">Metric</option>
+                    <option value="IMPERIAL">Imperial</option>
+                </select>
+            </div>
+        </form>
         </select>
-        </div>
-    <a href="#" onclick="saveUnits('IMPERIAL')">Switch to Imperial</a>
-        <a href="#" onclick="saveUnits('METRIC')">Switch to Metric</a>
     </div>
+</div>
 </div>
 <footer class="text-center text-white mt-auto" style="background-color: #3B3B3B;">
     <div class="text-center text-white p-4">
@@ -90,6 +89,7 @@
 </footer>
 <script th:src="@{/js/logout.js}"></script>
 <script th:src="@{/js/custdata.js}"></script>
+<script th:src="@{/js/settings.js}"></script>
 <script th:src="@{/js/sidenav.js}"></script>
 </body>
 </html>

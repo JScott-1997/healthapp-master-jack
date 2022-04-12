@@ -21,7 +21,7 @@ import java.net.URI;
 public class HeartRateEntryController {
     private final CustomerService customerService;
 
-    @PostMapping("/customer/heart_rate/save")
+    @PostMapping("/save")
     public ResponseEntity<HeartRateEntry> saveHREntry(@RequestBody HeartRateEntry heartRateEntry) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();

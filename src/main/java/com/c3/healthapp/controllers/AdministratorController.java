@@ -21,13 +21,13 @@ import java.util.List;
 public class AdministratorController {
     private final CustomerService customerService;
 
-    @PostMapping("/admin/role/add_to_user")
+    @PostMapping("/add_to_user")
     public ResponseEntity<?> addRoleToUser(@RequestBody RoleToCustomerForm form) {
         customerService.addRoleToCustomer(form.username, form.roleName);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/admin/user_administration")
+    @GetMapping("/user_administration")
     public ResponseEntity<List<Customer>> getUsers() {
         return ResponseEntity.ok().body(customerService.getCustomers());
     }

@@ -1,43 +1,47 @@
-function getCustData(){
-  fetch('/customer/customer')
-      .then(jsonData => jsonData.json())
-      .then(data => saveToSession(data))
+function getCustData() {
+    fetch('/customer/customer')
+        .then(jsonData => jsonData.json())
+        .then(data => saveToSession(data))
 
-  let saveToSession = (data) => {
-      sessionStorage.setItem('customer', JSON.stringify(data));
-  }
+    let saveToSession = (data) => {
+        sessionStorage.setItem('customer', JSON.stringify(data));
+    }
 }
 
-
-function saveEntry(entry, path, type){
+function saveEntry(entry, path, type) {
     let postedData = {};
     postedData.dateOfEntry = entry.x;
     postedData['entry' + type] = entry.y;
     fetch(path, {
         method: "POST",
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(postedData)
     }).then(res => {
+        res.json().then(data => console.log(data))
     });
 }
 
-function saveTarget(target, path){
-        fetch(path, {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(target)
-        }).then(res => {
-        });
+function saveTarget(target, path) {
+    fetch(path, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(target)
+    }).then(res => {
+        res.json().then(data => console.log(data))
+    });
 }
 
-function saveUnits(unitsPref){
-        const units = {
-            customerUnitsPreference: unitsPref
-        }
-        fetch('/customer/units/save', {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(unitsPref)
-        }).then(res => {
-        });
+function saveUnits(evt) {
+    const form = document.getElementById('unitsPrefForm')
+    const units = {
+        customerUnitsPreference: evt.currentTarget.value
+    }
+    console.log(units)
+    fetch('/customer/units/save', {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(evt.currentTarget.value.toUpperCase())
+    }).then(res => {
+        res.json().then(data => console.log(data), form.appendChild(document.createElement('small')).innerHTML = "Updated successfully.")
+    });
 }

@@ -13,6 +13,8 @@ public interface CustomerService {
      */
     Customer saveCustomer(Customer customer);
 
+    Customer updateCustomer(Customer customer);
+
     /**
      * Stores a new role in the database.
      *

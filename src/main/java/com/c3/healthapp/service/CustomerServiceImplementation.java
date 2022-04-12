@@ -58,6 +58,12 @@ public class CustomerServiceImplementation implements CustomerService, UserDetai
         return customerRepository.save(customer);
     }
 
+    @Override
+    public Customer updateCustomer(Customer customer) {
+        log.info("Saving new user: {} to the database...", customer.getUsername());
+        return customerRepository.save(customer);
+    }
+
     /**
      * Stores a new role in the database.
      *
