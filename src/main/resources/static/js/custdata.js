@@ -1,7 +1,8 @@
+
 function getCustData() {
     fetch('/customer/customer')
         .then(jsonData => jsonData.json())
-        .then(data => saveToSession(data))
+        .then(data => saveToSession(data));
 
     let saveToSession = (data) => {
         sessionStorage.setItem('customer', JSON.stringify(data));

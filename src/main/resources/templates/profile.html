@@ -66,42 +66,49 @@
 </nav>
 <div class="container mx-auto text-center my-2">
     <h1>Profile</h1>
-    <div class="d-flex justify-content-center mx-auto my-3">
-        <div class="mx-2">
+    <div class="d-flex justify-content-center mx-auto my-3" id="profileContainer">
+        <div>
             <img th:src="@{/assets/profileplaceholder.png}" id="profileImage">
         </div>
-        <div class="mx-2" id="profileInfo">
-            <table>
-                <tbody class="text-left">
+        <div id="profileInfo" class="mx-2">
+            <table class="mx-auto" id="profileTable">
+                <tbody>
                 <tr>
                     <td><b>Name</b></td>
-                    <td th:text="${user.name}"></td>
+                    <td th:text="${customer.name}"></td>
                 </tr>
                 <tr>
                     <td><b>Date of Birth</b></td>
-                    <td th:text="${#dates.format(user.dateOfBirth, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${#dates.format(customer.dateOfBirth, 'dd/MM/yyyy')}"></td>
                 </tr>
                 <tr>
-                    <td><b>Email Address</b></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><b>Member Since</b></td>
-                    <td></td>
+                    <td><b>Sex</b></td>
+                    <td th:text="${customer.customerSex}"></td>
                 </tr>
                 <tr>
                     <td><b>Height</b></td>
-                    <td th:inline="text">[[${user.height}]]cm</td>
+                    <td th:inline="text" id="customerHeight">[[${customer.height}]]cm</td>
+                </tr>
+                <tr th:if="${customer.height == 0}">
+                    <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#setHeightModal">Set height</button></td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="d-flex flex-wrap col-xl-4 col-9 mx-auto">
-        <div class="vitalstat bg-primary mx-auto my-1 rounded border p-2"><b>Current Weight: </b>65kg</div>
-        <div class="vitalstat bg-primary mx-auto my-1 rounded border p-2"><b>Last Heart Rate: </b>65bpm</div>
-        <div class="vitalstat bg-primary mx-auto my-1 rounded border p-2"><b>Last Respiration Rate: </b>4</div>
-        <div class="vitalstat bg-primary mx-auto my-1 rounded border p-2"><b>Grip Strength: </b>43363</div>
+    <div class="d-flex flex-wrap col-xl-4 col-9 mx-auto my-2">
+        <div class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Weight: </b>
+            <span th:text="${customer.weightEntries[#lists.size(customer.weightEntries)-1].entryWeight + 'KG'}"></span>
+        </div>
+        <div class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Heart Rate: </b>
+            <span th:text="${customer.heartRateEntries[#lists.size(customer.heartRateEntries)-1].entryHeartRate + 'BPM'}"></span>
+        </div>
+<!--        <div class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Last Respiration Rate: </b>-->
+<!--            <span th:text="${customer.respirationRateEntries[#lists.size(customer.respirationRateEntries)-1].entryRespirationRate + ' Breaths/Min'}"></span>-->
+<!--        </div>-->
+        <div class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Grip Strength: </b>
+            <span th:text="${customer.gripStrengthEntries[#lists.size(customer.gripStrengthEntries)-1].entryGripStrength + 'KG'}"></span>
+        </div>
     </div>
     <p>
         You currently have access to:
@@ -121,6 +128,30 @@
         </li>
     </ul>
 </div>
+<div class="modal fade pt-2" id="setHeightModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">X</span>
+                </button>
+                <h5 class="modal-title mx-auto">Set Height</h5>
+            </div>
+            <form class="m-2 data" id="heightForm">
+                <table class="mx-auto">
+                    <tr>
+                        <td><label for="dataInput">Current height (cm): </label></td>
+                        <td><input type="text" id="dataInput" maxlength="3" size="3"
+                                   class="m-1 data" required></td>
+                        <td>
+                            <button class="btn btn-primary btn-sm m-1" type="submit">Set</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
 <footer class="text-center text-white mt-auto" style="background-color: #3B3B3B;">
     <div class="text-center text-white p-4">
         © 2022 Copyright:
@@ -129,6 +160,7 @@
 </footer>
 <script th:src="@{/js/logout.js}"></script>
 <script th:src="@{/js/sidenav.js}"></script>
+<script th:src="@{/js/profile.js}"></script>
 </body>
 
 </html>

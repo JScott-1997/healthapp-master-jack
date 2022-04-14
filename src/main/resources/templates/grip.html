@@ -74,27 +74,27 @@
         <section id="leftColumn" class="col-lg bg-white m-1 p-1 chartbox">
             <h3 class="h3 sectionHead">Grip Strength</h3>
             <div class="canvasContainer">
-                <canvas id="gripchart" class="m-3"></canvas>
+                <canvas id="chart" class="m-3"></canvas>
                 <div class="d-flex flex-row-reverse px-4 my-3">|
-                    <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(180, gripChart)">180D</a> |
-                    <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(90, gripChart)">90D</a> |
-                    <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(30, gripChart)">30D</a> |
-                    <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(7, gripChart)">1W</a>
+                    <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(180, theChart)">180D</a> |
+                    <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(90, theChart)">90D</a> |
+                    <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(30, theChart)">30D</a> |
+                    <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(7, theChart)">1W</a>
                 </div>
             </div>
-            Target Grip: <b><span id="targetGrip"></span></b><br>
-            Current Grip Strength: <b><span id="currentGrip"></span></b><br>
-            <span id="gripMessage"></span>
-            <div id="gripbuttons" class="m-3">
-                <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#gripentry">Record Grip
+            Target Grip: <b><span id="target"></span></b><br>
+            Current Grip Strength: <b><span id="current"></span></b><br>
+            <span id="message"></span>
+            <div id="buttons" class="m-3">
+                <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#entryModal">Record Grip
                 </button>
-                <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#gripdata">View
+                <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#dataModal">View
                     Data
                 </button>
-                <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#griptarget">Set Target
+                <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#targetModal">Set Target
                 </button>
             </div>
-            <div class="modal fade pt-5" id="gripdata" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal fade pt-5" id="dataModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -115,7 +115,7 @@
                                     </th>
                                 </tr>
                                 </thead>
-                                <tbody id="gripModalData">
+                                <tbody id="modalData">
                                 <!--                                    filled by js-->
                                 </tbody>
                             </table>
@@ -129,7 +129,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="gripentry" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal fade" id="entryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content p-3">
                         <div class="modal-header">
@@ -139,13 +139,14 @@
                             </button>
                             <h6 class="modal-title mx-auto">Record Your Grip</h6>
                         </div>
-                        <div class="modal-body" id="gripModalBody">
+                        <div class="modal-body" id="entryModalBody">
                             <div id="defaultContent">
-                                <form class="m-2" id="gripForm">
+                                <form class="m-2 data" id="metricForm">
                                     <table class="mx-auto">
                                         <tr>
-                                            <td><label for="grip">Current Grip (<span class="unit"></span>): </label></td>
-                                            <td><input type="text" id="grip" maxlength="3" size="3"
+                                            <!--                                            Limited to between 40 and 240 as likely to be lesss than 30kg and not likely to be more than 400lbs-->
+                                            <td><label for="dataInput">Current Grip (<span class="unit"></span>): </label></td>
+                                            <td><input type="text" id="dataInput" maxlength="3" size="3"
                                                        pattern="(4[0-9]|[5-9][0-9]|1[0-9]{2}|2[0-3][0-9]|240)"
                                                        class="m-1 data"
                                                        oninvalid="this.setCustomValidity('Enter a value between 40 and 240')"
@@ -172,7 +173,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="griptarget" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal fade" id="targetModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content p-3">
                         <div class="modal-header">
@@ -184,14 +185,14 @@
                         </div>
                         <div class="modal-body" id="targetModalBody">
                             <div id="defaultTargetContent">
-                                <form class="m-2" id="targetGripForm">
+                                <form class="m-2" id="targetForm">
                                     <table class="mx-auto">
                                         <tr>
-                                            <td><label for="grip">Target Grip (<span class="unit"></span>): </label></td>
-                                            <td><input type="text" id="targetGripData" maxlength="3" size="3"
-                                                       pattern="(4[0-9]|[5-9][0-9]|1[0-9]{2}|2[0-3][0-9]|240)"
+                                            <td><label for="targetDataInput">Target Grip (<span class="unit"></span>): </label></td>
+                                            <td><input type="text" id="targetDataInput" maxlength="3" size="3"
+                                                       pattern="(1[0-9]|[2-8][0-9]|90)"
                                                        class="m-1 data"
-                                                       oninvalid="this.setCustomValidity('Enter a value between 40 and 240')"
+                                                       oninvalid="this.setCustomValidity('Enter a value between 10 and 90')"
                                                        oninput="this.setCustomValidity('')" required></td>
                                             <td>
                                                 <button class="btn btn-primary btn-sm m-1" type="submit">Record</button>

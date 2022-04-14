@@ -18,14 +18,14 @@ public class CustomerRegistrationController {
     private final CustomerService customerService;
 
     @PostMapping
-    //As data will be passed as a string in post request, ModelAttribute is used to bind data to user object
+    //As data will be passed as a string in post request, ModelAttribute is used to bind data to customer object
     public String registerCustomer(@ModelAttribute Customer customer, Model model) {
         model.addAttribute("username", customer.getUsername());
-
+        System.out.println(customer.getPassword());
         //Check if user exists and save, redirect
         if (!customerService.isUsernameTaken(customer.getUsername())) {
-            customerService.saveCustomer(customer);
             //All users start with this role
+            customerService.saveCustomer(customer);
             customerService.addRoleToCustomer(customer.getUsername(), "ROLE_USER");
             return "success";
         } else {

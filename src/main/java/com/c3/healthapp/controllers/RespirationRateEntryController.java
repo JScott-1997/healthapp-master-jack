@@ -17,7 +17,7 @@ import java.net.URI;
 
 @Slf4j
 @Controller
-@RequestMapping("/customer/respiration_rate")
+@RequestMapping("/customer/respirationrate")
 @RequiredArgsConstructor
 public class RespirationRateEntryController {
     private final CustomerService customerService;
@@ -27,7 +27,7 @@ public class RespirationRateEntryController {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
         customerService.saveRespirationRateEntry(username, respirationRateEntry);
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/respiration_rate/save").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/respirationrate/save").toUriString());
         return ResponseEntity.created(uri).body(respirationRateEntry);
     }
 }

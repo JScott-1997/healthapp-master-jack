@@ -1,141 +1,24 @@
+//For page displaying respirationrate chart and data.
+//Author: Sean Laughlin
+
 //update and get customer object
 getCustData();
 let customer = JSON.parse(sessionStorage.getItem('customer'));
 
-const userAge = yearsBeforeToday(new Date(customer.dateOfBirth));
+//Get elements to be used to set up chart and modal by chartSetup.js setUpChartAndModal
+const chartEl = document.getElementById('chart');
+const chartType = "RespirationRate";
+const modalTable = document.getElementById('modalData');
+const modalNext = document.getElementById('btn_next');
+const modalPrev = document.getElementById('btn_prev');
+const modalPageNoSpan = document.getElementById('page');
 
-//Min and max values from data, used to render chart to display a practical scale
-let lowestValueFromData = 1000;
-let highestValueFromData = 0;
-
-let currentMinValue = 0;
-let currentMaxValue = 0;
-
-const chartData = getChartDataFromCustomer(customer, "respirationRate");
-
-//getChartDataFromCustomer assigns values to lowest and highest value from data variables
-currentMinValue = lowestValueFromData;
-currentMaxValue = highestValueFromData;
-
-let daysDisplayedOnChart = 7;
-
-const respirationRateMessage = document.getElementById('respirationmessage');
-
-if (chartData.length == 0) {
-    respirationRateMessage.innerHTML = `No data available`;
-}
-else {
-    respirationRateMessage.innerHTML = getMessage(chartData[chartData.length - 1].y);
-}
-
-//Get page elements and data and send to setUpTable in paginateTable.js
-const respirationModalTable = document.getElementById('respirationModalData');
-const nextIn = document.getElementById('btn_next');
-const prevIn = document.getElementById('btn_prev');
-const pageNoSpanIn = document.getElementById('page');
-
-//Set up modal data table with elements and to display 10 results each page
-setupTable(chartData, nextIn, prevIn, pageNoSpanIn, respirationModalTable, 10);
-
-function getMessage(currentRate) {
-    if (currentRate >= 12 && currentRate <= 25)
-        return `Your respiration rate of <b>${currentRate} Breaths Per Minute</b> is within a normal range`
-    else {
-        return `Your respiration rate of <b>${currentRate} Breaths Per Minute</b> is outside of the normal range`
-    }
-}
-
-let respirationChart = new Chart(
-    document.getElementById('respirationchart'),
-    {
-        type: 'line',
-        data: {
-            datasets: [{
-                fill: false,
-                backgroundColor: 'rgb(47, 168, 58)',
-                borderColor: 'rgb(47, 168, 58)',
-                data: chartData,
-                spanGaps: true
-            }]
-        },
-        options: {
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'day',
-                        displayFormats: {
-                            week: 'MMM d',
-                            month: 'MMM'
-                        }
-                    },
-
-                    //Default min 1 week
-                    min: new Date(today - 6 * 24 * 60 * 60 * 1000).toISOString(),
-
-                    //Max will be yesterday unless data exists for today
-                    max: new Date(today).toISOString(),
-                    ticks: {
-                        source: 'auto',
-                    }
-                },
-                y: {
-                    min: currentMinValue - 5,
-                    max: currentMaxValue + 5
-                },
-            },
-            responsive: true,
-            maintainAspectRatio: true,
-            elements: {
-                line: {
-                    borderJoinStyle: 'round',
-                    tension: 0.3,
-                }
-            },
-            plugins: {
-                legend: {
-                    display: false,
-                }
-            }
-        }
-    }
-);
-
-function addRespirationRate(event) {
-    event.preventDefault();
-
-    //Get input by class
-    const input = event.target.querySelector('.data');
-    const newRespirationRate = parseInt(input.value);
-
-    //Reset value
-    input.value = '';
-    const newDateString = today.toLocaleDateString('en-GB');
-
-    //Object has to be fully null to send to back end and be parsed by spring boot
-    let newEntry = Object.create(null);
-    newEntry.x = today.toISOString();
-    newEntry.y = newRespirationRate;
-
-    //Save to db
-    let hasBeenAdded = addEntryToTable(newEntry);
-
-    if (hasBeenAdded) {
-        //Save to DB
-        saveEntry(newEntry, "/customer/respiration_rate/save", "RespirationRate");
-
-        //Update customer object
-        getCustData()
-        //Get lowest and highest data points again in case of change
-        getLowestAndHighestValues(chartData);
-        currentMinValue = lowestValueFromData;
-        currentMaxValue = highestValueFromData;
-
-        updateChart(respirationChart);
-        respirationRateMessage.innerHTML = getMessage(newRespirationRate);
-    }
-    showSubmittedContent(newRespirationRate, hasBeenAdded);
-}
+//All forms that can be used to input the value on the page
+const forms = new Array();
+forms.push(document.getElementById('respirationRateRecordedForm'));
+forms.push(document.getElementById('metricForm'));
+//Includes boolean KgLbs set to false indicating chart does not use kg/lbs and uses own units. Units string is passed too, "BPM"
+setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext, modalPrev, modalPageNoSpan, false, "Breaths P/M", forms);
 
 let defaultContent = document.getElementById('defaultContent');
 let preRecordContent = document.getElementById('preRecordInstructions');
@@ -149,10 +32,6 @@ function showManualRespirationForm() {
 
     defaultContent.style.display = "none";
     manualRespirationContent.style.display = "block";
-
-    //Add event listener to form to allow data to be submitted
-    const form = document.getElementById('respirationForm');
-    form.addEventListener('submit', addRespirationRate);
 }
 
 function showPreRecordInstructions() {
@@ -176,14 +55,13 @@ function showRecordedContent(respirationRate) {
     //Reset countButton text incase user selects retry
     countButton.firstChild.textContent = "Record";
     //Display messages relating to results
-    recordedContent.querySelector('#rcHeader').textContent = `Your respiration Rate is ${respirationRate} Beats Per Minute`;
+    recordedContent.querySelector('#rcHeader').textContent = `Your Respiration Rate is ${respirationRate} Breaths Per Minute`;
     //Contains HTML tags, so innerHTML is used over textContent
     recordedContent.querySelector('#rcMessage').innerHTML = getMessage(respirationRate);
-    //Set hidden input value with respiration rate so it can be found by addrespirationRate on submit
-    recordedContent.querySelector('#respirationValue').value = respirationRate;
-    console.log(respirationRate);
-    const form = recordedContent.querySelector('#respirationRecordedForm')
-    form.addEventListener('submit', addRespirationRate);
+    //Set hidden input value with respiration rate so it can be found by addHeartRate on submit
+    recordedContent.querySelector('#respirationRateValue').value = respirationRate;
+
+    const form = recordedContent.querySelector('#respirationRateRecordedForm')
 }
 
 function showSubmittedContent(respirationRate, hasBeenAdded) {
@@ -193,13 +71,21 @@ function showSubmittedContent(respirationRate, hasBeenAdded) {
     manualRespirationContent.style.display = "none";
 
     let message = submittedContent.querySelector('#submittedMessage');
-    message.textContent = hasBeenAdded ? `Respiration rate of ${respirationRate} Breaths Per Minute submitted successfully!` : `You have already submitted a reading today, please try again tomorrow!`;
+    message.textContent = hasBeenAdded ? `Respiration of ${respirationRate}BPM submitted successfully!` : `You have already submitted a reading today, please try again tomorrow!`;
     submittedContent.style.display = "block";
 }
+function getMessage(currentRate) {
+    if (currentRate >= 12 && currentRate <= 25)
+        return `Your respiration rate of <b>${currentRate} Breaths P/M</b> is within a normal range`
+    else {
+        return `Your respiration rate of <b>${currentRate} Breaths P/M</b> is outside of the normal range`
+    }
+}
+
 
 let countDown = null;
 
-//Handles displaying countdown and recording of respiration
+//Handles displaying countdown and recording of Respiration
 function beginRecording() {
     let seconds = 30;
     let count = 0;

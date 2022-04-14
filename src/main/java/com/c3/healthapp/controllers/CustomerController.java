@@ -28,13 +28,14 @@ public class CustomerController {
     //Might be easier to manage permissions in a /admin controller
 
 
-    //adds user to model and sends user to profile page
+    //adds customer to model and sends user to profile page
     @GetMapping("/profile")
     public String loggedInCustomer(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
-        User user = customerService.getCustomer(username);
-        model.addAttribute("user", user);
+        Customer customer = customerService.getCustomer(username);
+        model.addAttribute("customer", customer);
+        System.out.println(customer.getCustomerSex());
         return "profile";
     }
 
@@ -62,8 +63,6 @@ public class CustomerController {
         return ResponseEntity.created(uri).body(customerService.saveRole(role));
     }
 
-
-
     @PostMapping("/units/save")
     public ResponseEntity<CustomerUnitsPreference> saveUnitPref(@RequestBody CustomerUnitsPreference customerUnitsPreference){
         String username = SecurityContextHolder.getContext().getAuthentication()
@@ -73,6 +72,17 @@ public class CustomerController {
         customerService.updateCustomer(customer);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/units/save").toUriString());
         return ResponseEntity.created(uri).body(customerUnitsPreference);
+    }
+
+    @PostMapping("/height/save")
+    public ResponseEntity<Integer> saveHeight(@RequestBody int height){
+        String username = SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal().toString();
+        Customer customer = customerService.getCustomer(username);
+        customer.setHeight(height);
+        customerService.updateCustomer(customer);
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/height/save").toUriString());
+        return ResponseEntity.created(uri).body(height);
     }
 
 }

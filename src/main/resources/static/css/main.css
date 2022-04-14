@@ -11654,6 +11654,10 @@ td, th {
   width: 250px;
 }
 
+#profileTable td, #profileTable th {
+    text-align: left;
+}
+
 #countButton {
   display: flex;
   flex-direction: column;
@@ -11683,6 +11687,11 @@ td, th {
 }
 
 @media (max-width: 683px) {
+
+    #profileContainer{
+        flex-direction: column;
+    }
+
    .sectionicon {
     max-width: 150px;
    }
@@ -11717,6 +11726,7 @@ td, th {
     margin-top: 0.5rem;
     font-size: 1rem;
   }
+
   #imgHeader {
     background: url("/assets/headermobile.jpg") no-repeat;
     background-size: cover;
@@ -11730,6 +11740,16 @@ td, th {
   input.form-control {
     height: 1.5rem;
   }
+
+  input[type=date]{
+        padding: 0 0 0 0;
+  }
+
+  select.form-select{
+    height: 1.8rem;
+    font-size: 0.7rem;
+  }
+
   #profileImage {
     width: 150px;
   }

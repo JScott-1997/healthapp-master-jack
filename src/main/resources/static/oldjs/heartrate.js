@@ -1,25 +1,148 @@
-//For page displaying heartrate chart and data.
-//Author: Sean Laughlin
-
 //update and get customer object
 getCustData();
 let customer = JSON.parse(sessionStorage.getItem('customer'));
 
-//Get elements to be used to set up chart and modal by chartSetup.js setUpChartAndModal
-const chartEl = document.getElementById('chart');
-const chartType = "HeartRate";
-const modalTable = document.getElementById('modalData');
-const modalNext = document.getElementById('btn_next');
-const modalPrev = document.getElementById('btn_prev');
-const modalPageNoSpan = document.getElementById('page');
+const userAge = yearsBeforeToday(new Date(customer.dateOfBirth));
+const maxHeartRate = 220 - userAge;
 
-//All forms that can be used to input the value on the page
-const forms = new Array();
-forms.push(document.getElementById('heartRateRecordedForm'));
-forms.push(document.getElementById('metricForm'));
+//Min and max values from data, used to render chart to display a practical scale
+let lowestValueFromData = 1000;
+let highestValueFromData = 0;
 
-//Includes boolean KgLbs set to false indicating chart does not use kg/lbs and uses own units. Units string is passed too, "BPM"
-setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext, modalPrev, modalPageNoSpan, false, "BPM", forms);
+let currentMinValue = 0;
+let currentMaxValue = 0;
+
+const chartData = getChartDataFromCustomer(customer, "heartRate");
+
+//getChartDataFromCustomer assigns values to lowest and highest value from data variables
+currentMinValue = lowestValueFromData;
+currentMaxValue = highestValueFromData;
+
+let daysDisplayedOnChart = 7;
+
+const maxRateMessage = document.getElementById('maxheartrate');
+const heartRateMessage = document.getElementById('heartratemessage');
+
+if (chartData.length == 0) {
+    maxRateMessage.innerHTML = `No data available`;
+    heartRateMessage.innerHTML = `No data available`;
+}
+else {
+    maxRateMessage.innerHTML = `${maxHeartRate}BPM`;
+    heartRateMessage.innerHTML = getMessage(chartData[chartData.length - 1].y);
+}
+
+
+
+
+//Get page elements and data and send to setUpTable in paginateTable.js
+const hrModalTable = document.getElementById('hrModalData');
+const nextIn = document.getElementById('btn_next');
+const prevIn = document.getElementById('btn_prev');
+const pageNoSpanIn = document.getElementById('page');
+
+//Set up modal data table with elements and to display 10 results each page
+setupTable(chartData, nextIn, prevIn, pageNoSpanIn, hrModalTable, 10);
+
+function getMessage(currentRate) {
+    if (currentRate >= 60 && currentRate <= 100)
+        return `Your heart rate of <b>${currentRate}BPM</b> is within a normal range`
+    else {
+        return `Your heart rate of <b>${currentRate}BPM</b> is outside of the normal range`
+    }
+}
+
+let heartChart = new Chart(
+    document.getElementById('heartchart'),
+    {
+        type: 'line',
+        data: {
+            datasets: [{
+                fill: false,
+                backgroundColor: 'rgb(47, 168, 58)',
+                borderColor: 'rgb(47, 168, 58)',
+                data: chartData,
+                spanGaps: true
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day',
+                        displayFormats: {
+                            week: 'MMM d',
+                            month: 'MMM'
+                        }
+                    },
+
+                    //Default min 1 week
+                    min: new Date(today - 6 * 24 * 60 * 60 * 1000).toISOString(),
+
+                    //Max will be yesterday unless data exists for today
+                    max: new Date(today).toISOString(),
+                    ticks: {
+                        source: 'auto',
+                    }
+                },
+                y: {
+                    min: currentMinValue - 5,
+                    max: currentMaxValue + 5
+                },
+            },
+            responsive: true,
+            maintainAspectRatio: true,
+            elements: {
+                line: {
+                    borderJoinStyle: 'round',
+                    tension: 0.3,
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false,
+                }
+            }
+        }
+    }
+);
+
+function addHeartRate(event) {
+    event.preventDefault();
+
+    //Get input by class
+    const input = event.target.querySelector('.data');
+    const newHeartRate = parseInt(input.value);
+
+    //Reset value
+    input.value = '';
+    const newDateString = today.toLocaleDateString('en-GB');
+
+    //Object has to be fully null to send to back end and be parsed by spring boot
+    let newEntry = Object.create(null);
+    newEntry.x = today.toISOString();
+    newEntry.y = newHeartRate;
+
+    //Save to db
+    let hasBeenAdded = addEntryToTable(newEntry);
+
+    if (hasBeenAdded) {
+        //Save to DB
+        saveEntry(newEntry, "/customer/heart_rate/save", "HeartRate");
+
+        //Update customer object
+        getCustData()
+        //Get lowest and highest data points again in case of change
+        getLowestAndHighestValues(chartData);
+        currentMinValue = lowestValueFromData;
+        currentMaxValue = highestValueFromData;
+
+        updateChart(heartChart);
+        heartRateMessage.innerHTML = getMessage(newHeartRate);
+    }
+    showSubmittedContent(newHeartRate, hasBeenAdded);
+}
 
 let defaultContent = document.getElementById('defaultContent');
 let preRecordContent = document.getElementById('preRecordInstructions');
@@ -33,6 +156,10 @@ function showManualPulseForm() {
 
     defaultContent.style.display = "none";
     manualPulseContent.style.display = "block";
+
+    //Add event listener to form to allow data to be submitted
+    const form = document.getElementById('heartRateForm');
+    form.addEventListener('submit', addHeartRate);
 }
 
 function showPreRecordInstructions() {
@@ -63,6 +190,7 @@ function showRecordedContent(heartRate) {
     recordedContent.querySelector('#heartRateValue').value = heartRate;
 
     const form = recordedContent.querySelector('#heartRateRecordedForm')
+    form.addEventListener('submit', addHeartRate);
 }
 
 function showSubmittedContent(heartRate, hasBeenAdded) {
@@ -75,14 +203,6 @@ function showSubmittedContent(heartRate, hasBeenAdded) {
     message.textContent = hasBeenAdded ? `Heart rate of ${heartRate}BPM submitted successfully!` : `You have already submitted a reading today, please try again tomorrow!`;
     submittedContent.style.display = "block";
 }
-function getMessage(currentRate) {
-    if (currentRate >= 60 && currentRate <= 100)
-        return `Your heart rate of <b>${currentRate}BPM</b> is within a normal range`
-    else {
-        return `Your heart rate of <b>${currentRate}BPM</b> is outside of the normal range`
-    }
-}
-
 
 let countDown = null;
 

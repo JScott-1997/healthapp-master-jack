@@ -58,14 +58,17 @@ function changePage(page) {
     if (page > numPages()) page = numPages();
     table.innerHTML = "";
 
+    //To show in reverse order in table (from most recent)
+    const dataReversed = [...data].reverse();
+
     let j = 0;
     for (let i = (page - 1) * records_per_page; i < (page * records_per_page); i++) {
         if(i < data.length && !data.length==0){
             let row = table.insertRow(j);
             let cell1 = row.insertCell(0);
             let cell2 = row.insertCell(1);
-            cell1.innerHTML = new Date(data[i].x).toLocaleDateString('en-GB');
-            cell2.innerHTML = data[i].y;
+            cell1.innerHTML = new Date(dataReversed[i].x).toLocaleDateString('en-GB');
+            cell2.innerHTML = dataReversed[i].y;
             j++;
         }
     }

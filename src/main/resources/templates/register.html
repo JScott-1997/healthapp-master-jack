@@ -67,7 +67,7 @@
 <main class="container mx-auto text-center align-items-center vh-100" id="mainContainer">
     <section class="col-9 col-md-7 col-xl-4 bg-white mt-5 p-4 rounded border border-secondary mx-auto text-center">
         <h1 class="h1">Register</h1>
-        <form th:action="@{/registration}" method="post">
+        <form th:action="@{/registration}" method="post" autocomplete="off">
             <div class="form-group d-flex flex-column mx-auto my-2 formelement">
                 <label for="name">Full name</label>
                 <input type="text" class="form-control" id="name" name="name"
@@ -83,8 +83,22 @@
                 <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" required>
             </div>
             <div class="form-group d-flex flex-column mx-auto my-2 formelement">
+                <label for="sex">Sex</label>
+                <select class="form-select" id="sex" name="customerSex" required>
+                    <option selected hidden value="">Select sex</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                    <option value="NOT_SPECIFIED">Unspecified</option>
+                    <option value="">Prefer not to say</option>
+                </select>
+            </div>
+            <div class="form-group d-flex flex-column mx-auto my-2 formelement">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Password"
+                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                       oninvalid="this.setCustomValidity('Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters')"
+                       oninput="this.setCustomValidity('')"
+                       required />
             </div>
             <button type="submit" class="btn btn-primary m-2">Register</button>
         </form>

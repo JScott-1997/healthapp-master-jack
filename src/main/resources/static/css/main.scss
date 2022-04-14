@@ -177,6 +177,11 @@ td, th{
 }
 
 @media (max-width: 683px) {
+
+    #profileContainer{
+        flex-direction: column;
+    }
+
     .sectionicon {
         max-width: 150px;
     }

@@ -3,11 +3,8 @@
 //a span with id 'current' to display the last user entry, and a span with id 'message' to display a message relating to the current reading/target
 //May also contain a span with id of 'target' to display current target set
 
-//Author: Sean Laughlin
-//Lines 113-184 written by Chart.js team for Chart.js setup
 
-
-//Lowest value ands highest value from data are set in getChartDataFromCustomer method from paginateTable. 
+//Lowest value ands highest value from data are set in getChartDataFromCustomer method from paginateTable.
 //Used with current target to get chart scale min and max values
 let lowestValueFromData = 1000;
 let highestValueFromData = 0;
@@ -15,51 +12,47 @@ let currentMinValue = 0;
 let currentMaxValue = 0;
 
 const dataValues = {
-    lowest: lowestValueFromData,
-    highest: highestValueFromData,
-    min: 0,
-    max: 0
 }
 
 let theChart;
 
 function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext, modalPrev, modalPageNoSpan, kgLbs, units, forms){
+
     const unitSpans = document.getElementsByClassName('unit');
 
     //Set the units to display in areas of page where required
     Array.from(unitSpans).forEach(unit => unit.innerHTML = units);
 
-    let chartData = getChartDataFromCustomer(customer, chartType, dataValues);
+    let chartData = getChartDataFromCustomer(customer, chartType);
 
     let metricTargetValue;
 
-    //Convert lowest value from data, highest value from data and target to pounds if user has imperial units preference
+    //Convert data and chart min/max to pounds if user has imperial units preference
     if (kgLbs && units === 'lbs') {
         chartData.forEach(entry => {
             entry.y = convertKGToLbs(entry.y);
         })
-        dataValues.lowest = Math.round((dataValues.lowest * 2.2046))
-        dataValues.highest = Math.round((dataValues.highest * 2.2046))
+        lowestValueFromData = Math.round((lowestValueFromData * 2.2046))
+        highestValueFromData = Math.round((highestValueFromData * 2.2046))
         metricTargetValue = Math.round((metricTargetValue * 2.2046))
     }
 
-
     function getMinMaxValues() {
-        if (metricTargetValue <= dataValues.lowest) {
-            dataValues.min = metricTargetValue;
+        if (metricTargetValue <= lowestValueFromData) {
+            currentMinValue = metricTargetValue;
         }
         else {
-            dataValues.min = dataValues.lowest;
+            currentMinValue = lowestValueFromData;
         }
-        if (metricTargetValue >= dataValues.highest) {
-            dataValues.max = metricTargetValue;
+        if (metricTargetValue >= highestValueFromData) {
+            currentMaxValue = metricTargetValue;
         }
         else {
-            dataValues.max = dataValues.highest;
+            currentMaxValue = highestValueFromData;
         }
     }
 
-    //Change min max values for chart y axis based on data and target set
+    //Change min max based on target set
     getMinMaxValues();
 
     let daysDisplayedOnChart = 7;
@@ -162,8 +155,8 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
                         }
                     },
                     y: {
-                        min: (dataValues.min) - 5,
-                        max: dataValues.max + 5
+                        min: currentMinValue - 5,
+                        max: currentMaxValue + 5
                     },
                 },
                 responsive: true,
@@ -225,7 +218,7 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
             //Update customer object
             getCustData();
 
-            //Get lowest and highest data points again in case of change. Method in chartConfig.
+            //Get lowest and highest data points again in case of change
             getLowestAndHighestValues(chartData);
 
             //Get chart min and max values (depends on target as well as lowest and highest values)
@@ -242,7 +235,7 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
         event.preventDefault();
 
         //Get input by class
-        const input = document.getElementById('targetDataInput');
+        const input = event.target.getElementById('targetDataInput');
 
         //Convert to kg if user uses imperial units. data is stored in kg in db. Weight read in is used to update chart data etc as its in users choice of units
         const targetReadIn = parseInt(input.value);
@@ -275,7 +268,7 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
         message.style.display = "block";
         showSubmittedTargetContent(targetReadIn);
 
-        updateChart(chart, dataValues);
+        updateChart(chart);
     }
 
     //Modal elements and data listeners for data submission modals and target submission modal
@@ -287,66 +280,4 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
     if(targetForm != null){
         targetForm.addEventListener('submit', setTarget);
     }
-}
-
-//Chart config functions that can be re-used for different pages
-function updateChart(chart, data) {
-    chart.update();
-}
-
-function updateChart(chart) {
-    chart.options.scales.x.suggestedMax = new Date(today).toISOString();
-    chart.options.scales.y.min = dataValues.min-5;
-    chart.options.scales.y.max = dataValues.max+5;
-    chart.update();
-}
-
-function setDaysDisplayedOnChart(numberOfDays, chart){
-    chart.options.scales.x.min = new Date(today - (numberOfDays-1) * 24 * 60 * 60 * 1000).toISOString();
-    switch(numberOfDays){
-        case 180:
-            chart.options.scales.x.time.unit = 'month';
-            chart.options.scales.x.time.stepSize = 1;
-            break;
-        case 90:
-            chart.options.scales.x.time.unit = 'week';
-            chart.options.scales.x.time.stepSize = 2;
-            break;
-        case 30:
-            chart.options.scales.x.time.unit = 'day';
-            chart.options.scales.x.time.stepSize = 5;
-            break;
-        case 7:
-            chart.options.scales.x.time.unit = 'day';
-            chart.options.scales.x.time.stepSize = 1;
-        break;
-
-    }
-    updateChart(chart);
-}
-
-function getChartDataFromCustomer(customer, entryType){
-    const newArr = new Array();
-    const entries = customer[entryType[0].toLowerCase() + entryType.slice(1)+"Entries"];
-    entries.forEach(entry => {
-        let newEntry = {};
-
-        //Object properties 1 and 2 are used as 0 will be the entry id
-        newEntry.x = entry[Object.keys(entry)[1]];
-        newEntry.y = entry[Object.keys(entry)[2]];
-        newArr.push(newEntry)
-    })
-    getLowestAndHighestValues(newArr);
-    return newArr;
-}
-
-function getLowestAndHighestValues(chartData){
-    chartData.forEach(dataEntry => {
-            if(dataEntry.y <= dataValues.lowest){
-                dataValues.lowest = dataEntry.y;
-            }
-            if(dataEntry.y >= dataValues.highest){
-                dataValues.highest = dataEntry.y;
-            }
-    })
 }

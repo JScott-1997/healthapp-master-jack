@@ -17,7 +17,7 @@ import java.net.URI;
 
 @Slf4j
 @Controller
-@RequestMapping("/customer/grip_strength")
+@RequestMapping("/customer/gripstrength")
 @RequiredArgsConstructor
 public class GripStrengthEntryController {
     private final CustomerService customerService;
@@ -27,7 +27,7 @@ public class GripStrengthEntryController {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
         customerService.saveGripStrengthEntry(username, gripStrengthEntry);
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/grip_strength/save").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/gripstrength/save").toUriString());
         return ResponseEntity.created(uri).body(gripStrengthEntry);
     }
 }

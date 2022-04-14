@@ -53,7 +53,9 @@ public class CustomerServiceImplementation implements CustomerService, UserDetai
      */
     @Override
     public Customer saveCustomer(Customer customer) {
+        System.out.println(customer.getPassword());
         customer.setPassword(pwEncoder.encode(customer.getPassword()));
+        System.out.println(customer.getPassword());
         log.info("Saving new user: {} to the database...", customer.getUsername());
         return customerRepository.save(customer);
     }

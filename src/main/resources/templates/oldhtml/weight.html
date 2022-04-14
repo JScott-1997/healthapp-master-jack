@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <title>Weight - Dundas Health</title>
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/favicons/favicon-32x32.png}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/favicons/favicon-16x16.png}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link th:href="@{/css/main.css}" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://kit.fontawesome.com/218320a513.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+
+<body class="bg-light d-flex flex-column min-vh-100">
+    <!-- Sidebar navigation. Hidden by default and toggled by burger button -->
+    <nav class="sidebar" id="sideNav">
+        <ul>
+            <a href="dashboard">
+                <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-house mx-2"
+                        style="font-size: 0.9rem"></i>Home
+                </div>
+                </li>
+            </a>
+            <hr class="solid">
+            <a href="profile">
+                <li>
+                    <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user mx-2"
+                            style="font-size: 0.9rem"></i>My Profile
+                    </div>
+                </li>
+            </a>
+            <hr class="solid">
+            <a href="settings">
+                <li>
+                    <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user-gear mx-2"
+                                                                                   style="font-size: 0.9rem"></i>Account
+                        Settings
+                    </div>
+                </li>
+            </a>
+            <hr class="solid">
+            <a href="#" onclick="logOut()">
+                <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
+                    style="font-size: 0.9rem"></i>Log Out
+            </div></li>
+            </a>
+            <hr class="solid">
+        </ul>
+    </nav>
+    <!-- Top navigation bar with burger for side nav and logout button -->
+    <nav class="navbar fixed-top navbar-expand-md  bg-primary">
+        <button id="burger" class="text-dark navbar-brand bg-primary" onclick="openSideNav()">☰</button>
+        <a class="navbar-brand text-dark" id="title"></i>Dundas Health</a>
+    </nav>
+    <!-- Container for the Health Vitals sections containing the charts -->
+    <main class="container-fluid mx-auto text-center bg-light" id="mainContainer">
+        <div class="row justify-content-center">
+
+            <section id="leftColumn" class="col-lg bg-white m-1 p-1 chartbox">
+                <h3 class="h3 sectionHead">Weight (<span class="unit"></span>)</h3>
+                <div class="canvasContainer">
+                    <canvas id="weightchart" class="m-3"></canvas>
+                    <small><b>Note: </b>The blue line on the chart indicates your target weight.</small>
+                    <div class="d-flex flex-row-reverse px-4 my-3">|
+                        <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(180, weightChart)">180D</a> |
+                        <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(90, weightChart)">90D</a> |
+                        <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(30, weightChart)">30D</a> |
+                        <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(7, weightChart)">1W</a>
+                    </div>
+                </div>
+                Target Weight: <b><span id="targetWeight"></span></b><br>
+                Current Weight: <b><span id="currentWeight"></span></b><br>
+                <span id="weightMessage"></span>
+                <div id="weightbuttons" class="m-3">
+                    <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#weightentry">Record Weight
+                    </button>
+                    <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#weightdata">View
+                        Data
+                    </button>
+                    <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#weighttarget">Set Target
+                    </button>
+                </div>
+                <div class="modal fade pt-5" id="weightdata" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">X</span>
+                                </button>
+                                <h6 class="modal-title mx-auto">All Weight Submissions</h6>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-striped" width="80%">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-left">
+                                            Date
+                                        </th>
+                                        <th class="text-left">
+                                            Weight (<span class="unit"></span>)
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="weightModalData">
+<!--                                    filled by js-->
+                                    </tbody>
+                                </table>
+                                <div class="text-end"><a href="#" onclick="prevPage()" id="btn_prev">Prev</a>
+                                    <a href="#" onclick="nextPage()" id="btn_next">Next</a> Page: <span id="page"></span>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="weightentry" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content p-3">
+                            <div class="modal-header">
+                                <button type="button" class="close btn" data-dismiss="modal" aria-label="Close"
+                                        onclick="revertDefault()">
+                                    <span aria-hidden="true">X</span>
+                                </button>
+                                <h6 class="modal-title mx-auto">Record Your Weight</h6>
+                            </div>
+                            <div class="modal-body" id="weightModalBody">
+                                <div id="defaultContent">
+                                    <form class="m-2" id="weightForm">
+                                        <table class="mx-auto">
+                                            <tr>
+                                                <td><label for="weight">Current Weight (<span class="unit"></span>): </label></td>
+                                                <td><input type="text" id="weight" maxlength="3" size="3"
+                                                           pattern="(4[0-9]|[5-9][0-9]|1[0-9]{2}|2[0-3][0-9]|240)"
+                                                           class="m-1 data"
+                                                           oninvalid="this.setCustomValidity('Enter a value between 40 and 240')"
+                                                           oninput="this.setCustomValidity('')" required></td>
+                                                <td>
+                                                    <button class="btn btn-primary btn-sm m-1" type="submit">Record</button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </form>
+                                </div>
+                                <div id="confirmedMessage">
+
+                                </div>
+                                <div id="submittedContent" style="display: none">
+                                    <h6 id="submittedMessage"></h6>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                        onclick="revertDefault()">Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="weighttarget" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content p-3">
+                            <div class="modal-header">
+                                <button type="button" class="close btn" data-dismiss="modal" aria-label="Close"
+                                        onclick="revertDefault()">
+                                    <span aria-hidden="true">X</span>
+                                </button>
+                                <h6 class="modal-title mx-auto">Set Target Weight</h6>
+                            </div>
+                            <div class="modal-body" id="targetModalBody">
+                                <div id="defaultTargetContent">
+                                    <form class="m-2" id="targetWeightForm">
+                                        <table class="mx-auto">
+                                            <tr>
+                                                <td><label for="weight">Target Weight (<span class="unit"></span>): </label></td>
+                                                <td><input type="text" id="targetWeightData" maxlength="3" size="3"
+                                                           pattern="(4[0-9]|[5-9][0-9]|1[0-9]{2}|2[0-3][0-9]|240)"
+                                                           class="m-1 data"
+                                                           oninvalid="this.setCustomValidity('Enter a value between 40 and 240')"
+                                                           oninput="this.setCustomValidity('')" required></td>
+                                                <td>
+                                                    <button class="btn btn-primary btn-sm m-1" type="submit">Record</button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </form>
+                                </div>
+                                <div id="confirmedTargetMessage">
+
+                                </div>
+                                <div id="submittedTargetContent" style="display: none">
+                                    <h6 id="submittedTargetMessage"></h6>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                        onclick="revertTargetDefault()">Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer class="text-center text-white mt-auto" style="background-color: #3B3B3B;">
+        <div class="text-center text-white p-4">
+            © 2022 Copyright:
+            <a class="text-primary" href="https://dundashealth.co.uk">https://dundashealth.co.uk</a>
+        </div>
+    </footer>
+    <script th:src="@{/js/custdata.js}"></script>
+    <script th:src="@{/js/logout.js}"></script>
+    <script th:src="@{/js/helpers.js}"></script>
+    <script th:src="@{/js/paginateTable.js}" type="text/javascript"></script>
+    <script th:src="@{/js/sidenav.js}"></script>
+    <script th:src="@{/js/chartConfig.js}"></script>
+    <script th:src="@{/js/weight.js}"></script>
+</body>
+
+</html>
