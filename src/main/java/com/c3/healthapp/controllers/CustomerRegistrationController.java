@@ -1,6 +1,7 @@
 package com.c3.healthapp.controllers;
 
 import com.c3.healthapp.model.Customer;
+import com.c3.healthapp.model.CustomerUnitsPreference;
 import com.c3.healthapp.model.User;
 import com.c3.healthapp.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,10 @@ public class CustomerRegistrationController {
         System.out.println(customer.getPassword());
         //Check if user exists and save, redirect
         if (!customerService.isUsernameTaken(customer.getUsername())) {
-            //All users start with this role
+            //Units preference is metric by default, can be changed in settings when logged in
+            customer.setCustomerUnitsPreference(CustomerUnitsPreference.METRIC);
             customerService.saveCustomer(customer);
+            //All users start with this role
             customerService.addRoleToCustomer(customer.getUsername(), "ROLE_USER");
             return "success";
         } else {

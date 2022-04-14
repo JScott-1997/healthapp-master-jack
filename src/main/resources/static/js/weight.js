@@ -7,6 +7,8 @@ let customer = JSON.parse(sessionStorage.getItem('customer'));
 
 //Get elements to be used to set up chart and modal by chartSetup.js setUpChartAndModal
 const chartEl = document.getElementById('chart');
+const BMIChartEl = document.getElementById('BMIChart');
+
 const chartType = "Weight";
 const modalTable = document.getElementById('modalData');
 const modalNext = document.getElementById('btn_next');
@@ -29,7 +31,7 @@ const submittedContent = document.getElementById('submittedContent');
 
 const defaultTargetContent = document.getElementById('defaultTargetContent');
 const submittedTargetContent = document.getElementById('submittedTargetContent');
-
+//switchToBMIChart();
 function showSubmittedContent(entryValue, hasBeenAdded) {
     defaultContent.style.display = 'none';
     let message = submittedContent.querySelector('#submittedMessage');
@@ -60,3 +62,4 @@ function revertTargetDefault() {
         defaultTargetContent.style.display = 'block';
     }, 500);
 }
+

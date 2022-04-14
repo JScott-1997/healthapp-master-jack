@@ -67,10 +67,10 @@
 <div class="container mx-auto text-center my-2">
     <h1>Profile</h1>
     <div class="d-flex justify-content-center mx-auto my-3" id="profileContainer">
-        <div>
+        <div class="m-3">
             <img th:src="@{/assets/profileplaceholder.png}" id="profileImage">
         </div>
-        <div id="profileInfo" class="mx-2">
+        <div id="profileInfo" class="m-3">
             <table class="mx-auto" id="profileTable">
                 <tbody>
                 <tr>
@@ -89,25 +89,31 @@
                     <td><b>Height</b></td>
                     <td th:inline="text" id="customerHeight">[[${customer.height}]]cm</td>
                 </tr>
-                <tr th:if="${customer.height == 0}">
-                    <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#setHeightModal">Set height</button></td>
-                </tr>
                 </tbody>
             </table>
+            <div th:if="${customer.height == 0}" class="my-2">
+                <td><a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#setHeightModal">Set height</a></td>
+            </div>
         </div>
     </div>
+
+<!--    Before showing values, check if entry lists have entries, otherwise don't generate. Also check metric/imperial and display correct units-->
     <div class="d-flex flex-wrap col-xl-4 col-9 mx-auto my-2">
-        <div class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Weight: </b>
-            <span th:text="${customer.weightEntries[#lists.size(customer.weightEntries)-1].entryWeight + 'KG'}"></span>
+        <div th:if="${not #lists.isEmpty(customer.weightEntries)}" class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Weight: </b>
+            <span th:text="${customer.weightEntries[#lists.size(customer.weightEntries)-1].entryWeight}"></span>
+            <span th:if="${customer.customerUnitsPreference.toString() == 'IMPERIAL'}">lbs</span>
+            <span th:if="${customer.customerUnitsPreference.toString() == 'METRIC'}">KG</span>
         </div>
-        <div class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Heart Rate: </b>
-            <span th:text="${customer.heartRateEntries[#lists.size(customer.heartRateEntries)-1].entryHeartRate + 'BPM'}"></span>
+        <div th:if="${not #lists.isEmpty(customer.heartRateEntries)}" class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Heart Rate: </b>
+            <span th:text="${customer.heartRateEntries[#lists.size(customer.heartRateEntries)-1].entryHeartRate + ' BPM'}"></span>
         </div>
-<!--        <div class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Last Respiration Rate: </b>-->
-<!--            <span th:text="${customer.respirationRateEntries[#lists.size(customer.respirationRateEntries)-1].entryRespirationRate + ' Breaths/Min'}"></span>-->
-<!--        </div>-->
-        <div class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Grip Strength: </b>
-            <span th:text="${customer.gripStrengthEntries[#lists.size(customer.gripStrengthEntries)-1].entryGripStrength + 'KG'}"></span>
+        <div th:if="${not #lists.isEmpty(customer.respirationRateEntries)}" class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Last Respiration Rate: </b>
+            <span th:text="${customer.respirationRateEntries[#lists.size(customer.respirationRateEntries)-1].entryRespirationRate + ' Breaths/Min'}"></span>
+        </div>
+        <div th:if="${not #lists.isEmpty(customer.gripStrengthEntries)}" class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Grip Strength: </b>
+            <span th:text="${customer.gripStrengthEntries[#lists.size(customer.gripStrengthEntries)-1].entryGripStrength}"></span>
+            <span th:if="${customer.customerUnitsPreference.toString() == 'IMPERIAL'}">lbs</span>
+            <span th:if="${customer.customerUnitsPreference.toString() == 'METRIC'}">KG</span>
         </div>
     </div>
     <p>

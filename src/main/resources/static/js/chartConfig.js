@@ -22,6 +22,7 @@ const dataValues = {
 }
 
 let theChart;
+let chartData;
 
 function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext, modalPrev, modalPageNoSpan, kgLbs, units, forms){
     const unitSpans = document.getElementsByClassName('unit');
@@ -29,7 +30,7 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
     //Set the units to display in areas of page where required
     Array.from(unitSpans).forEach(unit => unit.innerHTML = units);
 
-    let chartData = getChartDataFromCustomer(customer, chartType, dataValues);
+    chartData = getChartDataFromCustomer(customer, chartType, dataValues);
 
     let metricTargetValue;
 
