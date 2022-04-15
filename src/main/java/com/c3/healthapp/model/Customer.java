@@ -25,13 +25,12 @@ public class Customer extends User {
 
     private Date dateOfBirth;
     private int height;
+    private int targetWeight;
+    private int targetGripStrength;
     private CustomerSex customerSex;
     private CustomerUnitsPreference customerUnitsPreference;
     private String profilePicture;
 
-    @ManyToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private Collection<Role> roles = new ArrayList<>();
     @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<HeartRateEntry> heartRateEntries = new ArrayList<>();

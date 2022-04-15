@@ -15,6 +15,8 @@ public interface CustomerService {
 
     Customer updateCustomer(Customer customer);
 
+    void deleteCustomer(Customer customer);
+
     /**
      * Stores a new role in the database.
      *
