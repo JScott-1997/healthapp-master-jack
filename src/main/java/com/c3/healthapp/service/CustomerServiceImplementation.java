@@ -66,6 +66,12 @@ public class CustomerServiceImplementation implements CustomerService, UserDetai
         return customerRepository.save(customer);
     }
 
+    @Override
+    public void deleteCustomer(Customer customer) {
+        log.info("Removing customer: {} and their associated data...", customer.getUsername());
+        customerRepository.delete(customer);
+    }
+
     /**
      * Stores a new role in the database.
      *
