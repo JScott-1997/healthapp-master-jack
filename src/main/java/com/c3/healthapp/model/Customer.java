@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.data.annotation.Transient;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -26,6 +27,7 @@ public class Customer extends User {
     private int height;
     private CustomerSex customerSex;
     private CustomerUnitsPreference customerUnitsPreference;
+    private String profilePicture;
 
     @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -42,5 +44,12 @@ public class Customer extends User {
     @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<RespirationRateEntry> respirationRateEntries = new ArrayList<>();
+
+    @Transient
+    public String getProfilePicturePath() {
+        if (profilePicture == null || getId() == null) return null;
+
+        return "/user-photos/" + getUsername() + "/" + profilePicture;
+    }
 
 }

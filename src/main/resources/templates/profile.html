@@ -67,8 +67,13 @@
 <div class="container mx-auto text-center my-2">
     <h1>Profile</h1>
     <div class="d-flex justify-content-center mx-auto my-3" id="profileContainer">
-        <div class="m-3">
-            <img th:src="@{/assets/profileplaceholder.png}" id="profileImage">
+        <div class="m-3" id="profileImage">
+            <img th:if="${customer.profilePicture.isEmpty()}" th:src="@{/assets/profileplaceholder.png}"/>
+            <img th:if="${!customer.profilePicture.isEmpty()}" th:src="${customer.profilePicturePath}"/>
+            <div class="overlay overlayFade pt-3">
+                <a class="text-light text-decoration-none" role="button" data-toggle="modal"
+                   data-target="#setPictureModal">Upload profile photo...</a>
+            </div>
         </div>
         <div id="profileInfo" class="m-3">
             <table class="mx-auto" id="profileTable">
@@ -92,28 +97,35 @@
                 </tbody>
             </table>
             <div th:if="${customer.height == 0}" class="my-2">
-                <td><a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#setHeightModal">Set height</a></td>
+                <td><a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#setHeightModal">Set Height</a>
+                </td>
             </div>
         </div>
     </div>
 
-<!--    Before showing values, check if entry lists have entries, otherwise don't generate. Also check metric/imperial and display correct units-->
+    <!--    Before showing values, check if entry lists have entries, otherwise don't generate. Also check metric/imperial and display correct units-->
     <div class="d-flex flex-wrap col-xl-4 col-9 mx-auto my-2">
-        <div th:if="${not #lists.isEmpty(customer.weightEntries)}" class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Weight: </b>
-            <span th:text="${customer.weightEntries[#lists.size(customer.weightEntries)-1].entryWeight}"></span>
-            <span th:if="${customer.customerUnitsPreference.toString() == 'IMPERIAL'}">lbs</span>
-            <span th:if="${customer.customerUnitsPreference.toString() == 'METRIC'}">KG</span>
+        <div th:if="${not #lists.isEmpty(customer.weightEntries)}"
+             class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Weight: </b>
+                <span th:if="${customer.customerUnitsPreference.toString() == 'IMPERIAL'}"
+                      th:text="${#numbers.setFormatDecimal((customer.weightEntries[#lists.size(customer.weightEntries)-1].entryWeight * 2.2),0,0) + 'lbs'}"></span>
+                <span th:if="${customer.customerUnitsPreference.toString() == 'METRIC'}"
+                      th:text="${customer.weightEntries[#lists.size(customer.weightEntries)-1].entryWeight + 'KG'}"></span>
         </div>
-        <div th:if="${not #lists.isEmpty(customer.heartRateEntries)}" class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Heart Rate: </b>
+        <div th:if="${not #lists.isEmpty(customer.heartRateEntries)}"
+             class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Heart Rate: </b>
             <span th:text="${customer.heartRateEntries[#lists.size(customer.heartRateEntries)-1].entryHeartRate + ' BPM'}"></span>
         </div>
-        <div th:if="${not #lists.isEmpty(customer.respirationRateEntries)}" class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Last Respiration Rate: </b>
+        <div th:if="${not #lists.isEmpty(customer.respirationRateEntries)}"
+             class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Last Respiration Rate: </b>
             <span th:text="${customer.respirationRateEntries[#lists.size(customer.respirationRateEntries)-1].entryRespirationRate + ' Breaths/Min'}"></span>
         </div>
-        <div th:if="${not #lists.isEmpty(customer.gripStrengthEntries)}" class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Grip Strength: </b>
-            <span th:text="${customer.gripStrengthEntries[#lists.size(customer.gripStrengthEntries)-1].entryGripStrength}"></span>
-            <span th:if="${customer.customerUnitsPreference.toString() == 'IMPERIAL'}">lbs</span>
-            <span th:if="${customer.customerUnitsPreference.toString() == 'METRIC'}">KG</span>
+        <div th:if="${not #lists.isEmpty(customer.gripStrengthEntries)}"
+             class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Grip Strength: </b>
+            <span th:if="${customer.customerUnitsPreference.toString() == 'IMPERIAL'}"
+                  th:text="${#numbers.setFormatDecimal((customer.gripStrengthEntries[#lists.size(customer.gripStrengthEntries)-1].entryGripStrength * 2.2),0,0) + 'lbs'}"></span>
+            <span th:if="${customer.customerUnitsPreference.toString() == 'METRIC'}"
+                  th:text="${customer.gripStrengthEntries[#lists.size(customer.gripStrengthEntries)-1].entryGripStrength + 'KG'}"></span>
         </div>
     </div>
     <p>
@@ -143,7 +155,7 @@
                 </button>
                 <h5 class="modal-title mx-auto">Set Height</h5>
             </div>
-            <form class="m-2 data" id="heightForm">
+            <form class="m-4 data" id="heightForm">
                 <table class="mx-auto">
                     <tr>
                         <td><label for="dataInput">Current height (cm): </label></td>
@@ -155,6 +167,30 @@
                     </tr>
                 </table>
             </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade pt-2" id="setPictureModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">X</span>
+                </button>
+                <h5 class="modal-title mx-auto">Set Profile Picture</h5>
+            </div>
+            <div class="p-4 mx-auto">
+                <p>Upload a photo for your profile. Please only upload jpg or png images.</p>
+                <p>File size is limited to 5MB.</p>
+                <form th:action="@{/customer/photo/save}"
+                      method="post"
+                      enctype="multipart/form-data" class="text-center">
+                    <div class="my-1">
+                        <input type="file" name="file" accept="image/png, image/jpeg" class="form-control"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-md my-2">Submit</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

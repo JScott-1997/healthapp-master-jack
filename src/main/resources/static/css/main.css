@@ -11651,9 +11651,37 @@ td, th {
 }
 
 #profileImage {
+  position: relative;
   width: 250px;
+  height: 250px;
   border: 1px solid grey;
   border-radius: 5px;
+  overflow: hidden;
+}
+
+.overlay {
+    position: absolute;
+    transition: all 0.3s ease;
+    opacity: 0;
+    background-color: #9bcd9b;
+    }
+
+.overlayFade {
+    height: 25%;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    background-color: #000;
+}
+
+#profileImage:hover .overlay {
+    opacity: 0.8;
+}
+
+#profileImage img{
+    max-width: 250px;
+    max-height: 250px;
+    object-fit: cover;
 }
 
 #profileTable td, #profileTable th {
@@ -11686,6 +11714,13 @@ td, th {
 @keyframes flash-animation {
     from { background: red; }
     to   { background: default; }
+}
+
+
+@media (max-width: 800px){
+  .overlay {
+    opacity: 0.8;
+  }
 }
 
 @media (max-width: 683px) {
@@ -11747,13 +11782,13 @@ td, th {
         padding: 0 0 0 0;
   }
 
+  input[type=file]{
+    height: auto;
+  }
+
   select.form-select{
     height: 1.8rem;
     font-size: 0.7rem;
-  }
-
-  #profileImage {
-    width: 150px;
   }
 }
 
