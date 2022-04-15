@@ -11520,9 +11520,32 @@ fieldset:disabled .btn {
   background-size: cover;
 }
 
+
+#loginbg:before{
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.7);
+    z-index: -1;
+}
+
 #registerbg {
   background: url("/assets/gym.jpg") no-repeat center center;
   background-size: cover;
+}
+
+#registerbg:before{
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.7);
+    z-index: -1;
 }
 
 #carotidPulseDiagram{
@@ -11617,7 +11640,7 @@ body {
           justify-content: center;
   margin: 0 auto;
   text-align: center;
-  height: 70vh;
+  height: 67vh;
   background: url("/assets/header.jpg") no-repeat center center;
   background-size: cover;
   width: 100vw;
@@ -11653,7 +11676,6 @@ td, th {
 #profileImage {
   position: relative;
   width: 250px;
-  height: 250px;
   border: 1px solid grey;
   border-radius: 5px;
   overflow: hidden;
@@ -11680,7 +11702,6 @@ td, th {
 
 #profileImage img{
     max-width: 250px;
-    max-height: 250px;
     object-fit: cover;
 }
 
@@ -11722,6 +11743,9 @@ td, th {
     opacity: 0.8;
   }
 }
+
+/* Checkbox toggle */
+
 
 @media (max-width: 683px) {
 
@@ -11790,6 +11814,11 @@ td, th {
     height: 1.8rem;
     font-size: 0.7rem;
   }
+
+  #profileImage{
+    margin: 0 auto;
+  }
+
 }
 
 @media (max-width: 576px) {

@@ -23,6 +23,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-trendline"></script>
 </head>
 
 <body class="bg-light d-flex flex-column min-vh-100">
@@ -55,9 +56,11 @@
         </a>
         <hr class="solid">
         <a href="#" onclick="logOut()">
-            <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
+            <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
                                                                                style="font-size: 0.9rem"></i>Log Out
-            </div></li>
+                </div>
+            </li>
         </a>
         <hr class="solid">
     </ul>
@@ -72,8 +75,13 @@
     <div class="row justify-content-center">
 
         <section id="leftColumn" class="col-lg bg-white m-1 p-1 chartbox">
-            <h3 class="h3 sectionHead">Weight (<span class="unit"></span>)</h3>
-            <div class="canvasContainer">
+            <h3 class="h3 sectionHead" id="weightHeader">Weight (<span class="unit"></span>)</h3>
+            <div class="m-2">
+                <a href="#" class="mx-2" onclick="showWeightChart()">Weight Chart</a> |
+                <a href="#" class="mx-2" onclick="showBMIChart()">BMI Chart</a>
+            </div>
+            <!--            Container for weight chart and associated elements-->
+            <div class="canvasContainer" id="weightChartContainer">
                 <canvas id="chart" class="m-3"></canvas>
                 <small><b>Note: </b>The blue line on the chart indicates your target weight.</small>
                 <div class="d-flex flex-row-reverse px-4 my-3">|
@@ -82,18 +90,56 @@
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(30, theChart)">30D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(7, theChart)">1W</a>
                 </div>
+                Target Weight: <b><span id="target"></span></b><br>
+                Current Weight: <b><span id="current"></span></b><br>
+                <span id="message"></span>
+                <div id="buttons" class="m-3">
+                    <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#entryModal">Record
+                        Weight
+                    </button>
+                    <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#dataModal">View
+                        Data
+                    </button>
+                    <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#targetModal">Set Target
+                    </button>
+                </div>
             </div>
-            Target Weight: <b><span id="target"></span></b><br>
-            Current Weight: <b><span id="current"></span></b><br>
-            <span id="message"></span>
-            <div id="buttons" class="m-3">
-                <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#entryModal">Record Weight
-                </button>
-                <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#dataModal">View
-                    Data
-                </button>
-                <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#targetModal">Set Target
-                </button>
+            <!--            Container for BMI chart and associated elements, hidden by default -->
+            <div class="canvasContainer" id="BMIChartContainer" style="display: none">
+                <canvas id="BMIChart" class="m-3"></canvas>
+                <span id="BMIMessage"></span>
+                <div class="d-flex flex-row-reverse px-4 my-3">|
+                    <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(180, BMIChart)">180D</a> |
+                    <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(90, BMIChart)">90D</a> |
+                    <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(30, BMIChart)">30D</a> |
+                    <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(7, BMIChart)">1W</a>
+                </div>
+                <section class="p-2">
+                    <h4>How to read your BMI Chart</h4>
+                    <h6>What is BMI?</h6>
+                    <p>The body mass index (BMI) is a measure that uses your height and weight to
+                        work out if your weight is healthy.
+                    <p>
+                    <p>The BMI calculation divides an adult's weight in kilograms by their height in metres squared. For
+                        example, A BMI of 25 means 25kg/m2.
+                        (Source: <a
+                                href="https://www.nhs.uk/common-health-questions/lifestyle/what-is-the-body-mass-index-bmi/"
+                                target="_blank">NHS</a>)
+                    </p>
+                    <h6>How to understand the chart</h6>
+                    <p>On the chart, the different categories of health that your BMI indicates are colour-coded.
+                        The list below gives you an indication of what these mean. </p>
+                    If your BMI is:
+                    <ul>
+                        <li>below 18.5 (Blue area of chart) – you're in the underweight range</li>
+                        <li>between 18.5 and 24.9 (Green area of chart) – you're in the healthy weight range</li>
+                        <li>between 25 and 29.9 (Yellow area of chart) – you're in the overweight range</li>
+                        <li>between 30 and 34.9 (Orange area of chart) – you're in the obese range</li>
+                        <li>between 35 and 40 (Red area of chart) – you're in the morbidly obese range</li>
+                    </ul>
+                    <p>If you have any concerns regarding your BMI, contact your GP to discuss.</p>
+                </section>
+
             </div>
             <div class="modal fade pt-5" id="dataModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -130,7 +176,8 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="entryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal fade" id="entryModal" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content p-3">
                         <div class="modal-header">
@@ -145,7 +192,8 @@
                                 <form class="m-2 data" id="metricForm">
                                     <table class="mx-auto">
                                         <tr>
-                                            <td><label for="dataInput">Current Weight (<span class="unit"></span>): </label></td>
+                                            <td><label for="dataInput">Current Weight (<span class="unit"></span>):
+                                            </label></td>
                                             <td><input type="text" id="dataInput" maxlength="3" size="3"
                                                        pattern="(4[0-9]|[5-9][0-9]|1[0-9]{2}|2[0-3][0-9]|240)"
                                                        class="m-1 data"
@@ -173,7 +221,8 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="targetModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal fade" id="targetModal" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content p-3">
                         <div class="modal-header">
@@ -188,8 +237,9 @@
                                 <form class="m-2" id="targetForm">
                                     <table class="mx-auto">
                                         <tr>
-<!--                                            Limited to between 30 and 400 as likely to be lighter than 30kg and not likely to be heavier than 400lbs-->
-                                            <td><label for="targetDataInput">Target Weight (<span class="unit"></span>): </label></td>
+                                            <!--                                            Limited to between 30 and 400 as likely to be lighter than 30kg and not likely to be heavier than 400lbs-->
+                                            <td><label for="targetDataInput">Target Weight (<span class="unit"></span>):
+                                            </label></td>
                                             <td><input type="text" id="targetDataInput" maxlength="3" size="3"
                                                        pattern="(3[0-9]|[4-9][0-9]|[1-3][0-9]{2}|400)"
                                                        class="m-1 data"

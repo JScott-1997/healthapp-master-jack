@@ -73,7 +73,7 @@
 <main class="container-fluid mx-auto text-center bg-light" id="mainContainer">
   <div class="row justify-content-center">
     <section id="heartRateChart" class="col-sm bg-white my-2 py-2 chartbox">
-      <h3 class="h3 text-secondary sectionHead">Respiration Rate</h3>
+      <h3 class="h3 sectionHead">Respiration Rate</h3>
       <div class="canvasContainer m-0 p-0">
         <canvas id="chart" class="m-3"></canvas>
         <div class="d-flex flex-row-reverse px-4 my-3">|
@@ -167,9 +167,9 @@
                     <tr>
                       <td><label for="respirationRate">Current Respiration Rate (Resting): </label></td>
                       <td><input type="text" id="respirationRate" maxlength="3" size="3"
-                                 pattern="(1[2-9]|2[0-5])"
+                                 pattern="([5-9]|[1-4][0-9]|50)"
                                  class="m-1 data"
-                                 oninvalid="this.setCustomValidity('Enter a value between 12 and 25')"
+                                 oninvalid="this.setCustomValidity('Enter a value between 5 and 50')"
                                  oninput="this.setCustomValidity('')" required></td>
                       <td>
                         <button class="btn btn-primary btn-sm m-1" type="submit">Record</button>
