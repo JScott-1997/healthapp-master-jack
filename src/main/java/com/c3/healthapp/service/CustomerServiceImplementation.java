@@ -4,6 +4,7 @@ import com.c3.healthapp.model.*;
 import com.c3.healthapp.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
+@Primary
 public class CustomerServiceImplementation implements CustomerService, UserDetailsService {
     private final CustomerRepository customerRepository;
     private final RoleRepository roleRepository;

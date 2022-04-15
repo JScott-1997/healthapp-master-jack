@@ -193,6 +193,19 @@ function setUpBMIChart(){
 }
 
 function showBMIChart(){
+
+    //Check if new weight has been submitted since page load and update BMI chart if it has
+    if(chartData.length > chartDataBMI.length){
+        const newWeightEntry = chartData[chartData.length-1];
+        //Clone chart data array to get updated values
+        const newBMIEntry = {
+            x: newWeightEntry.x,
+            y: newWeightEntry.y/Math.pow((customer.height/100), 2)
+        }
+        chartDataBMI.push(newBMIEntry)
+        BMIChart.update();
+    }
+
     weightHeader.innerHTML = "BMI";
     chartContainer.style.display="none";
     BMIChartContainer.style.display="block";
