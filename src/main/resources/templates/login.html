@@ -23,7 +23,6 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100" id="loginbg">
-<div class="opacity70">
     <nav class="sidebar" id="sideNav">
         <ul>
             <a href="/">
@@ -65,7 +64,7 @@
         <button id="burger" class="text-dark navbar-brand bg-primary" onclick="openSideNav()">☰</button>
         <a class="navbar-brand text-dark" id="title"></i>Dundas Health</a>
     </nav>
-    <main class="container mx-auto text-center align-items-center vh-100">
+    <main class="container mx-auto text-center align-items-center">
         <section
                 class="col-9 col-md-7 col-xl-4 mt-5 p-4 rounded border border-secondary mx-auto text-center bg-light">
             <h1 class="h1">Log in</h1>
@@ -103,14 +102,12 @@
             </div>
         </section>
     </main>
-    <footer class="text-center text-white mt-auto" style="background-color: #3B3B3B;">
-        <div class="text-center text-white p-4">
-            © 2022 Copyright:
-            <a class="text-primary" href="https://dundashealth.co.uk">https://dundashealth.co.uk</a>
-        </div>
-    </footer>
     <script th:src="@{/js/sidenav.js}"></script>
-</div>
+<footer class="text-center text-white mt-auto" style="background-color: #3B3B3B;">
+    <div class="text-center text-white p-4">
+        © 2022 Copyright:
+        <a class="text-primary" href="https://dundashealth.co.uk">https://dundashealth.co.uk</a>
+    </div>
+</footer>
 </body>
-
 </html>

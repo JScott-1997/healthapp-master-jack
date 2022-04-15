@@ -297,8 +297,6 @@ function updateChart(chart, data) {
 
 function updateChart(chart) {
     chart.options.scales.x.suggestedMax = new Date(today).toISOString();
-    chart.options.scales.y.min = dataValues.min-5;
-    chart.options.scales.y.max = dataValues.max+5;
     chart.update();
 }
 

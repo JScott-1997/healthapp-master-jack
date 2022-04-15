@@ -41,7 +41,6 @@ public class CustomerController {
                 .getPrincipal().toString();
         Customer customer = customerService.getCustomer(username);
         model.addAttribute("customer", customer);
-        System.out.println(customer.getCustomerSex());
         return "profile";
     }
 
@@ -50,7 +49,6 @@ public class CustomerController {
     public ResponseEntity<Customer> getCustomer() {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
-        System.out.println(username);
         Customer customer = customerService.getCustomer(username);
 
         return ResponseEntity.ok().body(customer);

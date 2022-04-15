@@ -22,7 +22,6 @@
 </head>
 
 <body class="bg-light d-flex flex-column min-vh-100" id="registerbg">
-<div class="opacity70">
 <nav class="sidebar" id="sideNav">
     <ul>
         <a href="/">
@@ -64,7 +63,7 @@
     <button id="burger" class="text-dark navbar-brand bg-primary" onclick="openSideNav()">☰</button>
     <a class="navbar-brand text-dark" id="title"></i>Dundas Health</a>
 </nav>
-<main class="container mx-auto text-center align-items-center vh-100" id="mainContainer">
+<main class="container mx-auto text-center align-items-center">
     <section class="col-9 col-md-7 col-xl-4 bg-white mt-5 p-4 rounded border border-secondary mx-auto text-center">
         <h1 class="h1">Register</h1>
         <form th:action="@{/registration}" method="post" autocomplete="off">
@@ -112,6 +111,5 @@
     </div>
 </footer>
 <script th:src="@{/js/sidenav.js}"></script>
-</div>
 </body>
 </html>
