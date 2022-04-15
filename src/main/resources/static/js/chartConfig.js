@@ -231,7 +231,8 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
 
             //Get chart min and max values (depends on target as well as lowest and highest values)
             getMinMaxValues();
-
+            chart.options.scales.y.min = dataValues.min-5;
+            chart.options.scales.y.max = dataValues.max+5;
             updateChart(chart);
             message.innerHTML = getMessage(metricTargetValue, entryReadIn);
             current.innerHTML = `${entryReadIn}${units}`
