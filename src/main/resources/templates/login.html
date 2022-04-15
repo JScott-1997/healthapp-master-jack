@@ -74,7 +74,10 @@
                     <div class="d-flex flex-row align-items-center"><i
                             class="fa-solid fa-user mx-2 formicon"></i>
                         <input type="text" class="form-control" id="username"
-                               aria-describedby="username" name="username" placeholder="Enter username" required>
+                               aria-describedby="username" name="username" placeholder="Enter username"
+                               pattern="^[A-Za-z][A-Za-z0-9]*$"
+                               oninvalid="this.setCustomValidity('Username cannot contain spaces.')"
+                               oninput="this.setCustomValidity('')" required>
                     </div>
                 </div>
                 <div class="form-group d-flex flex-column my-2 formelement">

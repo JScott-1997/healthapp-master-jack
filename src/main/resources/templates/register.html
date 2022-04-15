@@ -75,7 +75,10 @@
             <div class="form-group d-flex flex-column mx-auto my-2 formelement">
                 <label for="username">Username</label>
                 <input type="text" class="form-control" id="username" name="username"
-                       aria-describedby="unameHelp" placeholder="Enter username" required>
+                       aria-describedby="unameHelp" placeholder="Enter username" pattern="^[A-Za-z][A-Za-z0-9]*$"
+                       oninvalid="this.setCustomValidity('Username cannot contain spaces.')"
+                       oninput="this.setCustomValidity('')"
+                       required>
             </div>
             <div class="form-group d-flex flex-column mx-auto my-2 formelement">
                 <label for="dateOfBirth">Date of Birth</label>
