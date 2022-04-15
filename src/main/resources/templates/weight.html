@@ -23,6 +23,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-trendline"></script>
 </head>
 
 <body class="bg-light d-flex flex-column min-vh-100">
@@ -74,7 +75,7 @@
     <div class="row justify-content-center">
 
         <section id="leftColumn" class="col-lg bg-white m-1 p-1 chartbox">
-            <h3 class="h3 sectionHead">Weight (<span class="unit"></span>)</h3>
+            <h3 class="h3 sectionHead" id="weightHeader">Weight (<span class="unit"></span>)</h3>
             <div class="m-2">
                 <a href="#" class="mx-2" onclick="showWeightChart()">Weight Chart</a> |
                 <a href="#" class="mx-2" onclick="showBMIChart()">BMI Chart</a>
@@ -106,13 +107,13 @@
             <!--            Container for BMI chart and associated elements, hidden by default -->
             <div class="canvasContainer" id="BMIChartContainer" style="display: none">
                 <canvas id="BMIChart" class="m-3"></canvas>
+                <span id="BMIMessage"></span>
                 <div class="d-flex flex-row-reverse px-4 my-3">|
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(180, BMIChart)">180D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(90, BMIChart)">90D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(30, BMIChart)">30D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(7, BMIChart)">1W</a>
                 </div>
-                <span id="BMIMessage"></span>
                 <section class="p-2">
                     <h4>How to read your BMI Chart</h4>
                     <h6>What is BMI?</h6>
@@ -121,11 +122,13 @@
                     <p>
                     <p>The BMI calculation divides an adult's weight in kilograms by their height in metres squared. For
                         example, A BMI of 25 means 25kg/m2.
-                   (Source:  <a href="https://www.nhs.uk/common-health-questions/lifestyle/what-is-the-body-mass-index-bmi/" target="_blank">NHS</a>)
+                        (Source: <a
+                                href="https://www.nhs.uk/common-health-questions/lifestyle/what-is-the-body-mass-index-bmi/"
+                                target="_blank">NHS</a>)
                     </p>
                     <h6>How to understand the chart</h6>
                     <p>On the chart, the different categories of health that your BMI indicates are colour-coded.
-                    The list below gives you an indication of what these mean. </p>
+                        The list below gives you an indication of what these mean. </p>
                     If your BMI is:
                     <ul>
                         <li>below 18.5 (Blue area of chart) – you're in the underweight range</li>

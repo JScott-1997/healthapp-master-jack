@@ -167,9 +167,9 @@
                     <tr>
                       <td><label for="respirationRate">Current Respiration Rate (Resting): </label></td>
                       <td><input type="text" id="respirationRate" maxlength="3" size="3"
-                                 pattern="(1[2-9]|2[0-5])"
+                                 pattern="([5-9]|[1-4][0-9]|50)"
                                  class="m-1 data"
-                                 oninvalid="this.setCustomValidity('Enter a value between 12 and 25')"
+                                 oninvalid="this.setCustomValidity('Enter a value between 5 and 50')"
                                  oninput="this.setCustomValidity('')" required></td>
                       <td>
                         <button class="btn btn-primary btn-sm m-1" type="submit">Record</button>

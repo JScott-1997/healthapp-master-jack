@@ -13,6 +13,8 @@ const chartContainer = document.getElementById('weightChartContainer');
 const BMIChartContainer = document.getElementById('BMIChartContainer');
 const BMIMessage = document.getElementById('BMIMessage');
 
+const weightHeader = document.getElementById('weightHeader');
+
 let BMIChart;
 let chartDataBMI;
 
@@ -191,18 +193,23 @@ function setUpBMIChart(){
 }
 
 function showBMIChart(){
+    weightHeader.innerHTML = "BMI";
     chartContainer.style.display="none";
     BMIChartContainer.style.display="block";
     BMIMessage.innerHTML = getBMIMessage(chartDataBMI[chartDataBMI.length-1].y);
 }
 
 function showWeightChart(){
+    weightHeader.innerHTML = `Weight (${units})`;
     BMIChartContainer.style.display="none";
     chartContainer.style.display="block";
 }
 
 function getBMIMessage(currentBMI){
     let range;
+    if(customer.height==0)
+        return `<b>Please set your height on your <a href="/customer/profile">Profile</a> to view BMI data.</b>`;
+
     switch(true){
         case currentBMI < 18.5:
             range = 'Underweight';

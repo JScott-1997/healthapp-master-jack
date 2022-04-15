@@ -93,15 +93,21 @@ public class CustomerController {
     @PostMapping("/photo/save")
     public @ResponseBody
     RedirectView savePhoto(@RequestParam("file") MultipartFile file) throws IOException {
+
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
         Customer customer = customerService.getCustomer(username);
 
-        String uploadDir = "user-photos/" + customer.getUsername();
+        String uploadDir = "user-photos/" + username;
+
         Path uploadPath = Paths.get(uploadDir);
+
+        //Set profile picture path in customer object and save to db
         customer.setProfilePicture(fileName);
         customerService.updateCustomer(customer);
+
+        //If directory to save files doesn't exist, create
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
@@ -109,9 +115,11 @@ public class CustomerController {
         try (InputStream inputStream = file.getInputStream()) {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ioe) {
-            throw new IOException("Could not save image file: " + fileName, ioe);
+        } catch (IOException e) {
+            throw new IOException("Could not save image file: " + fileName, e);
         }
+
+        //Send back to profile
         return new RedirectView("../profile");
     }
 }

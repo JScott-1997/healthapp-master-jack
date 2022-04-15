@@ -37,7 +37,6 @@ function saveUnits(evt) {
     const units = {
         customerUnitsPreference: evt.currentTarget.value
     }
-    console.log(units)
     fetch('/customer/units/save', {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },

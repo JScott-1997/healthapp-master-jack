@@ -68,8 +68,8 @@
     <h1>Profile</h1>
     <div class="d-flex justify-content-center mx-auto my-3 align-items-center" id="profileContainer">
         <div class="m-3" id="profileImage">
-            <img th:if="${customer.profilePicture.isEmpty()}" th:src="@{/assets/profileplaceholder.png}"/>
-            <img th:if="${!customer.profilePicture.isEmpty()}" th:src="${customer.profilePicturePath}"/>
+            <img th:if="${(customer.profilePicture==null)}" th:src="@{/assets/profileplaceholder.png}"/>
+            <img th:if="${!(customer.profilePicture==null)}" th:src="${customer.profilePicturePath}"/>
             <div class="overlay overlayFade pt-3">
                 <a class="text-light text-decoration-none" role="button" data-toggle="modal"
                    data-target="#setPictureModal">Upload profile photo...</a>

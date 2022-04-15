@@ -11676,7 +11676,6 @@ td, th {
 #profileImage {
   position: relative;
   width: 250px;
-  height: 250px;
   border: 1px solid grey;
   border-radius: 5px;
   overflow: hidden;
@@ -11703,7 +11702,6 @@ td, th {
 
 #profileImage img{
     max-width: 250px;
-    max-height: 250px;
     object-fit: cover;
 }
 
@@ -11745,6 +11743,9 @@ td, th {
     opacity: 0.8;
   }
 }
+
+/* Checkbox toggle */
+
 
 @media (max-width: 683px) {
 
