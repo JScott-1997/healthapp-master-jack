@@ -11738,14 +11738,15 @@ td, th {
 }
 
 
-@media (max-width: 800px){
+@media (max-width: 900px){
   .overlay {
     opacity: 0.8;
   }
+
+  .optioncontainer {
+    width: 75%;
+  }
 }
-
-/* Checkbox toggle */
-
 
 @media (max-width: 683px) {
 

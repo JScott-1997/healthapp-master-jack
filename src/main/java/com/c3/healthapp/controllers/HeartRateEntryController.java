@@ -1,5 +1,6 @@
 package com.c3.healthapp.controllers;
 
+import com.c3.healthapp.model.Customer;
 import com.c3.healthapp.model.HeartRateEntry;
 import com.c3.healthapp.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -29,4 +30,5 @@ public class HeartRateEntryController {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/heartrate/save").toUriString());
         return ResponseEntity.created(uri).body(heartRateEntry);
     }
+
 }

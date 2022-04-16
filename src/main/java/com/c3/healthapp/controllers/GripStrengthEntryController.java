@@ -1,5 +1,6 @@
 package com.c3.healthapp.controllers;
 
+import com.c3.healthapp.model.Customer;
 import com.c3.healthapp.model.GripStrengthEntry;
 import com.c3.healthapp.model.HeartRateEntry;
 import com.c3.healthapp.service.CustomerService;
@@ -29,5 +30,16 @@ public class GripStrengthEntryController {
         customerService.saveGripStrengthEntry(username, gripStrengthEntry);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/gripstrength/save").toUriString());
         return ResponseEntity.created(uri).body(gripStrengthEntry);
+    }
+
+    @PostMapping("/target/save")
+    public ResponseEntity<Integer> saveGripTarget(@RequestBody int gripStrengthTarget) {
+        String username = SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal().toString();
+        Customer customer = customerService.getCustomer(username);
+        customer.setTargetGripStrength(gripStrengthTarget);
+        customerService.updateCustomer(customer);
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/gripstrength/target/save").toUriString());
+        return ResponseEntity.created(uri).body(gripStrengthTarget);
     }
 }

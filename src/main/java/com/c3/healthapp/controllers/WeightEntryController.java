@@ -1,5 +1,6 @@
 package com.c3.healthapp.controllers;
 
+import com.c3.healthapp.model.Customer;
 import com.c3.healthapp.model.WeightEntry;
 import com.c3.healthapp.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,16 @@ public class WeightEntryController {
         customerService.saveWeightEntry(username, weightEntry);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/weight/save").toUriString());
         return ResponseEntity.created(uri).body(weightEntry);
+    }
+
+    @PostMapping("/target/save")
+    public ResponseEntity<Integer> saveWeightTarget(@RequestBody int targetWeight) {
+        String username = SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal().toString();
+        Customer customer = customerService.getCustomer(username);
+        customer.setTargetWeight(targetWeight);
+        customerService.updateCustomer(customer);
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/weight/target/save").toUriString());
+        return ResponseEntity.created(uri).body(targetWeight);
     }
 }

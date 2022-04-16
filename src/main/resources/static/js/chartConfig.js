@@ -32,7 +32,9 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
 
     chartData = getChartDataFromCustomer(customer, chartType, dataValues);
 
+    //Get target from customer object if target is set
     let metricTargetValue;
+    if(customer[`target${chartType}`] > 0) metricTargetValue = customer[`target${chartType}`];
 
     //Convert lowest value from data, highest value from data and target to pounds if user has imperial units preference
     if (kgLbs && units === 'lbs') {
@@ -58,6 +60,11 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
         else {
             dataValues.max = dataValues.highest;
         }
+    }
+
+    function setChartYScale(chart){
+        chart.options.scales.y.min = dataValues.min-5;
+        chart.options.scales.y.max = dataValues.max+5;
     }
 
     //Change min max values for chart y axis based on data and target set
@@ -231,8 +238,8 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
 
             //Get chart min and max values (depends on target as well as lowest and highest values)
             getMinMaxValues();
-            chart.options.scales.y.min = dataValues.min-5;
-            chart.options.scales.y.max = dataValues.max+5;
+
+            setChartYScale(chart);
             updateChart(chart);
             message.innerHTML = getMessage(metricTargetValue, entryReadIn);
             current.innerHTML = `${entryReadIn}${units}`
@@ -273,10 +280,19 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
         target.innerHTML = `${metricTargetValue}${units}`;
         message.innerHTML = getMessage(metricTargetValue, currentMetricValue);
 
+        //Convert to KG to store in db if required
+        if(units == 'IMPERIAL'){
+            metricTargetValue = metricTargetValue / 2.046;
+        }
+
         //Show message now target is set
         message.style.display = "block";
         showSubmittedTargetContent(targetReadIn);
 
+        //Save entry to db and update chart
+        saveTarget(metricTargetValue, `/customer/${chartType.toLowerCase()}/target/save`);
+
+        setChartYScale(chart);
         updateChart(chart, dataValues);
     }
 
