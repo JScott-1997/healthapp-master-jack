@@ -212,6 +212,7 @@ function showBMIChart() {
         }
         chartDataBMI.push(newBMIEntry)
         BMIChart.update();
+
     }
 
     weightHeader.innerHTML = "BMI";
@@ -416,12 +417,11 @@ function showBodyFatChart() {
         bodyFatChart.update();
     }
 
-    bodyFatMessage.innerHTML = getBodyFatMessage(chartDataBodyFat[chartDataBodyFat.length - 1].y);
     weightHeader.innerHTML = "Body Fat (%)";
     chartContainer.style.display = "none";
     BMIChartContainer.style.display = "none";
     BodyFatChartContainer.style.display = "block";
-
+    bodyFatMessage.innerHTML = getBodyFatMessage(chartDataBodyFat[chartDataBodyFat.length - 1].y);
 }
 
 function getBodyFatRanges(sex, age) {
