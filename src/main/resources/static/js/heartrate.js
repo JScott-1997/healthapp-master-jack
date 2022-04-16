@@ -5,6 +5,11 @@
 getCustData();
 let customer = JSON.parse(sessionStorage.getItem('customer'));
 
+//Get and display users max heart rate (220 - age)
+const customerAge = calculate_age(new Date(customer.dateOfBirth));;
+const maxHeartRate = 220 - customerAge;
+document.getElementById('maxheartrate').innerHTML = maxHeartRate + 'BPM';
+
 //Get elements to be used to set up chart and modal by chartSetup.js setUpChartAndModal
 const chartEl = document.getElementById('chart');
 const chartType = "HeartRate";

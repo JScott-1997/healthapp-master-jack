@@ -66,3 +66,11 @@ function yearsBeforeToday(date) {
      return Math.round(value / 2.2046);
   }
 
+//From https://www.w3resource.com/javascript-exercises/javascript-date-exercise-18.php
+function calculate_age(dob) {
+    var diff_ms = Date.now() - dob.getTime();
+    var age_dt = new Date(diff_ms);
+
+    return Math.abs(age_dt.getUTCFullYear() - 1970);
+}
+

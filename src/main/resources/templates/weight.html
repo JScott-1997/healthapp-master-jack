@@ -74,11 +74,12 @@
 <main class="container-fluid mx-auto text-center bg-light" id="mainContainer">
     <div class="row justify-content-center">
 
-        <section id="leftColumn" class="col-lg bg-white m-1 p-1 chartbox">
+        <section id="leftColumn" class="bg-white m-1 p-1 chartbox">
             <h3 class="h3 sectionHead" id="weightHeader">Weight (<span class="unit"></span>)</h3>
             <div class="m-2">
                 <a href="#" class="mx-2" onclick="showWeightChart()">Weight Chart</a> |
-                <a href="#" class="mx-2" onclick="showBMIChart()">BMI Chart</a>
+                <a href="#" class="mx-2" onclick="showBMIChart()">BMI Chart</a> |
+                <a href="#" class="mx-2" onclick="showBodyFatChart()">Body Fat % Chart</a>
             </div>
             <!--            Container for weight chart and associated elements-->
             <div class="canvasContainer" id="weightChartContainer">
@@ -114,7 +115,7 @@
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(30, BMIChart)">30D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(7, BMIChart)">1W</a>
                 </div>
-                <section class="p-2">
+                <section class="p-3">
                     <h4>How to read your BMI Chart</h4>
                     <h6>What is BMI?</h6>
                     <p>The body mass index (BMI) is a measure that uses your height and weight to
@@ -138,6 +139,54 @@
                         <li>between 35 and 40 (Red area of chart) – you're in the morbidly obese range</li>
                     </ul>
                     <p>If you have any concerns regarding your BMI, contact your GP to discuss.</p>
+                </section>
+
+            </div>
+            <div class="canvasContainer" id="BodyFatChartContainer" style="display: none">
+                <canvas id="BodyFatChart" class="m-3"></canvas>
+                <span id="BodyFatMessage"></span>
+                <div class="d-flex flex-row-reverse px-4 my-3">|
+                    <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(180, bodyFatChart)">180D</a> |
+                    <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(90, bodyFatChart)">90D</a> |
+                    <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(30, bodyFatChart)">30D</a> |
+                    <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(7, bodyFatChart)">1W</a>
+                </div>
+                <section class="p-3">
+                    <h4>How to read your Body Fat % Chart</h4>
+                    <h6>About your body fat %</h6>
+                    <p>Although BMI can be a good indicator of your body fat %, and the range of health is this is
+                        associated with,
+                        BMI doesn't take into
+                        account things such as muscle mass. This means that for people with high muscle mass, BMI may
+                        not be the best indicator of health.
+                    <p>In order to get a more accurate indication of the health risks related to your weight and body
+                        composition, your body fat percentage is
+                        displayed on the chart above.
+                    </p>
+                    <p>According to a study published in the British Journal of Nutrition in 1991,
+                        if you are an adult, your percentage of body fat can be estimated as accurately as with
+                        skin-fold measurements and bioelectrical tests using the following gender-based formulas in
+                        conjunction with your BMI
+                    </p>
+                    <p>Women:
+
+                    <ul>
+                        <li>(1.20 x BMI) + (0.23 x Age) - 5.4 = Body Fat Percentage</li>
+                    </ul>
+                    Men:
+
+                    <ul>
+                        <li>(1.20 x BMI) + (0.23 x Age) - 16.2 = Body Fat Percentage</li>
+                    </ul>
+
+                    The data displayed above is calculated out using these formulas.
+                    </p>
+                    <h6>How to understand the chart</h6>
+                    <p>On the chart, the different categories of health that your body fat percentage indicates are
+                        colour-coded.
+                        The table below gives you an indication of what these mean. </p>
+                    <img th:src="@{/assets/bodyfatchart.jpg}" class="w-100">
+                    <p>If you have any concerns regarding your body fat, contact your GP to discuss.</p>
                 </section>
 
             </div>
