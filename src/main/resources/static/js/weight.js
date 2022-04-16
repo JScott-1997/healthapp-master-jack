@@ -1,4 +1,6 @@
 //For page displaying weight chart and data
+//Also contains bmi chart and body fat % chart
+//Author: Sean Laughlin
 
 //update and get customer object
 getCustData();
@@ -625,7 +627,7 @@ function getBodyFatMessage(currentBodyFat) {
             range = 'Low';
             break;
         case currentBodyFat > ranges.good.low && currentBodyFat < ranges.good.high:
-            range = 'Good';
+            range = 'Healthy';
             break;
         case currentBodyFat > ranges.poor.low && currentBodyFat < ranges.poor.high:
             range = 'Poor'
