@@ -23,8 +23,10 @@
 </head>
 <body class="d-flex flex-column min-vh-100" id="contactbg">
 <nav class="sidebar" id="sideNav">
-    <ul>
-        <a href="/">
+
+    <!-- Display different menu depending on whether user is logged in or not-->
+    <ul sec:authorize="!isAuthenticated()">
+        <a href="#">
             <li>
                 <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-house mx-2"
                                                                                style="font-size: 0.9rem"></i>Home
@@ -53,6 +55,41 @@
             <li>
                 <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-pencil mx-2"
                                                                                style="font-size: 0.9rem"></i>Contact
+                </div>
+            </li>
+        </a>
+        <hr class="solid">
+    </ul>
+    <ul sec:authorize="isAuthenticated()">
+        <a href="/customer/dashboard">
+            <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-house mx-2"
+                                                                               style="font-size: 0.9rem"></i>Home
+                </div>
+            </li>
+        </a>
+        <hr class="solid">
+        <a href="/customer/profile">
+            <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user mx-2"
+                                                                               style="font-size: 0.9rem"></i>My Profile
+                </div>
+            </li>
+        </a>
+        <hr class="solid">
+        <a href="/customer/settings">
+            <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user-gear mx-2"
+                                                                               style="font-size: 0.9rem"></i>Account
+                    Settings
+                </div>
+            </li>
+        </a>
+        <hr class="solid">
+        <a href="#" onclick="logOut()">
+            <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
+                                                                               style="font-size: 0.9rem"></i>Log Out
                 </div>
             </li>
         </a>
@@ -97,6 +134,7 @@
         </form>
     </section>
 </main>
+<script th:src="@{/js/logout.js}"></script>
 <script th:src="@{/js/sidenav.js}"></script>
 <footer class="text-center text-white mt-auto" style="background-color: #3B3B3B;">
     <div class="text-center text-white p-4">
