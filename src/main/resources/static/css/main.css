@@ -11770,11 +11770,6 @@ background-color: #fff;
     border-bottom: 2px solid grey;
 }
 
-/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-.collapsible.active, .collapsible:hover {
-    background-color: #ccc;
-}
-
 .collapsible:after {
     content: '\002B';
     /* Unicode character for "plus" sign (+) */
