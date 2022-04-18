@@ -55,9 +55,11 @@
         </a>
         <hr class="solid">
         <a href="#" onclick="logOut()">
-            <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
+            <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
                                                                                style="font-size: 0.9rem"></i>Log Out
-            </div></li>
+                </div>
+            </li>
         </a>
         <hr class="solid">
     </ul>
@@ -72,27 +74,88 @@
     <div class="row justify-content-center">
 
         <section id="leftColumn" class="col-lg bg-white m-1 p-1 chartbox">
-            <h1 class="sectionHead">Grip Strength</h1>
+            <h3 class="h3 sectionHead">Grip Strength (<span class="unit"></span>)</h3>
             <div class="canvasContainer">
                 <canvas id="chart" class="m-3"></canvas>
-                <div class="d-flex flex-row-reverse px-4 my-3">|
+                <div class="d-flex flex-row-reverse px-4 my-3">
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(180, theChart)">180D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(90, theChart)">90D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(30, theChart)">30D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(7, theChart)">1W</a>
                 </div>
-            </div>
-            Target Grip: <b><span id="target"></span></b><br>
-            Current Grip Strength: <b><span id="current"></span></b><br>
-            <span id="message"></span>
-            <div id="buttons" class="m-3">
-                <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#entryModal">Record Grip
-                </button>
-                <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#dataModal">View
-                    Data
-                </button>
-                <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#targetModal">Set Target
-                </button>
+                Target Grip: <b><span id="target"></span></b><br>
+                Current Grip Strength: <b><span id="current"></span></b><br>
+                <span id="message"></span>
+                <div id="buttons" class="m-3">
+                    <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#entryModal">Record Grip
+                    </button>
+                    <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#dataModal">View
+                        Data
+                    </button>
+                    <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#targetModal">Set Target
+                    </button>
+                </div>
+                <section class="p-3">
+                    <h4>How to use your Grip Strength Chart</h4>
+                    <h6>About your Grip Strength</h6>
+                    <p>Grip Strength is the measure of how strongly and securely you can hold things in your hand. As
+                        well as being a health indicator as outlined below, grip strength is also important to help you
+                        exercise, especially when training with weights.</p>
+                    <h6>Why should I measure my grip strength?</h6>
+                    <p>For older adults, grip strength is not only important because it's needed to function in everyday
+                        life. It's also a good measure of your overall strength. Testing grip strength is an easy way to
+                        assess your overall health status.</p>
+                    <p>Research has shown that grip strength is associated with a number of health indicators,
+                        including:</p>
+                    <ul>
+                        <li><strong>Mobility.</strong> While grip strength isn't necessarily used when you're walking,
+                            it's associated with
+                            mobility. People with physical limitations are more likely to have decreased grip strength.
+                        </li>
+
+                        <li><strong>Overall strength.</strong> Grip strength is a good indicator of overall strength.
+                            But there are some
+                            cases where this doesn't apply. It may be better to measure grip strength along with leg
+                            strength for a more accurate indicator.
+                        </li>
+
+                        <li><strong>Cognitive function.</strong> People who have good grip strength scored better on
+                            tests of working memory,
+                            processing speed, and verbal ability. They are also less likely to have thinking problems as
+                            they age.)
+                        </li>
+                        <li><strong>Bone mineral density.</strong> Low grip strength is correlated with low bone mineral
+                            density, which
+                            is how strong your bones are. It’s a strong risk factor for osteoporosis, which is when your
+                            bones get thinner. People with low grip strength are also more likely to have hip fractures
+                            and fragility fractures. Fragility fractures are fractures that happen from a fall of
+                            standing height or less.
+                        </li>
+                        <li><strong>Heart health.</strong> A study of 140,000 people showed that decreased grip strength
+                            was associated
+                            with measures of heart health.
+                        </li>
+                    </ul>
+                    <p>(Source: <a
+                            href="https://www.webmd.com/fitness-exercise/what-to-know-grip-strength-how-to-measure"
+                            target="_blank">WebMd</a>)
+                    </p>
+                    <div class="float-start rounded border border-secondary">
+                        <img th:src="@{/assets/dynamometer.jpg}" alt="A Dynamometer">
+                    </div>
+                    <h6>How to understand the chart</h6>
+                    <p>
+                        Use the chart to compare your grip strength over time.
+                        You can set targets and aim to improve your grip strength.
+                        There are some techniques for improving grip strength in this article by Healthline:
+                        <a href="https://www.healthline.com/health/grip-strength" target="_blank">healthline.com/health/grip-strength</a>
+                    </p>
+                    <p>When you visit a Dundas Health branch, ask a member of staff to use the
+                        <strong>Dynamometer</strong>.</p>
+                    <p>By gripping the Dynamometer, you will be able to take a reading for your grip strength, which you
+                        can submit here to keep record of your change in grip strength.</p>
+                    <p>If you have any concerns regarding your grip strength, book an appointment with your GP.</p>
+                </section>
             </div>
             <div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -129,7 +192,8 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="entryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal fade" id="entryModal" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content p-3">
                         <div class="modal-header">
@@ -145,7 +209,8 @@
                                     <table class="mx-auto">
                                         <tr>
                                             <!--                                            Limited to between 40 and 240 as likely to be lesss than 30kg and not likely to be more than 400lbs-->
-                                            <td><label for="dataInput">Current Grip (<span class="unit"></span>): </label></td>
+                                            <td><label for="dataInput">Current Grip (<span class="unit"></span>):
+                                            </label></td>
                                             <td><input type="text" id="dataInput" maxlength="3" size="3"
                                                        pattern="(4[0-9]|[5-9][0-9]|1[0-9]{2}|2[0-3][0-9]|240)"
                                                        class="m-1 data"
@@ -173,7 +238,8 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="targetModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal fade" id="targetModal" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content p-3">
                         <div class="modal-header">
@@ -188,7 +254,8 @@
                                 <form class="m-2" id="targetForm">
                                     <table class="mx-auto">
                                         <tr>
-                                            <td><label for="targetDataInput">Target Grip (<span class="unit"></span>): </label></td>
+                                            <td><label for="targetDataInput">Target Grip (<span class="unit"></span>):
+                                            </label></td>
                                             <td><input type="text" id="targetDataInput" maxlength="3" size="3"
                                                        pattern="(1[0-9]|[2-8][0-9]|90)"
                                                        class="m-1 data"

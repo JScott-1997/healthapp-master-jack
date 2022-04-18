@@ -256,7 +256,7 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
         //Convert to kg if user uses imperial units. data is stored in kg in db. Weight read in is used to update chart data etc as its in users choice of units
         const targetReadIn = parseInt(input.value);
         let newTarget;
-
+        console.log(units)
         if(kgLbs){
         //Convert to kg if user uses imperial units. data is stored in kg in db. Weight read in is used to update chart data etc as its in users choice of units
         newTarget = units === 'lbs' ? convertLbsToKG(targetReadIn) : targetReadIn;
@@ -280,9 +280,10 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
         target.innerHTML = `${metricTargetValue}${units}`;
         message.innerHTML = getMessage(metricTargetValue, currentMetricValue);
 
+        let submittedValue = metricTargetValue;
         //Convert to KG to store in db if required
-        if(units == 'IMPERIAL'){
-            metricTargetValue = metricTargetValue / 2.046;
+        if(units == 'lbs'){
+            submittedValue = metricTargetValue / 2.2046;
         }
 
         //Show message now target is set
@@ -290,7 +291,7 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
         showSubmittedTargetContent(targetReadIn);
 
         //Save entry to db and update chart
-        saveTarget(metricTargetValue, `/customer/${chartType.toLowerCase()}/target/save`);
+        saveTarget(submittedValue, `/customer/${chartType.toLowerCase()}/target/save`);
 
         setChartYScale(chart);
         updateChart(chart, dataValues);

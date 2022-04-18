@@ -85,7 +85,7 @@
             <div class="canvasContainer" id="weightChartContainer">
                 <canvas id="chart" class="m-3"></canvas>
                 <small><b>Note: </b>The blue line on the chart indicates your target weight.</small>
-                <div class="d-flex flex-row-reverse px-4 my-3">|
+                <div class="d-flex flex-row-reverse px-4 my-3">
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(180, theChart)">180D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(90, theChart)">90D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(30, theChart)">30D</a> |
@@ -104,20 +104,49 @@
                     <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#targetModal">Set Target
                     </button>
                 </div>
+                <section class="p-3">
+                    <h4>How to use your Weight Chart</h4>
+                    <h6>About your Weight</h6>
+                    <p>When we measure our weight, we're tracking the change in how much of the energy from our foods is
+                        converted into fats and muscle by our body.
+                        Generally, people who are more active and eat a healthier diet tend to find that they maintain a
+                        healthy weight, often with a lower body fat percentage than those who do not.</p>
+                    <p>There are many factors that can affect the weight you are at, or the rate at which your body
+                        loses/gains weight.<br>
+                        These include but are not limited to: </p>
+                    <ul>
+                        <li>Calorie Intake</li>
+                        <li>Diet</li>
+                        <li>Metabolism</li>
+                        <li>Family Genetics</li>
+                        <li>Level of Activity (Physical Exertion/Excercise)</li>
+                        <li>Medical Conditions (Such as Diabetes)</li>
+                    </ul>
+                    <p>The chart above can be used to track and view your weight, however it's recommended that you use
+                        this metric in addition to your BMI and body fat percentage trackers
+                        to get a better indication of how your weight is affecting your health.
+                    </p>
+                    <h6>How to understand the chart</h6>
+                    <p>The chart is meant to be used to view and understand the trend in your weight change. For
+                        example, if you were exercising to lose weight, the chart would help you to understand the rate
+                        at which you are losing weight
+                        and give you an idea of how effective your health and fitness regime is.</p>
+                    <p>If you have any concerns regarding your weight, contact your GP to discuss.</p>
+                </section>
             </div>
             <!--            Container for BMI chart and associated elements, hidden by default -->
             <div class="canvasContainer" id="BMIChartContainer" style="display: none">
                 <canvas id="BMIChart" class="m-3"></canvas>
                 <span id="BMIMessage"></span>
-                <div class="d-flex flex-row-reverse px-4 my-3">|
+                <div class="d-flex flex-row-reverse px-4 my-3">
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(180, BMIChart)">180D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(90, BMIChart)">90D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(30, BMIChart)">30D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(7, BMIChart)">1W</a>
                 </div>
                 <section class="p-3">
-                    <h4>How to read your BMI Chart</h4>
-                    <h6>What is BMI?</h6>
+                    <h4>How to use your BMI Chart</h4>
+                    <h6>About your BMI</h6>
                     <p>The body mass index (BMI) is a measure that uses your height and weight to
                         work out if your weight is healthy.
                     <p>
@@ -145,14 +174,14 @@
             <div class="canvasContainer" id="BodyFatChartContainer" style="display: none">
                 <canvas id="BodyFatChart" class="m-3"></canvas>
                 <span id="BodyFatMessage"></span>
-                <div class="d-flex flex-row-reverse px-4 my-3">|
+                <div class="d-flex flex-row-reverse px-4 my-3">
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(180, bodyFatChart)">180D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(90, bodyFatChart)">90D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(30, bodyFatChart)">30D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(7, bodyFatChart)">1W</a>
                 </div>
                 <section class="p-3">
-                    <h4>How to read your Body Fat % Chart</h4>
+                    <h4>How to use your Body Fat % Chart</h4>
                     <h6>About your body fat %</h6>
                     <p>Although BMI can be a good indicator of your body fat %, and the range of health is this is
                         associated with,

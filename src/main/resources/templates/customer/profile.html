@@ -68,8 +68,8 @@
     <h1>Profile</h1>
     <div class="d-flex justify-content-center mx-auto my-3 align-items-center" id="profileContainer">
         <div class="m-3" id="profileImage">
-            <img th:if="${#strings.isEmpty(customer.profilePicture)}" th:src="@{/assets/profileplaceholder.png}"/>
-            <img th:unless="${#strings.isEmpty(customer.profilePicture)}" th:src="${customer.profilePicturePath}"/>
+            <img th:if="${#strings.isEmpty(customer.profilePicture)}" th:src="@{/assets/profileplaceholder.png}" alt="Profile Image"/>
+            <img th:unless="${#strings.isEmpty(customer.profilePicture)}" th:src="${customer.profilePicturePath}" alt="Profile Image"/>
             <div class="overlay overlayFade pt-3">
                 <a class="text-light text-decoration-none" role="button" data-toggle="modal"
                    data-target="#setPictureModal">Upload profile photo...</a>
@@ -167,6 +167,9 @@
                     </tr>
                 </table>
             </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
@@ -190,6 +193,9 @@
                     </div>
                     <button type="submit" class="btn btn-primary btn-md my-2">Submit</button>
                 </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

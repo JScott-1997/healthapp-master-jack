@@ -18,7 +18,7 @@ const forms = new Array();
 forms.push(document.getElementById('respirationRateRecordedForm'));
 forms.push(document.getElementById('metricForm'));
 //Includes boolean KgLbs set to false indicating chart does not use kg/lbs and uses own units. Units string is passed too, "BPM"
-setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext, modalPrev, modalPageNoSpan, false, "Breaths P/M", forms);
+setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext, modalPrev, modalPageNoSpan, false, "Breaths/Min", forms);
 
 let defaultContent = document.getElementById('defaultContent');
 let preRecordContent = document.getElementById('preRecordInstructions');

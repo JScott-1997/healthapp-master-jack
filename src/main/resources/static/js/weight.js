@@ -281,7 +281,7 @@ function getBMIMessage(currentBMI) {
 
 function setUpBodyFatChart() {
 
-    //Formula changes depending on male or female so this is checked
+    //Formula changes depending on male or female so this is checked and value of variable assigned
     const maleFemaleNumber = customer.sex == 'FEMALE' ? 5.4 : 16.2;
     chartDataBMI.forEach((data) => {
         const yValue = (1.20 * data.y) + (0.23 * customerAge) - maleFemaleNumber;

@@ -11533,11 +11533,27 @@ fieldset:disabled .btn {
 }
 
 #registerbg {
-  background: url("/assets/gym.jpg") no-repeat center center;
+  background: url("/assets/registerbg.jpg") no-repeat center center;
   background-size: cover;
 }
 
 #registerbg:before{
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.7);
+    z-index: -1;
+}
+
+#contactbg {
+  background: url("/assets/contactbg.jpg") no-repeat center center;
+  background-size: cover;
+}
+
+#contactbg:before{
     content: '';
     position: absolute;
     top: 0;
@@ -11622,6 +11638,14 @@ body {
 .chartbox {
   max-width: 800px;
   min-width: 400px;
+  border: 1px solid lightGray;
+  border-radius: 5px;
+}
+
+#faqbox {
+  max-width: 800px;
+  border: 1px solid lightGray;
+  border-radius: 5px;
 }
 
 #imgHeader {
@@ -11730,6 +11754,48 @@ td, th {
     animation-name: flash-animation;
     animation-duration: 0.2s;
 }
+
+/* From w3schools, edited */
+.collapsible {
+background-color: #fff;
+    cursor: pointer;
+    padding: 1rem;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 1rem;
+    margin: 0.3rem auto 0 auto;
+    font-weight: bold;
+    border-bottom: 2px solid grey;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.collapsible.active, .collapsible:hover {
+    background-color: #ccc;
+}
+
+.collapsible:after {
+    content: '\002B';
+    /* Unicode character for "plus" sign (+) */
+    font-size: 1rem;
+    float: right;
+    margin-left: 5px;
+}
+
+.collapsible.active:after {
+    content: "\2212";
+    /* Unicode character for "minus" sign (-) */
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.content {
+    max-height: 0;
+    /* animation */
+    transition: max-height 0.2s ease-out;
+    overflow: hidden;
+}
+
 
 @-webkit-keyframes flash-animation {
     from { background: red; }

@@ -40,7 +40,7 @@ public class CustomerController {
                 .getPrincipal().toString();
         Customer customer = customerService.getCustomer(username);
         model.addAttribute("customer", customer);
-        return "profile";
+        return "customer/profile";
     }
 
     //gets username from UsernamePasswordAuthenticationToken and passes to repo to find user details, sends json data to client
@@ -119,6 +119,6 @@ public class CustomerController {
         }
 
         //Send back to profile
-        return new RedirectView("../profile");
+        return new RedirectView("../customer/profile");
     }
 }

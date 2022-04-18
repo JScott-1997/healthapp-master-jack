@@ -24,7 +24,7 @@ function saveHeight(evt) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     }).then(res => {
-        res.json().then(data => console.log(data), heightForm.appendChild(document.createElement('small')).innerHTML = "Updated successfully."),
+        res.json().then(data => console.log(data), heightForm.innerHTML = "<h5>Updated successfully.</h5>"),
         currentHeightEl.innerHTML = data+'cm';
     });
 }

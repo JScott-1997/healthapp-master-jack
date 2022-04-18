@@ -2,7 +2,7 @@
 <html xmlns:th="https://www.thymeleaf.org">
 
 <head>
-    <title>Heart Rate - Dundas Health</title>
+    <title>Respiration Rate - Dundas Health</title>
     <link rel="icon" type="image/png" sizes="32x32" th:href="@{/favicons/favicon-32x32.png}">
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/favicons/favicon-16x16.png}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
@@ -73,28 +73,92 @@
 <main class="container-fluid mx-auto text-center bg-light" id="mainContainer">
     <div class="row justify-content-center">
         <section id="heartRateChart" class="col-sm bg-white my-2 py-2 chartbox">
-            <h3 class="h3 sectionHead">Heart Rate (BPM)</h3>
+            <h3 class="h3 sectionHead">Respiration Rate (<span class="unit"></span>)</h3>
             <div class="canvasContainer m-0 p-0">
                 <canvas id="chart" class="m-3"></canvas>
-                <div class="d-flex flex-row-reverse px-4 my-3">|
+                <div class="d-flex flex-row-reverse px-4 my-3">
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(180, theChart)">180D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(90, theChart)">90D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(30, theChart)">30D</a> |
                     <a href="#" class="mx-2" onclick="setDaysDisplayedOnChart(7, theChart)">1W</a>
                 </div>
-            </div>
+                Healthy Respiration Rate: <b><span id="healthyRange">12-20 Breaths Per Minute</span></b><br>
+                Current Respiration Rate: <b><span id="current"></span></b>
+                <span id="message"></span>
+                <div id="buttons" class="m-3">
+                    <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#respirationentry">
+                        Record
+                        Respiration Rate
+                    </button>
+                    <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#dataModal">View
+                        Data
+                    </button>
+                </div>
+                <section class="p-3">
+                    <h4>How to use your Respiration Rate Chart</h4>
+                    <h6>About your Respiration Rate</h6>
+                    <p>The respiratory rate is the number of breaths someone takes every minute. It is one of the main
+                        vital signs, along with blood pressure, pulse, and temperature.</p>
+                    <h6>Why should I measure my Respiratory Rate?</h6>
+                    <p>A normal respiratory rate plays a critical role in keeping the balance of oxygen and carbon
+                        dioxide even in the body.</p>
+                    <p>Having an abnormal respiratory rate can indicate a variety of things. In some cases, a high or
+                        low respiratory rate is due to an activity, such as exercise, and is not an indication that
+                        there is anything wrong.</p>
 
-            Max Heart Rate: <b><span id="maxheartrate"></span></b><br>
-            Healthy Resting Range: <b><span id="healthyRange">60-100BPM</span></b><br>
-            Current Heart Rate: <b><span id="current"></span></b>
-            <span id="message"></span>
-            <div id="buttons" class="m-3">
-                <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#heartrateentry">Record
-                    Heart Rate
-                </button>
-                <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#dataModal">View
-                    Data
-                </button>
+                    <p>Sometimes, however, various diseases, injuries, and substances can lead to a change in
+                        breathing. In a medical setting, an abnormal respiratory rate, especially if it is too fast, can
+                        indicate a health problem. (Source: <a
+                                href="https://www.medicalnewstoday.com/articles/324409#abnormal-rates" target="_blank">Medical
+                            News Today</a>)
+                    </p>
+                    <h6>How to understand the chart</h6>
+                    <p>
+                        Use the chart to compare your resting Respiratory Rate over time.
+                        If you find that your rate is changing, it may be a sign of a change in fitness levels, or
+                        an early warning sign of a medical condition.
+                    </p>
+                    <p><strong>Bradypnea: - </strong>A low respiration rate is classified as a resting respiration rate
+                        less than
+                        12 breaths/min. The
+                        medical term for a respiration rate of around or less than this is Bradypnea.</p>
+                    <p>This can occur as a result of a worsening of an underlying respiratory condition.
+                        If you have any concerns regarding a low respiration rate then you should
+                        make an appointment with your GP. </p>
+                    <p><strong>Tachypnea: - </strong>Tachypnea refers to a high resting respiratory rate.
+                        Doctors refer to a high respiration rate of more than 20 breaths per minute as tachypnea.
+                        Common causes of high respiration rates include:</p>
+                    <ul>
+                        <li><b>Anxiety:</b> People may breathe faster when they are afraid or anxious. Fast
+                            breathing, or hyperventilation, is a common symptom of panic attacks. The fast breathing
+                            will usually pass once the anxiety goes away.
+                        </li>
+                        <li><strong>Fever:</strong> As body temperature increases with a fever, respiratory rate can
+                            also
+                            increase. The
+                            increase is the body’s way of trying to get rid of the heat.
+                        </li>
+                        <li><strong>Respiratory conditions:</strong> Conditions that can increase a person’s respiration
+                            rate including chronic obstructive pulmonary disease,
+                            asthma,
+                            pneumonia,
+                            carbon monoxide poisoning,
+                            pleural effusion,
+                            pulmonary embolism
+                        </li>
+                        <li><strong>Heart problems:</strong> If the heart does not pump properly to get oxygen to the
+                            organs, the body
+                            may react by breathing faster. A 2015 study notes that respiratory distress is
+                            common in those experiencing heart failure.
+                        </li>
+                        <li><strong>Dehydration:</strong> Dehydration can increase breathing rate as the
+                            body tries to get energy to the cells.
+                        </li>
+                    </ul>
+                    <p>(Source: <a href="https://www.medicalnewstoday.com/articles/324409" target="_blank">Medical News
+                        Today</a>)</p>
+                    <p>If you have any concerns regarding your respiration rate, contact your GP to discuss.</p>
+                </section>
             </div>
             <div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -103,7 +167,7 @@
                             <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">X</span>
                             </button>
-                            <h5 class="modal-title mx-auto">All Heart Rate Submissions</h5>
+                            <h5 class="modal-title mx-auto">All Respiration Submissions</h5>
                         </div>
                         <div class="modal-body">
                             <table class="table table-striped" width="80%">
@@ -113,7 +177,7 @@
                                         Date
                                     </th>
                                     <th class="text-left">
-                                        Heartrate (BPM)
+                                        Respiartion Rate (Breaths/Min)
                                     </th>
                                 </tr>
                                 </thead>
@@ -133,7 +197,8 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="heartrateentry" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal fade" id="respirationentry" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content p-3">
                         <div class="modal-header">
@@ -141,51 +206,39 @@
                                     onclick="revertDefault()">
                                 <span aria-hidden="true">X</span>
                             </button>
-                            <h4 class="modal-title mx-auto">Submit Heart Rate</h4>
+                            <h4 class="modal-title mx-auto">Submit Respiration Rate</h4>
                         </div>
-                        <div class="modal-body" id="heartRateModalBody">
+                        <div class="modal-body" id="respirationModalBody">
                             <div id="defaultContent">
-                                <img th:src="@{/assets/carotidpulse.jpg}" id="carotidPulseDiagram">
-                                <h5>Recording your Resting Heart Rate from your Carotid Pulse</h5>
-                                <p class="text-start">To locate your Carotid Pulse, very gently place two fingers on
-                                    your neck just slightly before
-                                    the
-                                    point at which your jawbone curves.</p>
-                                <p class="text-start">Once you've located the pulse, keep your fingers in position and
-                                    press 'Record
-                                    Pulse' below
-                                    to begin recording.
+                                <h5>Recording your Respiration Rate</h5>
+                                <p class="text-start">Make sure that you are comfortable and not exerted before you
+                                    begin.
+                                    In order to keep track of your rate you must be resting when making your recording.
                                 </p>
-                                <p class="text-start">Alternatively, if you have already recorded your pulse, press
+                                <p class="text-start">Press 'Record Breathing' below to begin.
+                                    Alternatively, if you have already recorded your breaths in a 1 minute period, press
                                     'Enter Manually'.
                                 </p>
-                                <p class="text-start">If you are unable to locate your Carotid Pulse, you may be able to
-                                    feel your pulse by
-                                    placing two
-                                    fingers on the underside of your wrist.
-                                    Count how many heart beats you can feel within a minute, and select 'Enter Manually'
-                                    to
-                                    submit.
-                                </p>
                                 <div class="recordButtons">
-                                    <a class="btn btn-primary btn-sm m-1" id="pulseRecordButton"
+                                    <a class="btn btn-primary btn-sm m-1" id="respirationRecordButton"
                                        onclick="showPreRecordInstructions()">Record
-                                        Pulse
+                                        Breaths
                                     </a>
-                                    <a class="btn btn-primary btn-sm m-1" id="pulseManuallyButton"
-                                       onclick="showManualPulseForm()">Enter Manually
+                                    <a class="btn btn-primary btn-sm m-1" id="respirationManuallyButton"
+                                       onclick="showManualRespirationForm()">Enter Manually
                                     </a>
                                 </div>
                             </div>
-                            <div id="manualPulseForm" style="display: none">
-                                <form class="m-2" id="metricForm">
+                            <div id="manualRespirationForm" style="display: none">
+                                <form class="m-2 data" id="metricForm">
                                     <table class="mx-auto">
                                         <tr>
-                                            <td><label for="dataInput">Current Heart Rate (Resting): </label></td>
-                                            <td><input type="text" id="dataInput" maxlength="3" size="3"
-                                                       pattern="(4[0-9]|[5-9][0-9]|1[0-9]{2}|2[0-3][0-9]|240)"
+                                            <td><label for="respirationRate">Current Respiration Rate
+                                                (Resting): </label></td>
+                                            <td><input type="text" id="respirationRate" maxlength="3" size="3"
+                                                       pattern="([5-9]|[1-4][0-9]|50)"
                                                        class="m-1 data"
-                                                       oninvalid="this.setCustomValidity('Enter a value between 40 and 240')"
+                                                       oninvalid="this.setCustomValidity('Enter a value between 5 and 50')"
                                                        oninput="this.setCustomValidity('')" required></td>
                                             <td>
                                                 <button class="btn btn-primary btn-sm m-1" type="submit">Record</button>
@@ -195,18 +248,15 @@
                                 </form>
                             </div>
                             <div id="preRecordInstructions" style="display: none">
-                                <h5>Record Carotid Pulse</h5>
-                                <!--                                <img src="https://thumbs.dreamstime.com/b/finger-pressing-spacebar-button-black-keyboard-close-up-shot-male-finger-pressing-spacebar-button-black-136854257.jpg"-->
-                                <!--                                     width="200px"/>-->
-                                <img th:src="@{/assets/tappingphone.jpg}" width="200px"/>
+                                <h5>Record Breathing</h5>
+                                <img th:src="@{/assets/tappingphone.jpg}" width="200px" alt="Tapping Phone"/>
                                 <p><b>Instructions: </b>
-                                <p>Make sure that you have two fingers on your Carotid Pulse and can feel your heart
-                                    beat.
-                                    <br>When ready, press start below. A timer will appear and count down for 30
-                                    seconds.
-                                <p>During the countdown, with your other hand, press the SPACEBAR on your keyboard, or
-                                    tap on the button displayed in time with your heart beating, until the
-                                    counter reaches zero.</p>
+                                <p>Make sure that your breathing is relaxed and that you are at rest.
+                                    <br>When ready, press start below. A timer will appear and
+                                    count down for 30
+                                    seconds, after being triggered by a mouse click or spacebar tap. Make sure that you have fully exhaled before beginning.
+                                <p>During the countdown, tap the button or the spacebar on your keyboard when you finish
+                                    each breath out.</p>
                                 <a class="btn btn-primary btn-lg m-1" id="startButton" onclick="beginRecording()">Start
                                 </a>
                             </div>
@@ -218,16 +268,16 @@
                             </div>
                             <div id="recordedContent" style="display: none">
                                 <h5 id="rcHeader"></h5>
-                                <p>A normal range for a resting heart beat is between 60 to 100 BPM. <br>Athletes and
-                                    people who very active may have a lower heart rate in the range of 40 to 60 BPM.</p>
+                                <p>A normal range for resting respiration is between 12 to 25 Breaths Per Minute.</p>
                                 <p>Please be aware that as this reading is performed at home, it may not be as accurate
                                     as
                                     readings provided by medical professionals.
-                                    If you have any concerns regarding your heart rate, please book an appointment with
+                                    If you have any concerns regarding your respiration, please book an appointment with
                                     a medical professional to confirm and discuss your results.</p>
                                 <p id="rcMessage"></p>
-                                <form id="heartRateRecordedForm">
-                                    <input type="hidden" class="data" id="heartRateValue" name="heartrate" value="">
+                                <form id="respirationRateRecordedForm">
+                                    <input type="hidden" class="data" id="respirationRateValue" name="respirationrate"
+                                           value="">
                                     <button class="btn btn-primary btn-md m-1" type="submit">Submit</button>
                                     <a class="btn btn-primary btn-md m-1" onclick="beginRecording()">Retry</a>
                                 </form>
@@ -259,7 +309,7 @@
 <script th:src="@{/js/paginateTable.js}" type="text/javascript"></script>
 <script th:src="@{/js/sidenav.js}"></script>
 <script th:src="@{/js/chartConfig.js}"></script>
-<script th:src="@{/js/heartrate.js}"></script>
+<script th:src="@{/js/respiration.js}"></script>
 </body>
 
 </html>

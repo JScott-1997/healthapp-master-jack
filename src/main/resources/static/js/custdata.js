@@ -23,6 +23,7 @@ function saveEntry(entry, path, type) {
 }
 
 function saveTarget(target, path) {
+console.log(target)
     fetch(path, {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
@@ -42,6 +43,9 @@ function saveUnits(evt) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(evt.currentTarget.value.toUpperCase())
     }).then(res => {
-        res.json().then(data => console.log(data), form.appendChild(document.createElement('small')).innerHTML = "Updated successfully.")
+        res.json().then(data => console.log(data),
+        form.appendChild(document.createElement('small')).innerHTML = "Updated successfully."),
+        //Update customer object in session storage
+        getCustData()
     });
 }
