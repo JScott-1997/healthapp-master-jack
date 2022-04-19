@@ -56,9 +56,7 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
      */
     @Override
     public Customer saveCustomer(Customer customer) {
-        System.out.println(customer.getPassword());
         customer.setPassword(pwEncoder.encode(customer.getPassword()));
-        System.out.println(customer.getPassword());
         log.info("Saving new user: {} to the database...", customer.getUsername());
         return customerRepository.save(customer);
     }
@@ -114,6 +112,11 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
         return customerRepository.findByUsername(username);
     }
 
+    @Override
+    public Customer getCustomer(long id) {
+        return customerRepository.findById(id);
+    }
+
     /**
      * Queries the database, retrieves all users stored within and returns
      * the details of these users in a collection of User objects.
@@ -124,6 +127,11 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
     public List<Customer> getCustomers() {
         log.info("Fetching all users...");
         return customerRepository.findAll();
+    }
+
+    @Override
+    public List<Customer> getByKeyword(String keyword){
+        return customerRepository.findByKeyword(keyword);
     }
 
     @Override

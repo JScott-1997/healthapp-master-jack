@@ -13,7 +13,6 @@ public class ViewConfig implements WebMvcConfigurer {
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/register").setViewName("register");
         registry.addViewController("/contact").setViewName("contact");
-        registry.addViewController("/customer/dashboard").setViewName("customer/dashboard");
         registry.addViewController("/customer/").setViewName("customer/dashboard");
         registry.addViewController("/customer/weight").setViewName("customer/weight");
         registry.addViewController("/customer/heartrate").setViewName("customer/heartrate");
@@ -21,6 +20,7 @@ public class ViewConfig implements WebMvcConfigurer {
         registry.addViewController("/customer/grip").setViewName("customer/grip");
         registry.addViewController("/customer/settings").setViewName("customer/settings");
         registry.addViewController("/customer/help").setViewName("customer/help");
+        registry.addViewController("/admin").setViewName("admin/dashboard");
         registry.addViewController("/admin/dashboard").setViewName("admin/dashboard");
         registry.addViewController("/admin/activities").setViewName("admin/activities");
         registry.addViewController("/admin/help").setViewName("admin/help");
@@ -28,6 +28,8 @@ public class ViewConfig implements WebMvcConfigurer {
         registry.addViewController("/admin/registeruser").setViewName("admin/registeruser");
         registry.addViewController("/admin/reportissue").setViewName("admin/reportissue");
         registry.addViewController("/admin/viewusers").setViewName("admin/viewusers");
+        registry.addViewController("/admin/updatedcustomer").setViewName("admin/updatedcustomer");
+        registry.addViewController("/admin/deleted").setViewName("admin/deleted");
         registry.addViewController("/customer/uploaderror").setViewName("error/fileuploaderror");
         registry.addViewController("/error").setViewName("error/error");
     }

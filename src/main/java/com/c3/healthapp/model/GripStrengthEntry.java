@@ -20,6 +20,6 @@ public class GripStrengthEntry {
     @GeneratedValue(strategy = IDENTITY)
     private Long entryId;
     private Date dateOfEntry;
-    private int entryGripStrength;
+    private double entryGripStrength;
 
 }

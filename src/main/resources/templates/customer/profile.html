@@ -68,8 +68,10 @@
     <h1>Profile</h1>
     <div class="d-flex justify-content-center mx-auto my-3 align-items-center" id="profileContainer">
         <div class="m-3" id="profileImage">
-            <img th:if="${#strings.isEmpty(customer.profilePicture)}" th:src="@{/assets/profileplaceholder.png}" alt="Profile Image"/>
-            <img th:unless="${#strings.isEmpty(customer.profilePicture)}" th:src="${customer.profilePicturePath}" alt="Profile Image"/>
+            <img th:if="${#strings.isEmpty(customer.profilePicture)}" th:src="@{/assets/profileplaceholder.png}"
+                 alt="Profile Image"/>
+            <img th:unless="${#strings.isEmpty(customer.profilePicture)}" th:src="${customer.profilePicturePath}"
+                 alt="Profile Image"/>
             <div class="overlay overlayFade pt-3">
                 <a class="text-light text-decoration-none" role="button" data-toggle="modal"
                    data-target="#setPictureModal">Upload profile photo...</a>
@@ -107,10 +109,10 @@
     <div class="d-flex flex-wrap col-xl-4 col-9 mx-auto my-2">
         <div th:if="${not #lists.isEmpty(customer.weightEntries)}"
              class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Weight: </b>
-                <span th:if="${customer.customerUnitsPreference.toString() == 'IMPERIAL'}"
-                      th:text="${#numbers.setFormatDecimal((customer.weightEntries[#lists.size(customer.weightEntries)-1].entryWeight * 2.2),0,0) + 'lbs'}"></span>
-                <span th:if="${customer.customerUnitsPreference.toString() == 'METRIC'}"
-                      th:text="${customer.weightEntries[#lists.size(customer.weightEntries)-1].entryWeight + 'KG'}"></span>
+            <span th:if="${customer.customerUnitsPreference.toString() == 'IMPERIAL'}"
+                  th:text="${#numbers.setFormatDecimal((customer.weightEntries[#lists.size(customer.weightEntries)-1].entryWeight * 2.2),0,0) + 'lbs'}"></span>
+            <span th:if="${customer.customerUnitsPreference.toString() == 'METRIC'}"
+                  th:text="${customer.weightEntries[#lists.size(customer.weightEntries)-1].entryWeight + 'KG'}"></span>
         </div>
         <div th:if="${not #lists.isEmpty(customer.heartRateEntries)}"
              class="vitalstat bg-primary mx-auto rounded border p-2 w-100"><b>Heart Rate: </b>
@@ -131,19 +133,11 @@
     <p>
         You currently have access to:
     </p>
-    <ul style="list-style: none; font-weight: bold;">
-        <li>
-            Weight Tracking
-        </li>
-        <li>
-            Heart Rate Tracking
-        </li>
-        <li>
-            Respiration Tracking
-        </li>
-        <li>
-            Grip Strength Tracking
-        </li>
+    <ul style="list-style: none; font-weight: bold;" th:each="r : ${customer.roles}">
+        <li th:if="${r.name}=='ROLE_WEIGHT'" th:text="'Weight Tracking'"></li>
+        <li th:if="${r.name}=='ROLE_HEART_RATE'" th:text="'Heart Rate Tracking'"></li>
+        <li th:if="${r.name}=='ROLE_GRIP_STRENGTH'" th:text="'Grip Strength Tracking'"></li>
+        <li th:if="${r.name}=='ROLE_RESPIRATION_RATE'" th:text="'Respiration Rate Tracking'"></li>
     </ul>
 </div>
 <div class="modal fade pt-2" id="setHeightModal" tabindex="-1" role="dialog" aria-hidden="true">

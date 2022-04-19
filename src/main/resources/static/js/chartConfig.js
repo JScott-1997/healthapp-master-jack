@@ -41,9 +41,9 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
         chartData.forEach(entry => {
             entry.y = convertKGToLbs(entry.y);
         })
-        dataValues.lowest = Math.round((dataValues.lowest * 2.2046))
-        dataValues.highest = Math.round((dataValues.highest * 2.2046))
-        metricTargetValue = Math.round((metricTargetValue * 2.2046))
+        dataValues.lowest = Math.round(dataValues.lowest * 2.2046)
+        dataValues.highest = Math.round(dataValues.highest * 2.2046)
+        metricTargetValue = Math.round(metricTargetValue * 2.2046)
     }
 
 
@@ -104,7 +104,7 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
 
     function getMessage(metricTargetValue, currentMetricValue) {
         if(metricTargetValue != null){
-            const difference = Math.abs(Math.round(metricTargetValue - currentMetricValue));
+            const difference = Math.abs(Math.round((metricTargetValue - currentMetricValue)*100)/100);
             if (metricTargetValue > currentMetricValue) {
                 return `You are <b>${difference}${units}</b> below your target of <b>${metricTargetValue}${units}</b>`
             }
@@ -224,10 +224,10 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
         if (hasBeenAdded) {
             currentMetricValue = newEntry.y;
 
-            //Change weight to KG in object and save to DB. rounded as stored as int
+            //Change weight to KG in object and save to DB. rounded to 2 dp
             const formattedForDBEntry = {
                 x: today.toISOString(),
-                y: Math.round(entry)
+                y: Math.round(entry * 100)/100
             }
             saveEntry(formattedForDBEntry, `/customer/${chartType.toLowerCase()}/save`, `${chartType}`);
 
@@ -257,7 +257,6 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
         //Convert to kg if user uses imperial units. data is stored in kg in db. Weight read in is used to update chart data etc as its in users choice of units
         const targetReadIn = parseInt(input.value);
         let newTarget;
-        console.log(units)
         if(kgLbs){
         //Convert to kg if user uses imperial units. data is stored in kg in db. Weight read in is used to update chart data etc as its in users choice of units
         newTarget = units === 'lbs' ? convertLbsToKG(targetReadIn) : targetReadIn;
@@ -285,6 +284,7 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
         //Convert to KG to store in db if required
         if(units == 'lbs'){
             submittedValue = metricTargetValue / 2.2046;
+            console.log(submittedValue);
         }
 
         //Show message now target is set

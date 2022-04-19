@@ -63,7 +63,7 @@ function yearsBeforeToday(date) {
  }
 
   function convertLbsToKG(value){
-     return Math.round(value / 2.2046);
+     return Math.round((value / 2.2046) * 100)/100;
   }
 
 //From https://www.w3resource.com/javascript-exercises/javascript-date-exercise-18.php

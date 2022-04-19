@@ -1,6 +1,8 @@
 package com.c3.healthapp.model;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -24,6 +26,7 @@ public class User {
     private String password;
 
     @ManyToMany
+    @Cascade(CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Role> roles = new ArrayList<>();
 }

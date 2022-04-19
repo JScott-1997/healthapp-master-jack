@@ -42,6 +42,8 @@ public interface UserService {
      */
     Customer getCustomer(String username);
 
+    Customer getCustomer(long id);
+
     /**
      * Queries the database, retrieves all users stored within and returns
      * the details of these users in a collection of User objects.
@@ -69,4 +71,6 @@ public interface UserService {
     void deleteUserHeartRateData(String username);
 
     void deleteUserWeightData(String username);
+
+    List<Customer> getByKeyword(String keyword);
 }

@@ -20,7 +20,7 @@ public class WeightEntry {
     @GeneratedValue(strategy = IDENTITY)
     private Long entryId;
     private Date dateOfEntry;
-    private int entryWeight;
+    private double entryWeight;
 
 
     @Override

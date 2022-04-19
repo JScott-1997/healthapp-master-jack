@@ -32,7 +32,7 @@ public class WeightEntryController {
     }
 
     @PostMapping("/target/save")
-    public ResponseEntity<Integer> saveWeightTarget(@RequestBody int targetWeight) {
+    public ResponseEntity<Double> saveWeightTarget(@RequestBody double targetWeight) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
         Customer customer = customerService.getCustomer(username);

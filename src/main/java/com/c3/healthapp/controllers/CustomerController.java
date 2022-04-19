@@ -25,20 +25,26 @@ import java.nio.file.StandardCopyOption;
 @Controller
 @RequestMapping("/customer")
 @RequiredArgsConstructor
-//Majority of methods return JSON data to the client. If js processing isn't required it's added to model for thymeleaf rendering
+//Most methods return JSON data to the client. If js processing isn't required it's added to model for thymeleaf rendering
 public class CustomerController {
-    private final UserService customerService;
+    private final UserService userService;
     private static String uploadDirectory = System.getProperty("user.dir") + "/uploads";
-    //Probably best to add this in to an admin controller later, unless we want to administrate admin functions here too?
-    //Might be easier to manage permissions in a /admin controller
 
+    @GetMapping(value={"/dashboard", "/"})
+    public String home(Model model){
+        String username = SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal().toString();
+        Customer customer = userService.getCustomer(username);
+        model.addAttribute("customer", customer);
+        return "customer/dashboard";
+    }
 
     //adds customer to model and sends user to profile page
     @GetMapping("/profile")
     public String loggedInCustomer(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
-        Customer customer = customerService.getCustomer(username);
+        Customer customer = userService.getCustomer(username);
         model.addAttribute("customer", customer);
         return "customer/profile";
     }
@@ -48,7 +54,7 @@ public class CustomerController {
     public ResponseEntity<Customer> getCustomer() {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
-        Customer customer = customerService.getCustomer(username);
+        Customer customer = userService.getCustomer(username);
 
         return ResponseEntity.ok().body(customer);
     }
@@ -57,22 +63,22 @@ public class CustomerController {
     public ResponseEntity<Customer> saveCustomer(@RequestBody Customer customer) {
         //returns the location the resource was created in response sent
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/save").toUriString());
-        return ResponseEntity.created(uri).body(customerService.saveCustomer(customer));
+        return ResponseEntity.created(uri).body(userService.saveCustomer(customer));
     }
 
     @PostMapping("/role/save")
     public ResponseEntity<Role> saveRole(@RequestBody Role role) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/role/save").toUriString());
-        return ResponseEntity.created(uri).body(customerService.saveRole(role));
+        return ResponseEntity.created(uri).body(userService.saveRole(role));
     }
 
     @PostMapping("/units/save")
     public ResponseEntity<CustomerUnitsPreference> saveUnitPref(@RequestBody CustomerUnitsPreference customerUnitsPreference) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
-        Customer customer = customerService.getCustomer(username);
+        Customer customer = userService.getCustomer(username);
         customer.setCustomerUnitsPreference(customerUnitsPreference);
-        customerService.updateCustomer(customer);
+        userService.updateCustomer(customer);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/units/save").toUriString());
         return ResponseEntity.created(uri).body(customerUnitsPreference);
     }
@@ -81,9 +87,9 @@ public class CustomerController {
     public ResponseEntity<Integer> saveHeight(@RequestBody int height) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
-        Customer customer = customerService.getCustomer(username);
+        Customer customer = userService.getCustomer(username);
         customer.setHeight(height);
-        customerService.updateCustomer(customer);
+        userService.updateCustomer(customer);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/height/save").toUriString());
         return ResponseEntity.created(uri).body(height);
     }
@@ -102,14 +108,14 @@ public class CustomerController {
         }
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
-        Customer customer = customerService.getCustomer(username);
+        Customer customer = userService.getCustomer(username);
 
         String uploadDir = "user-photos/" + username;
 
         Path uploadPath = Paths.get(uploadDir);
         //Set profile picture path in customer object and save to db
         customer.setProfilePicture(fileName);
-        customerService.updateCustomer(customer);
+        userService.updateCustomer(customer);
 
         //If directory to save files doesn't exist, create
         if (!Files.exists(uploadPath)) {

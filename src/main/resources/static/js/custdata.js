@@ -23,11 +23,10 @@ function saveEntry(entry, path, type) {
 }
 
 function saveTarget(target, path) {
-console.log(target)
     fetch(path, {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(target)
+        body: JSON.stringify((Math.round(target*100)/100))
     }).then(res => {
         res.json().then(data => console.log(data))
     });

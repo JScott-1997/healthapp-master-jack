@@ -12,14 +12,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://kit.fontawesome.com/218320a513.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
 </head>
 
 <body class="bg-light d-flex flex-column min-vh-100">
@@ -51,50 +51,94 @@
         </a>
         <hr class="solid">
         <a href="#" onclick="logOut()">
-            <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
+            <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
                                                                                style="font-size: 0.9rem"></i>Log Out
-            </div></li>
+                </div>
+            </li>
         </a>
         <hr class="solid">
     </ul>
 </nav>
-    <nav class="navbar fixed-top navbar-expand-md bg-primary">
-        <button id="burger" class="text-dark navbar-brand bg-primary" onclick="openSideNav()">☰</button>
-        <a class="navbar-brand text-dark" id="title"></i>Dundas Health</a>
-    </nav>
-    <main class="container-fluid mx-auto text-center">
-        <h1 class="my-1">Dashboard</h1>
-        <div class="optioncontainer row justify-content-center mx-auto">
-            <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow">
-                <a href="weight"><img th:src="@{/assets/scale.svg}" /></a>
-            </div>
-            <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow">
-                <a href="heartrate"><img th:src="@{/assets/heart.svg}"></a>
-            </div>
-            <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow">
-                <a href="respiration"><img th:src="@{/assets/respiration.svg}" /></a>
-            </div>
-            <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow">
-                <a href="grip"><img th:src="@{/assets/grip.svg}" /></a>
-            </div>
-            <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow">
-                <a href="settings"><img th:src="@{/assets/settings.svg}" /></a>
-            </div>
-            <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow">
-                <a href="help"><img th:src="@{/assets/help.svg}" /></a>
-            </div>
+<nav class="navbar fixed-top navbar-expand-md bg-primary">
+    <button id="burger" class="text-dark navbar-brand bg-primary" onclick="openSideNav()">☰</button>
+    <a class="navbar-brand text-dark" id="title"></i>Dundas Health</a>
+</nav>
+<main class="container-fluid mx-auto text-center">
+    <h1 class="my-1">Dashboard</h1>
+    <div class="optioncontainer row justify-content-center mx-auto">
+        <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow"
+             th:if="${not customer.roles.?[name == 'ROLE_WEIGHT'].isEmpty()}">
+            <a href="weight" class="text-dark text-decoration-none">
+                <img th:src="@{/assets/scale.svg}" alt="Weight Section"/>
+                <h5>Weight</h5>
+            </a>
         </div>
-    </main>
-    <footer class="text-center text-white mt-auto" style="background-color: #3B3B3B;">
-        <div class="text-center text-white p-4">
-            © 2022 Copyright:
-            <a class="text-primary" href="https://dundashealth.co.uk">https://dundashealth.co.uk</a>
+        <div class="sectionicon col-md-3 col-sm-4 bg-secondary m-2 p-3 rounded shadow"
+             th:unless="${not customer.roles.?[name == 'ROLE_WEIGHT'].isEmpty()}">
+            <img th:src="@{/assets/scale.svg}" alt="Weight Section (Disabled)"/>
+            <h5 class="text-dark">Weight (Disabled)</h5>
         </div>
-    </footer>
-    <script th:src="@{/js/logout.js}"></script>
-    <script th:src="@{/js/custdata.js}"></script>
-    <script>getCustData();</script>
-    <script th:src="@{/js/sidenav.js}"></script>
+        <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow"
+             th:if="${not customer.roles.?[name == 'ROLE_HEART_RATE'].isEmpty()}">
+            <a href="heartrate" class="text-dark text-decoration-none">
+                <img th:src="@{/assets/heart.svg}" alt="Heart Rate Section">
+                <h5>Heart Rate</h5>
+            </a>
+        </div>
+        <div class="sectionicon col-md-3 col-sm-4 bg-secondary m-2 p-3 rounded shadow"
+             th:unless="${not customer.roles.?[name == 'ROLE_HEART_RATE'].isEmpty()}">
+            <img th:src="@{/assets/heart.svg}" alt="Heart Rate Section">
+            <h5 class="text-dark">Heart Rate (Disabled)</h5>
+        </div>
+        <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow"
+             th:if="${not customer.roles.?[name == 'ROLE_RESPIRATION_RATE'].isEmpty()}">
+            <a href="respiration" class="text-dark text-decoration-none">
+                <img th:src="@{/assets/respiration.svg}" alt="Respiration Section"/>
+                <h5>Respiration</h5>
+            </a>
+        </div>
+        <div class="sectionicon col-md-3 col-sm-4 bg-secondary m-2 p-3 rounded shadow"
+             th:unless="${not customer.roles.?[name == 'ROLE_RESPIRATION_RATE'].isEmpty()}">
+            <img th:src="@{/assets/respiration.svg}" alt="Respiration Section (Disabled)"/>
+            <h5 class="text-dark">Respiration (Disabled)</h5>
+        </div>
+        <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow"
+             th:if="${not customer.roles.?[name == 'ROLE_GRIP_STRENGTH'].isEmpty()}">
+            <a href="grip" class="text-dark text-decoration-none">
+                <img th:src="@{/assets/grip.svg}" alt="Grip Strength Section"/>
+                <h5>Grip</h5>
+            </a>
+        </div>
+        <div class="sectionicon col-md-3 col-sm-4 bg-secondary m-2 p-3 rounded shadow"
+             th:unless="${not customer.roles.?[name == 'ROLE_GRIP_STRENGTH'].isEmpty()}">
+            <img th:src="@{/assets/grip.svg}" alt="Grip Strength Section (Disabled)"/>
+            <h5 class="text-dark">Grip (Disabled)</h5>
+        </div>
+        <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow">
+            <a href="settings" class="text-dark text-decoration-none">
+                <img th:src="@{/assets/settings.svg}" alt="Settings"/>
+                <h5>Settings</h5>
+            </a>
+        </div>
+        <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow">
+            <a href="help" class="text-dark text-decoration-none">
+                <img th:src="@{/assets/help.svg}" alt="Help"/>
+                <h5>Help</h5>
+            </a>
+        </div>
+    </div>
+</main>
+<footer class="text-center text-white mt-auto" style="background-color: #3B3B3B;">
+    <div class="text-center text-white p-4">
+        © 2022 Copyright:
+        <a class="text-primary" href="https://dundashealth.co.uk">https://dundashealth.co.uk</a>
+    </div>
+</footer>
+<script th:src="@{/js/logout.js}"></script>
+<script th:src="@{/js/custdata.js}"></script>
+<script>getCustData();</script>
+<script th:src="@{/js/sidenav.js}"></script>
 </body>
 
 </html>

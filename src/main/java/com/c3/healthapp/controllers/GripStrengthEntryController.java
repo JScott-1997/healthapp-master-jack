@@ -32,7 +32,7 @@ public class GripStrengthEntryController {
     }
 
     @PostMapping("/target/save")
-    public ResponseEntity<Integer> saveGripTarget(@RequestBody int gripStrengthTarget) {
+    public ResponseEntity<Double> saveGripTarget(@RequestBody double gripStrengthTarget) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
         Customer customer = customerService.getCustomer(username);

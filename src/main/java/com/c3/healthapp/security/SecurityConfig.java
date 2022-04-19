@@ -41,8 +41,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll().and().httpBasic().and().logout().logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout").deleteCookies("token").deleteCookies("refreshToken").invalidateHttpSession(true);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers(GET, "/customer/**").hasAuthority("ROLE_USER");
+        http.authorizeRequests().antMatchers(GET, "/customer/weight").hasAuthority("ROLE_WEIGHT");
+        http.authorizeRequests().antMatchers(GET, "/customer/respiration").hasAuthority("ROLE_RESPIRATION_RATE");
+        http.authorizeRequests().antMatchers(GET, "/customer/heartrate").hasAuthority("ROLE_HEART_RATE");
+        http.authorizeRequests().antMatchers(GET, "/customer/grip").hasAuthority("ROLE_GRIP_STRENGTH");
         http.authorizeRequests().antMatchers(POST, "/customer/save/**").hasAuthority("ROLE_ADMIN");
+        http.authorizeRequests().antMatchers(GET, "/customer/**").hasAuthority("ROLE_USER");
         http.authorizeRequests().antMatchers(GET, "/admin/**").hasAuthority("ROLE_ADMIN");
         http.authorizeRequests().antMatchers("/**", "/login/**", "/").permitAll();
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
