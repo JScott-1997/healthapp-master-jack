@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="https://www.thymeleaf.org">
 
 <head>
     <title>Administrator Dashboard - Dundas Health</title>
@@ -22,60 +22,77 @@
             crossorigin="anonymous"></script>
 </head>
 
-<body class="d-flex flex-column min-vh-100" id="loginbg">
-<div class="opacity70">
-    <nav class="sidebar" id="sideNav">
-        <ul>
-            <a href="admindash">
-                <li>
-                    <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-house mx-2"
-                                                                                   style="font-size: 0.9rem"></i>Home
-                    </div>
-                </li>
-            </a>
-            <hr class="solid">
-            <a href="profile">
-                <li>
-                    <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user mx-2"
-                                                                                   style="font-size: 0.9rem"></i>My Profile
-                    </div>
-                </li>
-            </a>
-            <hr class="solid">
-            <a href="account">
-                <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user-gear mx-2"
-                                                                                   style="font-size: 0.9rem"></i>Account Management
-                </div></li>
-            </a>
-            <hr class="solid">
-            <a href="#" onclick="logOut()">
-                <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
-                                                                                   style="font-size: 0.9rem"></i>Log Out
-                </div></li>
-            </a>
-            <hr class="solid">
-        </ul>
-    </nav>
-    <nav class="navbar fixed-top navbar-expand-md  bg-primary">
-        <button id="burger" class="text-dark navbar-brand bg-primary" onclick="openSideNav()">☰</button>
-        <a class="navbar-brand text-dark" id="title"></i>Dundas Health</a>
-    </nav>
-    <main class="container mx-auto text-center align-items-center vh-100">
-        <section
-                class="col-9 col-md-7 col-xl-4 mt-5 p-4 rounded border border-secondary mx-auto text-center bg-light">
-            <h1 class="h1">Admin Dashboard</h1>
-            <div sec:authorize="hasAuthority('ROLE_ADMIN')"> Has Authority Admin </div>
-        </section>
-    </main>
-    <footer class="text-center text-white mt-auto" style="background-color: #3B3B3B;">
-        <div class="text-center text-white p-4">
-            © 2022 Copyright:
-            <a class="text-primary" href="https://dundashealth.co.uk">https://dundashealth.co.uk</a>
+<body class="bg-light d-flex flex-column min-vh-100">
+<nav class="sidebar" id="sideNav">
+    <ul>
+        <a href="dashboard">
+            <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-house mx-2"
+                                                                               style="font-size: 0.9rem"></i>Home
+                </div>
+            </li>
+        </a>
+        <hr class="solid">
+        <a href="profile">
+            <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user mx-2"
+                                                                               style="font-size: 0.9rem"></i>My Profile
+                </div>
+            </li>
+        </a>
+        <hr class="solid">
+        <a href="settings">
+            <li>
+                <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-user-gear mx-2"
+                                                                               style="font-size: 0.9rem"></i>Account
+                    Settings
+                </div>
+            </li>
+        </a>
+        <hr class="solid">
+        <a href="#" onclick="logOut()">
+            <li><div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-door-open mx-2"
+                                                                               style="font-size: 0.9rem"></i>Log Out
+            </div></li>
+        </a>
+        <hr class="solid">
+    </ul>
+</nav>
+<nav class="navbar fixed-top navbar-expand-md bg-primary">
+    <button id="burger" class="text-dark navbar-brand bg-primary" onclick="openSideNav()">☰</button>
+    <a class="navbar-brand text-dark" id="title"></i>Dundas Health</a>
+</nav>
+<main class="container-fluid mx-auto text-center">
+    <h1 class="my-1">Dashboard</h1>
+    <div class="optioncontainer row justify-content-center mx-auto">
+        <div class="sectionicon col-md-3 col-sm-4 bg-secondary m-2 p-3 rounded shadow">
+            <a href="weight"><img th:src="@{/assets/scale.svg}" /></a>
         </div>
-    </footer>
-    <script th:src="@{/js/logout.js}"></script>
-    <script th:src="@{/js/sidenav.js}"></script>
-</div>
+        <div class="sectionicon col-md-3 col-sm-4 bg-secondary m-2 p-3 rounded shadow">
+            <a href="heartrate"><img th:src="@{/assets/heart.svg}"></a>
+        </div>
+        <div class="sectionicon col-md-3 col-sm-4 bg-secondary m-2 p-3 rounded shadow">
+            <a href="respiration"><img th:src="@{/assets/respiration.svg}" /></a>
+        </div>
+        <div class="sectionicon col-md-3 col-sm-4 bg-secondary m-2 p-3 rounded shadow">
+            <a href="grip"><img th:src="@{/assets/grip.svg}" /></a>
+        </div>
+        <div class="sectionicon col-md-3 col-sm-4 bg-secondary m-2 p-3 rounded shadow">
+            <a href="settings"><img th:src="@{/assets/settings.svg}" /></a>
+        </div>
+        <div class="sectionicon col-md-3 col-sm-4 bg-secondary m-2 p-3 rounded shadow">
+            <a href="help"><img th:src="@{/assets/help.svg}" /></a>
+        </div>
+    </div>
+</main>
+<footer class="text-center text-white mt-auto" style="background-color: #3B3B3B;">
+    <div class="text-center text-white p-4">
+        © 2022 Copyright:
+        <a class="text-primary" href="https://dundashealth.co.uk">https://dundashealth.co.uk</a>
+    </div>
+</footer>
+<script th:src="@{/js/logout.js}"></script>>
+<script th:src="@{/js/sidenav.js}"></script>
 </body>
 
 </html>
