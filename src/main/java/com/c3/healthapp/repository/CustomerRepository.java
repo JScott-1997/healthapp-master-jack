@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Customer findByUsername(String username);
 
-    //Will be used later to prevent duplicate registrations
+    //Used to prevent duplicate registrations
     boolean existsCustomerByUsername(String username);
 }

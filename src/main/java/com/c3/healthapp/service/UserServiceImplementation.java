@@ -157,8 +157,9 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
         return respirationRateEntryRepository.save(respirationRateEntry);
     }
 
+    //Checks both admin and customer tables for username, usernames must be unique
     public boolean isUsernameTaken(String username) {
-        return customerRepository.existsCustomerByUsername(username);
+        return customerRepository.existsCustomerByUsername(username) || administratorRepository.existsAdministratorByUsername(username);
     }
 
     @Override
