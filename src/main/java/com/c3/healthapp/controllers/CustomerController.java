@@ -1,10 +1,9 @@
 package com.c3.healthapp.controllers;
 
 import com.c3.healthapp.model.*;
-import com.c3.healthapp.service.CustomerService;
+import com.c3.healthapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.fileupload.impl.IOFileUploadException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -28,7 +27,7 @@ import java.nio.file.StandardCopyOption;
 @RequiredArgsConstructor
 //Majority of methods return JSON data to the client. If js processing isn't required it's added to model for thymeleaf rendering
 public class CustomerController {
-    private final CustomerService customerService;
+    private final UserService customerService;
     private static String uploadDirectory = System.getProperty("user.dir") + "/uploads";
     //Probably best to add this in to an admin controller later, unless we want to administrate admin functions here too?
     //Might be easier to manage permissions in a /admin controller

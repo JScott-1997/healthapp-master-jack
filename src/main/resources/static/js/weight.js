@@ -1,5 +1,5 @@
 //For page displaying weight chart and data
-//Also contains bmi chart and body fat % chart
+//Also contains bmi chart and body fat % chart (coloured background plugins)
 //Author: Sean Laughlin
 
 //update and get customer object
@@ -115,7 +115,8 @@ function setUpBMIChart() {
                             displayFormats: {
                                 week: 'MMM d',
                                 month: 'MMM'
-                            }
+                            },
+                            tooltipFormat: 'dd MMM yy'
                         },
 
                         //Default min 1 week
@@ -316,7 +317,8 @@ function setUpBodyFatChart() {
                             displayFormats: {
                                 week: 'MMM d',
                                 month: 'MMM'
-                            }
+                            },
+                            tooltipFormat: 'dd MMM yy'
                         },
 
                         //Default min 1 week

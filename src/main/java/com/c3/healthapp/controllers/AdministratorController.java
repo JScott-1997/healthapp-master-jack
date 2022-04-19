@@ -1,7 +1,7 @@
 package com.c3.healthapp.controllers;
 
 import com.c3.healthapp.model.Customer;
-import com.c3.healthapp.service.CustomerService;
+import com.c3.healthapp.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdministratorController {
-    private final CustomerService customerService;
+    private final UserService customerService;
 
     @PostMapping("/add_to_user")
     public ResponseEntity<?> addRoleToUser(@RequestBody RoleToCustomerForm form) {

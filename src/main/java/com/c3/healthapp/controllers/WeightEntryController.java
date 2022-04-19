@@ -2,7 +2,7 @@ package com.c3.healthapp.controllers;
 
 import com.c3.healthapp.model.Customer;
 import com.c3.healthapp.model.WeightEntry;
-import com.c3.healthapp.service.CustomerService;
+import com.c3.healthapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import java.net.URI;
 @RequestMapping("/customer/weight")
 @RequiredArgsConstructor
 public class WeightEntryController {
-    private final CustomerService customerService;
+    private final UserService customerService;
 
     @PostMapping("/save")
     public ResponseEntity<WeightEntry> saveHREntry(@RequestBody WeightEntry weightEntry) {

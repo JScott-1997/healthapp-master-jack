@@ -74,8 +74,14 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         refreshTokenCookie.setPath("/");
         response.addCookie(refreshTokenCookie);
 
-        //Redirect to dashboard on authentication success
-        String redirectUrl = "/customer/dashboard";
+        //Redirect to dashboard on authentication success. Check if user or admin and direct appropriately
+        String redirectUrl;
+        if(user.getAuthorities().stream().anyMatch((a -> a.getAuthority().equals("ROLE_ADMIN")))){
+            redirectUrl = "/admin/dashboard";
+        }
+        else{
+            redirectUrl = "/customer/dashboard";
+        }
         new DefaultRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
 

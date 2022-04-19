@@ -157,7 +157,8 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
                             displayFormats: {
                                 week: 'MMM d',
                                 month: 'MMM'
-                            }
+                            },
+                            tooltipFormat: 'dd MMM yy'
                         },
 
                         //Default min 1 week

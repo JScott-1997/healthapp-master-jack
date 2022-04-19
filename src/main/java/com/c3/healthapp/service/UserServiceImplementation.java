@@ -22,8 +22,9 @@ import java.util.List;
 @Transactional
 @Slf4j
 @Primary
-public class CustomerServiceImplementation implements CustomerService, UserDetailsService {
+public class UserServiceImplementation implements UserService, UserDetailsService {
     private final CustomerRepository customerRepository;
+    private final AdministratorRepository administratorRepository;
     private final RoleRepository roleRepository;
     private final HeartRateRepository heartRateRepository;
     private final WeightEntryRepository weightEntryRepository;
@@ -33,18 +34,17 @@ public class CustomerServiceImplementation implements CustomerService, UserDetai
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Customer customer = customerRepository.findByUsername(username);
-        if (customer == null) {
-            log.error("User {} not found in the database", username);
-            throw new UsernameNotFoundException("User not found in the database");
+        User user = customerRepository.findByUsername(username);
+        if (user == null) {
+            user = administratorRepository.findAdministratorByUsername(username);
         } else {
             log.info("User {} found in the database", username);
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        customer.getRoles().forEach(role -> {
+        user.getRoles().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         });
-        return new org.springframework.security.core.userdetails.User(username, customer.getPassword(), authorities);
+        return new org.springframework.security.core.userdetails.User(username, user.getPassword(), authorities);
     }
 
     /**
@@ -159,5 +159,36 @@ public class CustomerServiceImplementation implements CustomerService, UserDetai
 
     public boolean isUsernameTaken(String username) {
         return customerRepository.existsCustomerByUsername(username);
+    }
+
+    @Override
+    public void deleteUserData(String username) {
+    }
+
+    @Override
+    public void deleteUserRespirationData(String username) {
+        log.info("Deleting the Health data of Customer: {}", username);
+        Customer customer = customerRepository.findByUsername(username);
+    }
+
+    @Override
+    public void deleteUserGripStrengthData(String username) {
+        log.info("Deleting the Health data of Customer: {}", username);
+        Customer customer = customerRepository.findByUsername(username);
+        customer.getGripStrengthEntries().clear();
+    }
+
+    @Override
+    public void deleteUserHeartRateData(String username) {
+        log.info("Deleting the Health data of Customer: {}", username);
+        Customer customer = customerRepository.findByUsername(username);
+        customer.getHeartRateEntries().clear();
+    }
+
+    @Override
+    public void deleteUserWeightData(String username) {
+        log.info("Deleting the Health data of Customer: {}", username);
+        Customer customer = customerRepository.findByUsername(username);
+        customer.getWeightEntries().clear();
     }
 }

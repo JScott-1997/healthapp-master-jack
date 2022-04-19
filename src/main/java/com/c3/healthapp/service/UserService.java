@@ -4,7 +4,7 @@ import com.c3.healthapp.model.*;
 
 import java.util.List;
 
-public interface CustomerService {
+public interface UserService {
     /**
      * Stores a new user in the database.
      *
@@ -59,4 +59,14 @@ public interface CustomerService {
     GripStrengthEntry saveGripStrengthEntry(String username, GripStrengthEntry gripStrengthEntry);
 
     RespirationRateEntry saveRespirationRateEntry(String username, RespirationRateEntry respirationRateEntry);
+
+    void deleteUserData(String username);
+
+    void deleteUserRespirationData(String username);
+
+    void deleteUserGripStrengthData(String username);
+
+    void deleteUserHeartRateData(String username);
+
+    void deleteUserWeightData(String username);
 }
