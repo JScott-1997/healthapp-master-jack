@@ -168,19 +168,19 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
         log.info("Deleting the All Health data of Customer: {}", username);
         Customer customer = customerRepository.findByUsername(username);
         List<Long> customerEntryIds = customer.getRespirationRateEntries().stream().map(RespirationRateEntry :: getEntryId).collect(Collectors.toList());
-        respirationRateEntryRepository.deleteByEntryId(customerEntryIds);
+        respirationRateEntryRepository.deleteByEntryIdIn(customerEntryIds);
         customer.getRespirationRateEntries().clear();
 
         customerEntryIds = customer.getGripStrengthEntries().stream().map(GripStrengthEntry :: getEntryId).collect(Collectors.toList());
-        gripStrengthEntryRepository.deleteByEntryId(customerEntryIds);
+        gripStrengthEntryRepository.deleteByEntryIdIn(customerEntryIds);
         customer.getGripStrengthEntries().clear();
 
         customerEntryIds = customer.getHeartRateEntries().stream().map(HeartRateEntry :: getEntryId).collect(Collectors.toList());
-        heartRateRepository.deleteByEntryId(customerEntryIds);
+        heartRateRepository.deleteByEntryIdIn(customerEntryIds);
         customer.getHeartRateEntries().clear();
 
         customerEntryIds = customer.getWeightEntries().stream().map(WeightEntry :: getEntryId).collect(Collectors.toList());
-        weightEntryRepository.deleteByEntryId(customerEntryIds);
+        weightEntryRepository.deleteByEntryIdIn(customerEntryIds);
         customer.getWeightEntries().clear();
     }
 
@@ -189,7 +189,7 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
         log.info("Deleting the Respiration data of Customer: {}", username);
         Customer customer = customerRepository.findByUsername(username);
         List<Long> customerRespirationEntryIds = customer.getRespirationRateEntries().stream().map(RespirationRateEntry :: getEntryId).collect(Collectors.toList());
-        respirationRateEntryRepository.deleteByEntryId(customerRespirationEntryIds);
+        respirationRateEntryRepository.deleteByEntryIdIn(customerRespirationEntryIds);
         customer.getRespirationRateEntries().clear();
     }
 
@@ -198,7 +198,7 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
         log.info("Deleting the Grip data of Customer: {}", username);
         Customer customer = customerRepository.findByUsername(username);
         List<Long> customerGripEntryIds = customer.getGripStrengthEntries().stream().map(GripStrengthEntry :: getEntryId).collect(Collectors.toList());
-        gripStrengthEntryRepository.deleteByEntryId(customerGripEntryIds);
+        gripStrengthEntryRepository.deleteByEntryIdIn(customerGripEntryIds);
         customer.getGripStrengthEntries().clear();
     }
 
@@ -207,7 +207,7 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
         log.info("Deleting the Heart data of Customer: {}", username);
         Customer customer = customerRepository.findByUsername(username);
         List<Long> customerHeartEntryIds = customer.getHeartRateEntries().stream().map(HeartRateEntry :: getEntryId).collect(Collectors.toList());
-        heartRateRepository.deleteByEntryId(customerHeartEntryIds);
+        heartRateRepository.deleteByEntryIdIn(customerHeartEntryIds);
         customer.getHeartRateEntries().clear();
     }
 
@@ -216,7 +216,7 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
         log.info("Deleting the Weight data of Customer: {}", username);
         Customer customer = customerRepository.findByUsername(username);
         List<Long> customerWeightEntryIds = customer.getWeightEntries().stream().map(WeightEntry :: getEntryId).collect(Collectors.toList());
-        weightEntryRepository.deleteByEntryId(customerWeightEntryIds);
+        weightEntryRepository.deleteByEntryIdIn(customerWeightEntryIds);
         customer.getWeightEntries().clear();
     }
 }

@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface GripStrengthEntryRepository extends JpaRepository<GripStrengthEntry, Long> {
-    void deleteByEntryId(List<Long> customerRespirationEntryIds);
+    void deleteByEntryIdIn(List<Long> customerRespirationEntryIds);
 }
