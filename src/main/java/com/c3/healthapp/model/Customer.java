@@ -25,8 +25,8 @@ public class Customer extends User {
 
     private Date dateOfBirth;
     private int height;
-    private int targetWeight;
-    private int targetGripStrength;
+    private double targetWeight;
+    private double targetGripStrength;
     private CustomerSex customerSex;
     private CustomerUnitsPreference customerUnitsPreference;
     private String profilePicture;

@@ -16,6 +16,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -164,32 +165,58 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
 
     @Override
     public void deleteUserData(String username) {
+        log.info("Deleting the All Health data of Customer: {}", username);
+        Customer customer = customerRepository.findByUsername(username);
+        List<Long> customerEntryIds = customer.getRespirationRateEntries().stream().map(RespirationRateEntry :: getEntryId).collect(Collectors.toList());
+        respirationRateEntryRepository.deleteByEntryId(customerEntryIds);
+        customer.getRespirationRateEntries().clear();
+
+        customerEntryIds = customer.getGripStrengthEntries().stream().map(GripStrengthEntry :: getEntryId).collect(Collectors.toList());
+        gripStrengthEntryRepository.deleteByEntryId(customerEntryIds);
+        customer.getGripStrengthEntries().clear();
+
+        customerEntryIds = customer.getHeartRateEntries().stream().map(HeartRateEntry :: getEntryId).collect(Collectors.toList());
+        heartRateRepository.deleteByEntryId(customerEntryIds);
+        customer.getHeartRateEntries().clear();
+
+        customerEntryIds = customer.getWeightEntries().stream().map(WeightEntry :: getEntryId).collect(Collectors.toList());
+        weightEntryRepository.deleteByEntryId(customerEntryIds);
+        customer.getWeightEntries().clear();
     }
 
     @Override
     public void deleteUserRespirationData(String username) {
-        log.info("Deleting the Health data of Customer: {}", username);
+        log.info("Deleting the Respiration data of Customer: {}", username);
         Customer customer = customerRepository.findByUsername(username);
+        List<Long> customerRespirationEntryIds = customer.getRespirationRateEntries().stream().map(RespirationRateEntry :: getEntryId).collect(Collectors.toList());
+        respirationRateEntryRepository.deleteByEntryId(customerRespirationEntryIds);
+        customer.getRespirationRateEntries().clear();
     }
 
     @Override
     public void deleteUserGripStrengthData(String username) {
-        log.info("Deleting the Health data of Customer: {}", username);
+        log.info("Deleting the Grip data of Customer: {}", username);
         Customer customer = customerRepository.findByUsername(username);
+        List<Long> customerGripEntryIds = customer.getGripStrengthEntries().stream().map(GripStrengthEntry :: getEntryId).collect(Collectors.toList());
+        gripStrengthEntryRepository.deleteByEntryId(customerGripEntryIds);
         customer.getGripStrengthEntries().clear();
     }
 
     @Override
     public void deleteUserHeartRateData(String username) {
-        log.info("Deleting the Health data of Customer: {}", username);
+        log.info("Deleting the Heart data of Customer: {}", username);
         Customer customer = customerRepository.findByUsername(username);
+        List<Long> customerHeartEntryIds = customer.getHeartRateEntries().stream().map(HeartRateEntry :: getEntryId).collect(Collectors.toList());
+        heartRateRepository.deleteByEntryId(customerHeartEntryIds);
         customer.getHeartRateEntries().clear();
     }
 
     @Override
     public void deleteUserWeightData(String username) {
-        log.info("Deleting the Health data of Customer: {}", username);
+        log.info("Deleting the Weight data of Customer: {}", username);
         Customer customer = customerRepository.findByUsername(username);
+        List<Long> customerWeightEntryIds = customer.getWeightEntries().stream().map(WeightEntry :: getEntryId).collect(Collectors.toList());
+        weightEntryRepository.deleteByEntryId(customerWeightEntryIds);
         customer.getWeightEntries().clear();
     }
 }
