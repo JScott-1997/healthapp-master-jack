@@ -4,6 +4,7 @@ import com.c3.healthapp.model.*;
 import com.c3.healthapp.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.impl.IOFileUploadException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -94,6 +95,12 @@ public class CustomerController {
     RedirectView savePhoto(@RequestParam("file") MultipartFile file) throws IOException {
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
+        //Throw error if non image file uploaded
+        String fileExt = fileName.split("\\.")[1];
+        if(fileExt != "jpg" || fileExt != "png"){
+            throw new IOException("Invalid File Type: " + fileName);
+        }
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
         Customer customer = customerService.getCustomer(username);
@@ -101,7 +108,6 @@ public class CustomerController {
         String uploadDir = "user-photos/" + username;
 
         Path uploadPath = Paths.get(uploadDir);
-
         //Set profile picture path in customer object and save to db
         customer.setProfilePicture(fileName);
         customerService.updateCustomer(customer);
@@ -119,6 +125,6 @@ public class CustomerController {
         }
 
         //Send back to profile
-        return new RedirectView("../customer/profile");
+        return new RedirectView("../profile");
     }
 }
