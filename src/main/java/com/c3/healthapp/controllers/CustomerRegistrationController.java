@@ -37,8 +37,10 @@ public class CustomerRegistrationController {
             //All users have this role
             userService.addRoleToCustomer(customer.getUsername(), "ROLE_USER");
             //Add roles from register form
-            for (String userRole : rolesForCustomer.getSubmittedRoles()) {
-                userService.addRoleToCustomer(customer.getUsername(), userRole);
+            if (rolesForCustomer.getSubmittedRoles() != null) {
+                for (String userRole : rolesForCustomer.getSubmittedRoles()) {
+                    userService.addRoleToCustomer(customer.getUsername(), userRole);
+                }
             }
             return "success";
         } else {
