@@ -1,4 +1,4 @@
-package com.c3.healthapp.config.controllers;
+package com.c3.healthapp.controllers;
 
 import com.c3.healthapp.model.Customer;
 import com.c3.healthapp.model.GripStrengthEntry;
