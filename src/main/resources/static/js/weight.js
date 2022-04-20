@@ -92,10 +92,9 @@ function setUpBMIChart() {
     //Calculate BMI from weight data and customer height
     chartDataBMI = getChartDataFromCustomer(customer, chartType);
 
-    //Makes sure lowest and highest are correct in lbs rather than kg as may be set by above method
+    //Makes sure lowest is correct in lbs rather than kg as may be set by above method
     if (units === 'lbs') {
         dataValues.lowest = Math.round(dataValues.lowest * 2.2046)
-        dataValues.highest = Math.round(dataValues.highest * 2.2046)
     }
 
     chartDataBMI.forEach((data) => {
