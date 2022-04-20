@@ -41,12 +41,21 @@ public class CustomerController {
 
     //adds customer to model and sends user to profile page
     @GetMapping("/profile")
-    public String loggedInCustomer(Model model) {
+    public String profile(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
         Customer customer = userService.getCustomer(username);
         model.addAttribute("customer", customer);
         return "customer/profile";
+    }
+
+    @GetMapping("/settings")
+    public String settings(Model model){
+        String username = SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal().toString();
+        Customer customer = userService.getCustomer(username);
+        model.addAttribute("customer", customer);
+        return "customer/settings";
     }
 
     //gets username from UsernamePasswordAuthenticationToken and passes to repo to find user details, sends json data to client
@@ -131,5 +140,25 @@ public class CustomerController {
 
         //Send back to profile
         return new RedirectView("../profile");
+    }
+
+    @PostMapping("/update")
+    public String updateFeaturesEnabled(@ModelAttribute RolesForCustomer rolesForCustomer, @RequestParam String username, Model model) {
+        //Get user and clear all previous roles, re-add user role
+        Customer customer = userService.getCustomer(username);
+        customer.getRoles().clear();
+        Role userRole = new Role(1L, "ROLE_USER");
+        customer.getRoles().add(userRole);
+        userService.updateCustomer(customer);
+        if (rolesForCustomer != null && rolesForCustomer.submittedRoles != null) {
+            //For each role from checkbox, add to customer, then add customer back into model and redirect to confirmation page
+            for (String roleString : rolesForCustomer.getSubmittedRoles()) {
+                if (roleString != null)
+                    userService.addRoleToCustomer(username, roleString);
+            }
+        }
+        customer = userService.getCustomer(username);
+        model.addAttribute("customer", customer);
+        return "customer/settings";
     }
 }

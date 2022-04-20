@@ -98,7 +98,6 @@ public class AdministratorController {
                     userService.addRoleToCustomer(username, roleString);
             }
         }
-
         customer = userService.getCustomer(username);
         model.addAttribute("customer", customer);
         return "admin/updatedcustomer";

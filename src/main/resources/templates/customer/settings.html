@@ -70,7 +70,7 @@
         <form class="mx-2 form-horizontal px-5">
             <div class="form-group" id="unitsPrefForm">
                 <label for="unitsPref"><h5>Units Preference: </h5></label>
-                <select class="form-select form-select-md" id="UnitsPref" aria-label=".form-select-md example">
+                <select class="form-select form-select-md" id="UnitsPref">
                     <option selected hidden value="">Choose units preference</option>
                     <option value="METRIC">Metric</option>
                     <option value="IMPERIAL">Imperial</option>
@@ -79,7 +79,58 @@
         </form>
         </select>
     </div>
-</div>
+    <form th:action="@{/customer/update}" method="post" autocomplete="off">
+        <input type="text" class="form-control" id="username" name="username"
+               th:value="${customer.username}" hidden>
+        <div class="form-group d-flex flex-column mx-auto my-2 formelement">
+            <h5>Customise Dashboard</h5>
+            <p>Features currently enabled: </p>
+                <span th:each="r : ${customer.roles}" class="list-unstyled p-1 m-1">
+                    <strong><span th:if="${r.name}=='ROLE_WEIGHT'" th:text="'Weight Tracking'"></span>
+                    <span th:if="${r.name}=='ROLE_HEART_RATE'" th:text="'Heart Rate Tracking'"></span>
+                    <span th:if="${r.name}=='ROLE_GRIP_STRENGTH'" th:text="'Grip Strength Tracking'"></span>
+                    <span th:if="${r.name}=='ROLE_RESPIRATION_RATE'"
+                          th:text="'Respiration Rate Tracking'"></span></strong>
+                </span>
+            <div class="d-flex flex-column width-auto mx-auto">
+                <p>Select the features you want to see on your dashboard</p>
+                <div class="form-check">
+                    <input class="form-check-input" th:name="|submittedRoles[0]|" type="checkbox"
+                           value="ROLE_HEART_RATE" id="roleheartrate"
+                           th:checked="${not customer.roles.?[name == 'ROLE_HEART_RATE'].isEmpty()}">
+                    <label class="form-check-label" for="roleheartrate">
+                        Heart Rate Tracking
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" th:name="|submittedRoles[1]|" type="checkbox"
+                           value="ROLE_WEIGHT"
+                           id="roleweight"
+                           th:checked="${not customer.roles.?[name == 'ROLE_WEIGHT'].isEmpty()}">
+                    <label class="form-check-label" for="roleweight">
+                        Weight Tracking
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" th:name="|submittedRoles[2]|" type="checkbox"
+                           value="ROLE_GRIP_STRENGTH" id="rolegripstrength"
+                           th:checked="${not customer.roles.?[name == 'ROLE_GRIP_STRENGTH'].isEmpty()}">
+                    <label class="form-check-label" for="rolegripstrength">
+                        Grip Strength Tracking
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" th:name="submittedRoles[3]|" type="checkbox"
+                           value="ROLE_RESPIRATION_RATE" id="rolerespirationrate"
+                           th:checked="${not customer.roles.?[name == 'ROLE_RESPIRATION_RATE'].isEmpty()}">
+                    <label class="form-check-label" for="rolerespirationrate">
+                        Respiration Rate Tracking
+                    </label>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary m-2">Submit</button>
+    </form>
 </div>
 <footer class="text-center text-white mt-auto" style="background-color: #3B3B3B;">
     <div class="text-center text-white p-4">

@@ -70,12 +70,12 @@
             <div class="form-group d-flex flex-column mx-auto my-2 formelement">
                 <label for="name">Full name</label>
                 <input type="text" class="form-control" id="name" name="name"
-                       aria-describedby="nameHelp" placeholder="Enter name" required>
+                        placeholder="Enter name" required>
             </div>
             <div class="form-group d-flex flex-column mx-auto my-2 formelement">
                 <label for="username">Username</label>
                 <input type="text" class="form-control" id="username" name="username"
-                       aria-describedby="unameHelp" placeholder="Enter username" pattern="^\w[a-zA-Z@#0-9.]*$"
+                       placeholder="Enter username" pattern="^\w[a-zA-Z@#0-9.]*$"
                        oninvalid="this.setCustomValidity('Username cannot contain spaces.')"
                        oninput="this.setCustomValidity('')"
                        required>
@@ -101,39 +101,6 @@
                        oninvalid="this.setCustomValidity('Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters')"
                        oninput="this.setCustomValidity('')"
                        required/>
-            </div>
-            <div class="d-flex flex-column width-auto mx-auto">
-                <p>Select the metric trackers you would like access to by checking the boxes below.
-                </p>
-                <div class="form-check">
-                    <input class="form-check-input" th:name="|submittedRoles[0]|" type="checkbox"
-                           value="ROLE_HEART_RATE" id="roleheartrate">
-                    <label class="form-check-label" for="roleheartrate">
-                        Heart Rate Tracking
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" th:name="|submittedRoles[1]|" type="checkbox"
-                           value="ROLE_WEIGHT"
-                           id="roleweight">
-                    <label class="form-check-label" for="roleweight">
-                        Weight Tracking
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" th:name="|submittedRoles[2]|" type="checkbox"
-                           value="ROLE_GRIP_STRENGTH" id="rolegripstrength">
-                    <label class="form-check-label" for="rolegripstrength">
-                        Grip Strength Tracking
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" th:name="|submittedRoles[3]|" type="checkbox"
-                           value="ROLE_RESPIRATION_RATE" id="rolerespirationrate">
-                    <label class="form-check-label" for="rolerespirationrate">
-                        Respiration Rate Tracking
-                    </label>
-                </div>
             </div>
             <button type="submit" class="btn btn-primary m-2">Register</button>
         </form>

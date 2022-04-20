@@ -43,6 +43,8 @@ function saveUnits(evt) {
         body: JSON.stringify(evt.currentTarget.value.toUpperCase())
     }).then(res => {
         res.json().then(data => console.log(data),
+        if(form.contains('small'))
+            form.removeChild(form.lastChild)
         form.appendChild(document.createElement('small')).innerHTML = "Updated successfully."),
         //Update customer object in session storage
         getCustData()

@@ -95,14 +95,14 @@
 <main class="container mx-auto text-center bg-light " id="mainContainer">
     <section class="col-md-9 col-xl-7 col-sm-11 bg-white my-2 mx-auto p-3">
         <h1>Edit <span th:text="${customer.name} + ' ID #' + ${customer.id}"></span></h1>
-        <button type="button" class="collapsible">Change Access Permissions</button>
+        <button type="button" class="collapsible">Change Dashboard Features</button>
         <div class="content mt-2">
             <form th:action="@{/admin/customer/update}" method="post" autocomplete="off">
                 <input type="text" class="form-control" id="username" name="username"
                        th:value="${customer.username}" hidden>
                 <div class="form-group d-flex flex-column mx-auto my-2 formelement">
-                    <h5>Access Permissions</h5>
-                    <p class="p-1 m-1">Current permissions:<br>
+                    <h5>Customer Dashboard</h5>
+                    <p class="p-1 m-1">Current Dashboard Features:<br>
                         <span th:each="r : ${customer.roles}" class="list-unstyled p-1 m-1">
                     <strong><span th:if="${r.name}=='ROLE_WEIGHT'" th:text="'Weight Tracking'"></span>
                     <span th:if="${r.name}=='ROLE_HEART_RATE'" th:text="'Heart Rate Tracking'"></span>
@@ -111,8 +111,8 @@
                           th:text="'Respiration Rate Tracking'"></span></strong>
                 </span>
                     </p>
-                    <p>Set new permissions using the checkboxes below. </p>
-                    <p>Check boxes to add new permissions and uncheck to
+                    <p>Set dashboard using the checkboxes below. </p>
+                    <p>Check boxes to add new trackers and uncheck to
                         remove.</p>
                     <div class="d-flex flex-column width-auto mx-auto">
                         <div class="form-check">
@@ -189,12 +189,12 @@
             back</a>
     </section>
 </main>
-<div class="modal fade pt-2" id="deleteDataModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade pt-2" id="deleteDataModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">X</span>
+                <button type="button" class="close btn" data-dismiss="modal">
+                    <span>X</span>
                 </button>
                 <h5 class="modal-title mx-auto">Delete</h5>
             </div>

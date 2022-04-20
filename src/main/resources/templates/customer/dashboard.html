@@ -74,22 +74,12 @@
                 <h5>Weight</h5>
             </a>
         </div>
-        <div class="sectionicon col-md-3 col-sm-4 bg-secondary m-2 p-3 rounded shadow"
-             th:unless="${not customer.roles.?[name == 'ROLE_WEIGHT'].isEmpty()}">
-            <img th:src="@{/assets/scale.svg}" alt="Weight Section (Disabled)"/>
-            <h5 class="text-dark">Weight (Disabled)</h5>
-        </div>
         <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow"
              th:if="${not customer.roles.?[name == 'ROLE_HEART_RATE'].isEmpty()}">
             <a href="heartrate" class="text-dark text-decoration-none">
                 <img th:src="@{/assets/heart.svg}" alt="Heart Rate Section">
                 <h5>Heart Rate</h5>
             </a>
-        </div>
-        <div class="sectionicon col-md-3 col-sm-4 bg-secondary m-2 p-3 rounded shadow"
-             th:unless="${not customer.roles.?[name == 'ROLE_HEART_RATE'].isEmpty()}">
-            <img th:src="@{/assets/heart.svg}" alt="Heart Rate Section">
-            <h5 class="text-dark">Heart Rate (Disabled)</h5>
         </div>
         <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow"
              th:if="${not customer.roles.?[name == 'ROLE_RESPIRATION_RATE'].isEmpty()}">
@@ -98,22 +88,12 @@
                 <h5>Respiration</h5>
             </a>
         </div>
-        <div class="sectionicon col-md-3 col-sm-4 bg-secondary m-2 p-3 rounded shadow"
-             th:unless="${not customer.roles.?[name == 'ROLE_RESPIRATION_RATE'].isEmpty()}">
-            <img th:src="@{/assets/respiration.svg}" alt="Respiration Section (Disabled)"/>
-            <h5 class="text-dark">Respiration (Disabled)</h5>
-        </div>
         <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow"
              th:if="${not customer.roles.?[name == 'ROLE_GRIP_STRENGTH'].isEmpty()}">
             <a href="grip" class="text-dark text-decoration-none">
                 <img th:src="@{/assets/grip.svg}" alt="Grip Strength Section"/>
                 <h5>Grip</h5>
             </a>
-        </div>
-        <div class="sectionicon col-md-3 col-sm-4 bg-secondary m-2 p-3 rounded shadow"
-             th:unless="${not customer.roles.?[name == 'ROLE_GRIP_STRENGTH'].isEmpty()}">
-            <img th:src="@{/assets/grip.svg}" alt="Grip Strength Section (Disabled)"/>
-            <h5 class="text-dark">Grip (Disabled)</h5>
         </div>
         <div class="sectionicon col-md-3 col-sm-4 bg-primary m-2 p-3 rounded shadow">
             <a href="settings" class="text-dark text-decoration-none">
