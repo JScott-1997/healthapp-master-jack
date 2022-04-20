@@ -78,6 +78,7 @@ public class AdministratorController {
     @PostMapping("/customer/account/delete")
     public String deleteCustomerAccount(@RequestParam String username) {
         Customer customer = userService.getCustomer(username);
+        userService.deleteUserData(username);
         userService.deleteCustomer(customer);
         return "admin/deleted";
     }
