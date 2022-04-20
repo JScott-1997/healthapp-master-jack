@@ -46,7 +46,6 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
         metricTargetValue = Math.round(metricTargetValue * 2.2046)
     }
 
-
     function getMinMaxValues() {
         if (metricTargetValue <= dataValues.lowest) {
             dataValues.min = metricTargetValue;
@@ -191,7 +190,6 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
             }
         }
     );
-
     theChart = chart;
 
     function addEntry(event) {
@@ -284,16 +282,13 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
         //Convert to KG to store in db if required
         if(units == 'lbs'){
             submittedValue = metricTargetValue / 2.2046;
-            console.log(submittedValue);
         }
-
         //Show message now target is set
         message.style.display = "block";
         showSubmittedTargetContent(targetReadIn);
 
         //Save entry to db and update chart
         saveTarget(submittedValue, `/customer/${chartType.toLowerCase()}/target/save`);
-
         setChartYScale(chart);
         updateChart(chart, dataValues);
     }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <title>Contact - Dundas Health</title>
@@ -26,7 +26,7 @@
 
     <!-- Display different menu depending on whether user is logged in or not-->
     <ul sec:authorize="!isAuthenticated()">
-        <a href="#">
+        <a href="/">
             <li>
                 <div class="d-flex justify-content-left align-items-center"><i class="fa-solid fa-house mx-2"
                                                                                style="font-size: 0.9rem"></i>Home
