@@ -33,16 +33,16 @@ public class Customer extends User {
     private CustomerUnitsPreference customerUnitsPreference;
     private String profilePicture;
 
-    @ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<HeartRateEntry> heartRateEntries = new ArrayList<>();
-    @ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<WeightEntry> weightEntries = new ArrayList<>();
-    @ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<GripStrengthEntry> gripStrengthEntries = new ArrayList<>();
-    @ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<RespirationRateEntry> respirationRateEntries = new ArrayList<>();
 

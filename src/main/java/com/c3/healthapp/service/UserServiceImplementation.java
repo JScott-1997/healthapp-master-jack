@@ -71,6 +71,10 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
     public void deleteCustomer(Customer customer) {
         log.info("Removing customer: {} and their associated data...", customer.getUsername());
         customer.getRoles().clear();
+        customer.getRespirationRateEntries().clear();
+        customer.getGripStrengthEntries().clear();
+        customer.getWeightEntries().clear();
+        customer.getHeartRateEntries().clear();
         customerRepository.delete(customer);
     }
 
