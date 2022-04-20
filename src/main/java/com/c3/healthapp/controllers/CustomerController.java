@@ -114,8 +114,9 @@ public class CustomerController {
 
         //Throw error if non image file uploaded
         String fileExt = fileName.split("\\.")[1];
-        if(fileExt != "jpg" || fileExt != "png"){
-            throw new IOException("Invalid File Type: " + fileName);
+        System.out.println(fileExt);
+        if(!fileExt.equals("jpg") || fileExt.equals("png")){
+            throw new IOException("Invalid File Type: " + fileExt);
         }
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
