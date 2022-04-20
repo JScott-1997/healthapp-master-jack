@@ -1,4 +1,4 @@
-package com.c3.healthapp.controllers;
+package com.c3.healthapp.config.controllers;
 
 import com.c3.healthapp.model.*;
 import com.c3.healthapp.service.UserService;

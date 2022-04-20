@@ -89,7 +89,6 @@
                         <th>Username</th>
                         <th>Name</th>
                         <th>Date of Birth</th>
-                        <th>Height</th>
                         <th>Permissions</th>
                         <th></th>
                     </tr>
@@ -100,7 +99,6 @@
                         <td th:text="${c.username}"></td>
                         <td th:text="${c.name}"></td>
                         <td th:text="${c.dateOfBirth}"></td>
-                        <td th:text="${c.height}"></td>
                         <td>
                             <ul class="list-unstyled">
                                 <li th:each="r : ${c.roles}"><span th:text="${r.name}"></span></li>

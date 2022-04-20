@@ -1,3 +1,7 @@
+/*
+Shows and hides side navigation bar
+*/
+
 const sideNav = document.getElementById('sideNav');
 const burger = document.getElementById('burger');
 

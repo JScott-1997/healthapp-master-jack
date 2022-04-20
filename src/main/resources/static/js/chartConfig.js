@@ -7,7 +7,7 @@
 //Lines 113-184 written by Chart.js team for Chart.js setup
 
 
-//Lowest value ands highest value from data are set in getChartDataFromCustomer method from paginateTable. 
+//Lowest value ands highest value from data are set in getChartDataFromCustomer method.
 //Used with current target to get chart scale min and max values
 let lowestValueFromData = 1000;
 let highestValueFromData = 0;
@@ -47,6 +47,7 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
     }
 
     function getMinMaxValues() {
+
         if (metricTargetValue <= dataValues.lowest) {
             dataValues.min = metricTargetValue;
         }
@@ -247,6 +248,7 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
     }
 
     function setTarget(event) {
+
         event.preventDefault();
 
         //Get input by class
@@ -269,6 +271,7 @@ function setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext,
             target: newTarget
         }
         metricTargetValue = targetReadIn;
+
         target.innerHTML = `${metricTargetValue}${units}`;
 
         //change min and max values for chart and update chart

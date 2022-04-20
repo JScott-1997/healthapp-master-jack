@@ -1,16 +1,18 @@
-//For page displaying weight chart and data
-//Also contains bmi chart and body fat % chart (coloured background plugins)
-//Author: Sean Laughlin
+/*
+For page displaying weight chart and data
+Also contains bmi chart and body fat % chart (with coloured background plugins)
+Author: Sean Laughlin
+*/
 
-//update and get customer object
+//Update and get customer object from session
 getCustData();
 let customer = JSON.parse(sessionStorage.getItem('customer'));
 const customerAge = calculate_age(new Date(customer.dateOfBirth));
 
-//Get ranges for body fat %, dangerous, low, good etc
+//Get ranges for body fat %, dangerous, low, good etc (hard coded into this file)
 const ranges = getBodyFatRanges(customer.sex, customerAge);
 
-//Get elements to be used to set up chart and modal by chartSetup.js setUpChartAndModal
+//Get elements to be used to set up chart and modal (weight chart is set up by by chartSetup.js - setUpChartAndModal() and is referred to just as chart)
 const chartEl = document.getElementById('chart');
 const BMIChartEl = document.getElementById('BMIChart');
 const BodyFatChartEl = document.getElementById('BodyFatChart');
@@ -33,6 +35,7 @@ const modalTable = document.getElementById('modalData');
 const modalNext = document.getElementById('btn_next');
 const modalPrev = document.getElementById('btn_prev');
 const modalPageNoSpan = document.getElementById('page');
+
 //Boolean to indicate whether this is kilogram/pounds measured, so that imperial or metric units are applied based on user preference
 const kgLbs = true;
 let usesImperialUnits = customer.customerUnitsPreference == 'IMPERIAL';
@@ -42,15 +45,16 @@ let units = usesImperialUnits ? 'lbs' : 'KG';
 let forms = new Array();
 forms.push(document.getElementById('metricForm'));
 
+//Method is from chartConfig.js, general method for setting up charts. Not suitable for BMI and body fat % due to plugins
 setUpChartAndModal(chartEl, chartType, customer, modalTable, modalNext, modalPrev, modalPageNoSpan, kgLbs, units, forms);
 
 //Modal elements for data submission modal and target submission modal
 const defaultContent = document.getElementById('defaultContent');
 const submittedContent = document.getElementById('submittedContent');
-
 const defaultTargetContent = document.getElementById('defaultTargetContent');
 const submittedTargetContent = document.getElementById('submittedTargetContent');
-//switchToBMIChart();
+
+//Shows message confirming entry submitted
 function showSubmittedContent(entryValue, hasBeenAdded) {
     defaultContent.style.display = 'none';
     let message = submittedContent.querySelector('#submittedMessage');
@@ -66,6 +70,7 @@ function revertDefault() {
     }, 500);
 }
 
+//Shows message confirming target submitted
 function showSubmittedTargetContent(target) {
     defaultTargetContent.style.display = 'none';
     let message = submittedTargetContent.querySelector('#submittedTargetMessage');
@@ -416,7 +421,6 @@ function showBodyFatChart() {
             //BMI has to be calculated from weight, then body fat % calculated
             y: (1.20 * (newWeightEntry.y / Math.pow((customer.height / 100), 2)) + (0.23 * customerAge) - maleFemaleNumber)
         }
-        console.log(newBodyFatEntry);
         chartDataBodyFat.push(newBodyFatEntry)
         bodyFatChart.update();
     }
@@ -428,6 +432,7 @@ function showBodyFatChart() {
     bodyFatMessage.innerHTML = getBodyFatMessage(chartDataBodyFat[chartDataBodyFat.length - 1].y);
 }
 
+//Body fat ranges data by age and gender used to set up charts and display related messages
 function getBodyFatRanges(sex, age) {
     const ranges = {};
     if (sex == 'FEMALE') {

@@ -1,4 +1,4 @@
-//For page displaying respirationrate chart and data.
+//For page displaying respiration rate chart and data.
 //Author: Sean Laughlin
 
 //update and get customer object
@@ -81,7 +81,6 @@ function getMessage(currentRate) {
         return `Your respiration rate of <b>${currentRate} Breaths P/M</b> is outside of the normal range`
     }
 }
-
 
 let countDown = null;
 
