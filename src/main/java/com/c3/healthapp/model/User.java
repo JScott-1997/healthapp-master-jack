@@ -26,7 +26,6 @@ public class User {
     private String password;
 
     @ManyToMany
-    @Cascade(CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Role> roles = new ArrayList<>();
 }

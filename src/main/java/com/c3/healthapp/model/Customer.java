@@ -9,6 +9,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.data.annotation.Transient;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import java.lang.reflect.Field;
@@ -32,16 +33,16 @@ public class Customer extends User {
     private CustomerUnitsPreference customerUnitsPreference;
     private String profilePicture;
 
-    @ManyToMany
+    @ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.REMOVE})
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<HeartRateEntry> heartRateEntries = new ArrayList<>();
-    @ManyToMany
+    @ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.REMOVE})
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<WeightEntry> weightEntries = new ArrayList<>();
-    @ManyToMany
+    @ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.REMOVE})
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<GripStrengthEntry> gripStrengthEntries = new ArrayList<>();
-    @ManyToMany
+    @ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.REMOVE})
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<RespirationRateEntry> respirationRateEntries = new ArrayList<>();
 
