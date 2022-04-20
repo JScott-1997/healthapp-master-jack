@@ -169,6 +169,7 @@ public class CustomerController {
     public String deleteAccount(Model model, HttpServletRequest request) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
+        userService.deleteUserData(username);
         userService.deleteCustomer(userService.getCustomer(username));
         HttpSession session = request.getSession();
         session.invalidate();
