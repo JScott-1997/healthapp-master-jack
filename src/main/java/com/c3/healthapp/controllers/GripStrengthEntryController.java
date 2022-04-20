@@ -20,13 +20,13 @@ import java.net.URI;
 @RequestMapping("/customer/gripstrength")
 @RequiredArgsConstructor
 public class GripStrengthEntryController {
-    private final UserService customerService;
+    private final UserService userService;
 
     @PostMapping("/save")
     public ResponseEntity<GripStrengthEntry> saveGSEntry(@RequestBody GripStrengthEntry gripStrengthEntry) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
-        customerService.saveGripStrengthEntry(username, gripStrengthEntry);
+        userService.saveGripStrengthEntry(username, gripStrengthEntry);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/gripstrength/save").toUriString());
         return ResponseEntity.created(uri).body(gripStrengthEntry);
     }
@@ -35,10 +35,18 @@ public class GripStrengthEntryController {
     public ResponseEntity<Double> saveGripTarget(@RequestBody double gripStrengthTarget) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
-        Customer customer = customerService.getCustomer(username);
+        Customer customer = userService.getCustomer(username);
         customer.setTargetGripStrength(gripStrengthTarget);
-        customerService.updateCustomer(customer);
+        userService.updateCustomer(customer);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/gripstrength/target/save").toUriString());
         return ResponseEntity.created(uri).body(gripStrengthTarget);
+    }
+
+    @PostMapping("/delete")
+    public String deleteGripStrengthData() {
+        String username = SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal().toString();
+        userService.deleteUserGripStrengthData(username);
+        return "customer/deleted";
     }
 }

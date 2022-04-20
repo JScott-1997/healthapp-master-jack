@@ -64,73 +64,131 @@
     <button id="burger" class="text-dark navbar-brand bg-primary" onclick="openSideNav()">☰</button>
     <a class="navbar-brand text-dark" id="title"></i>Dundas Health</a>
 </nav>
-<div class="container mx-auto text-center my-2">
-    <h1>Account Settings</h1>
-    <div class="d-flex flex-column justify-content-center mx-auto my-3 col-lg-4 col-md-6 col-sm-4">
-        <form class="mx-2 form-horizontal px-5">
-            <div class="form-group" id="unitsPrefForm">
-                <label for="unitsPref"><h5>Units Preference: </h5></label>
-                <select class="form-select form-select-md" id="UnitsPref">
-                    <option selected hidden value="">Choose units preference</option>
-                    <option value="METRIC">Metric</option>
-                    <option value="IMPERIAL">Imperial</option>
-                </select>
-            </div>
-        </form>
-        </select>
-    </div>
-    <form th:action="@{/customer/update}" method="post" autocomplete="off">
-        <input type="text" class="form-control" id="username" name="username"
-               th:value="${customer.username}" hidden>
-        <div class="form-group d-flex flex-column mx-auto my-2 formelement">
-            <h5>Customise Dashboard</h5>
-            <p>Features currently enabled: </p>
-                <span th:each="r : ${customer.roles}" class="list-unstyled p-1 m-1">
+<main class="container mx-auto text-center bg-light " id="mainContainer">
+    <section class="col-md-9 col-xl-7 col-sm-11 bg-white my-2 mx-auto p-3">
+        <h1>Account Settings</h1>
+        <button type="button" class="collapsible">Change Units Preference</button>
+        <div class="content mt-2">
+            <form class="mx-2 my-5 form-horizontal px-5">
+                <div class="form-group" id="unitsPrefForm">
+                    <label for="unitsPref"><h5>Units Preference: </h5></label>
+                    <select class="form-select form-select-md" id="UnitsPref">
+                        <option selected hidden value="">Choose units preference</option>
+                        <option value="METRIC">Metric</option>
+                        <option value="IMPERIAL">Imperial</option>
+                    </select>
+                </div>
+            </form>
+            </select>
+        </div>
+        <button type="button" class="collapsible">Customise Dashboard</button>
+        <div class="content mt-2">
+            <form th:action="@{/customer/update}" method="post" autocomplete="off">
+                <input type="text" class="form-control" id="username" name="username"
+                       th:value="${customer.username}" hidden>
+                <div class="form-group d-flex flex-column mx-auto my-2 formelement">
+                    <p>Features currently enabled: </p>
+                    <span th:each="r : ${customer.roles}" class="list-unstyled p-1 m-1">
                     <strong><span th:if="${r.name}=='ROLE_WEIGHT'" th:text="'Weight Tracking'"></span>
                     <span th:if="${r.name}=='ROLE_HEART_RATE'" th:text="'Heart Rate Tracking'"></span>
                     <span th:if="${r.name}=='ROLE_GRIP_STRENGTH'" th:text="'Grip Strength Tracking'"></span>
                     <span th:if="${r.name}=='ROLE_RESPIRATION_RATE'"
                           th:text="'Respiration Rate Tracking'"></span></strong>
                 </span>
-            <div class="d-flex flex-column width-auto mx-auto">
-                <p>Select the features you want to see on your dashboard</p>
-                <div class="form-check">
-                    <input class="form-check-input" th:name="|submittedRoles[0]|" type="checkbox"
-                           value="ROLE_HEART_RATE" id="roleheartrate"
-                           th:checked="${not customer.roles.?[name == 'ROLE_HEART_RATE'].isEmpty()}">
-                    <label class="form-check-label" for="roleheartrate">
-                        Heart Rate Tracking
-                    </label>
+                    <div class="d-flex flex-column width-auto mx-auto">
+                        <p>Select the features you want to see on your dashboard</p>
+                        <div class="form-check">
+                            <input class="form-check-input" th:name="|submittedRoles[0]|" type="checkbox"
+                                   value="ROLE_HEART_RATE" id="roleheartrate"
+                                   th:checked="${not customer.roles.?[name == 'ROLE_HEART_RATE'].isEmpty()}">
+                            <label class="form-check-label" for="roleheartrate">
+                                Heart Rate Tracking
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" th:name="|submittedRoles[1]|" type="checkbox"
+                                   value="ROLE_WEIGHT"
+                                   id="roleweight"
+                                   th:checked="${not customer.roles.?[name == 'ROLE_WEIGHT'].isEmpty()}">
+                            <label class="form-check-label" for="roleweight">
+                                Weight Tracking
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" th:name="|submittedRoles[2]|" type="checkbox"
+                                   value="ROLE_GRIP_STRENGTH" id="rolegripstrength"
+                                   th:checked="${not customer.roles.?[name == 'ROLE_GRIP_STRENGTH'].isEmpty()}">
+                            <label class="form-check-label" for="rolegripstrength">
+                                Grip Strength Tracking
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" th:name="submittedRoles[3]|" type="checkbox"
+                                   value="ROLE_RESPIRATION_RATE" id="rolerespirationrate"
+                                   th:checked="${not customer.roles.?[name == 'ROLE_RESPIRATION_RATE'].isEmpty()}">
+                            <label class="form-check-label" for="rolerespirationrate">
+                                Respiration Rate Tracking
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" th:name="|submittedRoles[1]|" type="checkbox"
-                           value="ROLE_WEIGHT"
-                           id="roleweight"
-                           th:checked="${not customer.roles.?[name == 'ROLE_WEIGHT'].isEmpty()}">
-                    <label class="form-check-label" for="roleweight">
-                        Weight Tracking
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" th:name="|submittedRoles[2]|" type="checkbox"
-                           value="ROLE_GRIP_STRENGTH" id="rolegripstrength"
-                           th:checked="${not customer.roles.?[name == 'ROLE_GRIP_STRENGTH'].isEmpty()}">
-                    <label class="form-check-label" for="rolegripstrength">
-                        Grip Strength Tracking
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" th:name="submittedRoles[3]|" type="checkbox"
-                           value="ROLE_RESPIRATION_RATE" id="rolerespirationrate"
-                           th:checked="${not customer.roles.?[name == 'ROLE_RESPIRATION_RATE'].isEmpty()}">
-                    <label class="form-check-label" for="rolerespirationrate">
-                        Respiration Rate Tracking
-                    </label>
-                </div>
+                <button type="submit" class="btn btn-primary m-2">Submit</button>
+            </form>
+        </div>
+        <button type="button" class="collapsible text-danger">Delete Metric Data</button>
+        <div class="content mt-2">
+            <p>Use the buttons below to delete <strong>all entries</strong> made by the customer for the selected
+                metric.</p>
+            <p>Please be aware that the data is non-recoverable after deletion.</p>
+            <div class="col-xl-6 col-md-8 col-sm-8 mx-auto">
+                <a role="button" class="btn btn-danger my-1 mx-1 w-75" data-toggle="modal"
+                   data-target="#deleteDataModal" id="weight" onclick="getSubmitPath(this.id)">Delete Weight Data</a>
+                <br>
+                <a role="button" class="btn btn-danger my-1 mx-1 w-75" data-toggle="modal"
+                   data-target="#deleteDataModal" id="heartrate" onclick="getSubmitPath(this.id)">Delete Heart Rate
+                    Data</a>
+                <br>
+                <a role="button" class="btn btn-danger my-1 mx-1 w-75" data-toggle="modal"
+                   data-target="#deleteDataModal" id="gripstrength" onclick="getSubmitPath(this.id)">Delete Grip
+                    Strength
+                    Data</a>
+                <br>
+                <a role="button" class="btn btn-danger my-1 mx-1 w-75" data-toggle="modal"
+                   data-target="#deleteDataModal" id="respirationrate" onclick="getSubmitPath(this.id)">Delete
+                    Respiratory Rate
+                    Data</a>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary m-2">Submit</button>
-    </form>
+        <button type="button" class="collapsible text-danger">Delete Account</button>
+        <div class="content mt-2">
+            <p>Use the button below to delete your account and all associated data.</p>
+            <p>Please be aware that the
+                data is non-recoverable after deletion.</p>
+            <a role="button" class="btn btn-danger my-1 mx-1" data-toggle="modal"
+               data-target="#deleteDataModal" id="account" onclick="getSubmitPath(this.id)">Delete Account</a>
+        </div>
+    </section>
+</main>
+<div class="modal fade pt-2" id="deleteDataModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close btn" data-dismiss="modal">
+                    <span>X</span>
+                </button>
+                <h5 class="modal-title mx-auto">Delete</h5>
+            </div>
+            <form class="my-3 mx-auto" id="dataDeleteForm" method="POST">
+                <input type="hidden" name="username" th:value="${customer.username}">
+                <h5 class="text-center">Delete Data?</h5>
+                <button role="button" class="btn btn-danger my-1 mx-1" id="deleteButton">Delete Data</button>
+                <a role="button" class="btn btn-secondary my-1 mx-1" data-dismiss="modal">Cancel</a>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
 <footer class="text-center text-white mt-auto" style="background-color: #3B3B3B;">
     <div class="text-center text-white p-4">
@@ -141,6 +199,7 @@
 <script th:src="@{/js/logout.js}"></script>
 <script th:src="@{/js/custdata.js}"></script>
 <script th:src="@{/js/settings.js}"></script>
+<script th:src="@{/js/collapsibles.js}"></script>
 <script th:src="@{/js/sidenav.js}"></script>
 </body>
 </html>

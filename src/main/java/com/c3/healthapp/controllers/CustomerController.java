@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Files;
@@ -160,5 +162,16 @@ public class CustomerController {
         customer = userService.getCustomer(username);
         model.addAttribute("customer", customer);
         return "customer/settings";
+    }
+
+    @PostMapping("/account/delete")
+    public String deleteAccount(Model model, HttpServletRequest request) {
+        String username = SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal().toString();
+        userService.deleteCustomer(userService.getCustomer(username));
+        HttpSession session = request.getSession();
+        session.invalidate();
+        model.addAttribute("username", username);
+        return "deleted";
     }
 }

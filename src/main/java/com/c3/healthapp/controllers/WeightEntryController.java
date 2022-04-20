@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -20,13 +21,13 @@ import java.net.URI;
 @RequestMapping("/customer/weight")
 @RequiredArgsConstructor
 public class WeightEntryController {
-    private final UserService customerService;
+    private final UserService userService;
 
     @PostMapping("/save")
     public ResponseEntity<WeightEntry> saveHREntry(@RequestBody WeightEntry weightEntry) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
-        customerService.saveWeightEntry(username, weightEntry);
+        userService.saveWeightEntry(username, weightEntry);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/weight/save").toUriString());
         return ResponseEntity.created(uri).body(weightEntry);
     }
@@ -35,10 +36,18 @@ public class WeightEntryController {
     public ResponseEntity<Double> saveWeightTarget(@RequestBody double targetWeight) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
-        Customer customer = customerService.getCustomer(username);
+        Customer customer = userService.getCustomer(username);
         customer.setTargetWeight(targetWeight);
-        customerService.updateCustomer(customer);
+        userService.updateCustomer(customer);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/weight/target/save").toUriString());
         return ResponseEntity.created(uri).body(targetWeight);
+    }
+
+    @PostMapping("/delete")
+    public String deleteWeightData() {
+        String username = SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal().toString();
+        userService.deleteUserWeightData(username);
+        return "customer/deleted";
     }
 }

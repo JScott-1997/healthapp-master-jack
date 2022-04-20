@@ -19,15 +19,23 @@ import java.net.URI;
 @RequestMapping("/customer/heartrate")
 @RequiredArgsConstructor
 public class HeartRateEntryController {
-    private final UserService customerService;
+    private final UserService userService;
 
     @PostMapping("/save")
     public ResponseEntity<HeartRateEntry> saveHREntry(@RequestBody HeartRateEntry heartRateEntry) {
         String username = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
-        customerService.saveHeartRateEntry(username, heartRateEntry);
+        userService.saveHeartRateEntry(username, heartRateEntry);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/heartrate/save").toUriString());
         return ResponseEntity.created(uri).body(heartRateEntry);
+    }
+
+    @PostMapping("/delete")
+    public String deleteHeartRateData() {
+        String username = SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal().toString();
+        userService.deleteUserHeartRateData(username);
+        return "customer/deleted";
     }
 
 }
